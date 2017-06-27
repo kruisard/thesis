@@ -1,0 +1,27 @@
+% Appendix VRUMER
+
+\appendix
+\renewcommand{\thechapter}{A}
+\renewcommand{\chaptername}{Appendix}
+
+
+\chapter{VRUMER package}
+
+
+
+\begin{table}
+\centering
+\caption{Organization of VRUMER code}
+\label{tab:vrumercode}
+\begin{tabular}{l|l}
+Script name & Purpose \\
+\hline
+VRUMERI.m & Initiates VRUMER, defines ring (position of all magnets, \\
+& magnet strengths, earth field, misalignments, etc) \\
+VRUMERII.m & Tracks orbit specified number of cells, for an initial \\
+&  condition defined by user. Stores history of horizontal \\
+& and vertical orbits for entire ring. \\
+adv.m & Advances orbit through each cell, stores orbit history for the cell.  \\
+& Generic for either horizontal or vertical orbit.\\
+\end{tabular}
+\end{table}

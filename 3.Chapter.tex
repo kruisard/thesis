@@ -1,0 +1,197 @@
+%Chapter 3
+
+\renewcommand{\thechapter}{3}
+
+\chapter{Centroid Steering}
+
+\section{Motivation}
+
+
+
+\section{Considerations for low-ridgidity electron beam}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{3.figures/Earth_field.eps}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[Figure with caption indented]{Measured Earth field, from Dave Sutter measurements 6/1/2010. Red dashed = radial field (positive = outward direction). Blue solid = vertical field.}
+\label{fig:earthfield}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+\section{Prior Approach}
+
+
+% New Approach
+This note describes the quad-as-BPM measurement procedure and a new steering algorithm designed to horizontally center the beam in the quadrupoles. 
+The quad-as-BPM measurement, described in Section \ref{sec:quad_as_BPM}, was developed by Kiersten and Irv and measures the position of the beam 
+on the first turn using quad scan data. The horizontal steering algorithm, Section \ref{sec:horz_steer}, is a methodical, "front to back" approach 
+that first minimizes the position of the beam in the quadrupoles on the first turn then minimizes orbit deviations in subsequent turns. This is 
+proposed as a alternative to the response matrix steering algorithm \cite{response_matrix}, and may be more useful for applications where orbit 
+centering in the quadrupoles is essential.
+
+
+\section{Quadrupole as BPM technique}
+
+The quad as BPM method is a way to measure the beam orbit in the first turn. We calculate the beam position at the center of 
+each quadrupole by measuring the change in beam position due to a perturbation in the quadrupole current. 
+This is an essentially identical method to that described by Kamal Poor Rezaei in an earlier technical note \cite{KPR_note}, 
+with the main difference being the use of the VRUMER beam tracking code to calibrate position, rather than a transfer matrix calculation.  
+
+
+%% ADD MORE
+
+In the work described here, calibration of quadrupole response (measured directly at nearest downstream BPM) is accomplished using VRUMER. VRUMER, described in detail in Appendix [TBD], 
+is a simple orbit integrator written in Matlab, originally developed by Irv Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
+The model used here includes the measured background earth field, applied as a continuously 
+acting, lab-frame-position dependent force based on linear interpolation between measurement points at the 36 dipoles.
+This model does not include centroid kicks as a result of magnet fringe fields or the steering effect of the offset YQ magnet, although 
+the framework can support these refinements.
+
+
+
+\subsection{Avoiding null points} \label{sec:QAB:nulls}
+
+Generally, the quad as BPM measurement uses response data from the nearest downstream BPM. However, for certain quad-BPM pairs this may not be appropriate due to the BPM being located near a null point of the betatron oscillation. 
+
+There are two reasons why the BPM response will be very flat: the beam is near the center of the quadrupole, or quad-BPM separation is close to $n \frac{\lambda}{2}$ for integer n, where $\lambda$ is the betatron wavelength. The beam transformation in VRUMER is not exactly equivalent to the transformation in UMER (VRUMER does not include edge focusing, SC effects, etc). Therefore, quad-BPM separations near $n \frac{\lambda}{2}$, the BPM response slope will be small in both VRUMER and UMER but not identical. (This is true for all quad-BPM pairs, but will generally be a small error). 
+%For a non-zero BPM response slope, the Newton Raphson calculation will tend to pick a very large $x_q$ for the simulation reponse to match the measured response. 
+
+At an operating point of 1.826 A, the UMER 6 mA beam has $\nu_x = 6.636$, $\nu_y=6.752$ \cite{Rami_note}. This corresponds to betatron wavelengths $\lambda_x = 1.736$ m, $\lambda_y=1.706$ m.
+In the VRUMER simulation, horizontal and vertical tunes are equal (no edge focusing), $\nu=6.293$, equivalently $\lambda = 1.83$ m. This is consistent with the simplifications made in VRUMER. 
+
+We can see that the quad-BPM separations for which unusually high $x_q$, $y_q$ values appear (Table \ref{tab:nulls}) are close to the the VRUMER wavelength $\lambda = 1.83$ m, $\frac{\lambda}{2} = 0.92$ m. There are two inaccuracies that may result from this:
+
+\begin{itemize}
+\item Quad-BPM separation is close to UMER betatron wavelength (a null in the actual ring). VRUMER sees a small $\frac{\partial x_{BPM}}{\partial I_Q}$ slope and predicts $x_q \sim 0$, while in reality $x_q$ could be fairly large. This is hard to discern from the data, and may artifically obscure bad first-turn steering.
+\item Quad-BPM separation is close to VRUMER betatron wavelength. If BPM response slope is not very flat (but VRUMER thinks this should be a null point) the VRUMER calculation for $x_q$ blows up. This can be seen in Fig. \ref{fig:nulls}, where QR14, QR32 and QR62 in particular have unphysically large $x_q$.  
+\end{itemize}
+
+
+
+\begin{table}
+\centering
+\caption{}
+\label{tab:nulls}
+\begin{tabular}{|c|c|c|c|c|}
+Quad \# & Nearest BPM & $\Delta S_{Q \rightarrow BPM}$ [m] \\
+\hline
+QR14 & RC5 & 0.88   \\
+QR32 & RC11 & 1.84 \\
+QR38 & RC11 & 0.88 \\
+QR62 & RC17 & 0.88  \\
+QR70 & RC1 (turn 2) & 0.88  \\
+\end{tabular}
+\end{table}
+
+
+% \begin{figure}
+% \centering
+% \caption{Quad as BPM data taken 6/9/15, position in each quad is determined by response in next downstream BPM. Solid circles are BPM data.}
+% \label{fig:nulls}
+% \includegraphics[width=\textwidth,trim={.7in 5.2in .7in 2.6in},clip]{figures/scan150609_withBPMdata_xy.pdf}
+% \end{figure}
+
+% \begin{figure}
+% \centering
+% \caption{Null point effect as seen in VRUMER simulation. Each trace represents a different simulation, where the strength of RQ14 is varied. The null point occurs near RC15 for both horizontal (top) and vertical (bottom). }
+% \label{fig:nulls_vrumer}
+% \includegraphics[width=\textwidth,trim={.7in 5.2in .7in 2.6in},clip]{figures/Q14_allBPMS_VRUMER_zoomin.pdf}
+% \end{figure}
+
+
+In subsequent quad as BPM data in this note, QR14, QR32 and QR62 use the BPM response in the next nearest downstream BPM to avoid artificial blow-up or suppression of $x_q$ and $y_q$. 
+This effect should also be (but is not currently) included in the calculation of errorbars for the quad as BPM data.
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Ring steering}
+
+
+
+
+\subsection{Horizontal Steering Procedure}
+\subsection{Vertical Steering Procedure}
+
+\section{Injection and Recirculation Steering}
+\subsection{Injection}
+\subsection{Recirculation}
+
+\section{Comments on steering the Alternative Lattice}
+
+
+
+\section{implementation}
+% This section for technical details of implementation
+
+
+%% Quad as BPM
+The quad as BPM measurement is controlled by UMER control script \newline kiersten\_quad\_scan\_v2.m. 
+In this procedure, the current in each ring quadrupole (RQ2-RQ71) is independently scanned about it's nominal 
+operating point. The horizontal and vertical position of the nearest downstream BPM is recorded. This data is 
+fitted to a linear curve, using the linear least squares method. The fitted slope is the BPM response to the 
+quad scan, $\frac{\partial x_{BPM}}{\partial I_{quad}}$, equivalently the uncalibrated position in the quad. 
+The errorbars are defined as the 95\% confidence interval of the slope coefficient. 
+
+To calibrate the position in the quad, I use the VRUMER code to determine what initial condition in the quadrupole gives the appropriate BPM response.
+I first choose an arbitrary starting position $x_{0,q}$, $x'_{0,q}$ and simulate a quad scan.
+I then apply the Newton-Raphson method to determine the appropriate $x_q$ to give the desired (measured) BPM response, $m_{sim} = m_{data}$ (where $m_{data} = \frac{\partial x_{BPM}}{\partial I_{quad}}$): 
+
+
+\begin{equation*}
+ x_q = x_{0,q} - \left( m_{sim} - m_{data} \right) \left(\frac{dm_{sim}}{dx_q}\right)^{-1}
+\end{equation*}
+
+This allows us to define a calibration factor between the BPM response and the position at the center of each quadrupole, 
+
+\begin{equation*}
+x_q = C_{q,BPM} \times \frac{\partial x_{BPM}}{\partial I_{quad}}
+\end{equation*}
+
+
+While this factor will not change for a static version of VRUMER, the \newline  kiersten\_quad\_scan\_v2.m procedure is 
+set up to do the Newton-Raphson calculation for every set of quad scan data. This was mainly a matter of convenience at 
+the time, as having a lookup table for the calibration factors would result in slight decrease in run time and a loss of 
+flexibility (changes to ring operation would require recalculation of the look-up table, etc). Running VRUMER takes $\sim 0.06$ 
+seconds, so even for the an entire quad scan (9 points) repeated twice for the Newton-Raphson calculation VRUMER 
+costs $\sim 1$ second per quad. 
+
+
+
+%% Steering approach
+This is a description of the horizontal steering method I used to steer the 6 mA beam on November, 2015. The final solution was saved as settings file kiersten\_6mA\_151116.csv.
+
+The procedure for horizontal steering attempts to steer the beam as close as possible to the center of the quads in the first turn, and use two dipoles at the end of the ring to close the orbit. I generated this solution using an existing solution with many turns, but it should be possible to apply this method to a ring with "no-steering" (significant current loss in the first few turns).
+The procedure is as follows:
+
+\begin{enumerate}
+\item Set last 2 injection dipoles by scanning currents and identifying smallest rms deviation in first two RQ's after injection. Time: 1 hour.
+\item Steer through RQ3 (first turn) by setting current in D1; Repeat injection scan if change was significant. Time: 10 minutes + 1 hour if repeating injection scan.
+\item Steer through quads in first turn, setting dipoles D2-34 in order and using quad-as-BPM method to measure position in quads. Time: 2 1/2 hours ($\times 2$ for best results).
+\item Close orbit by scanning D34 and D35 currents.  Time: 30 minutes
+\item Verify orbit quality by running quad scan for 1st turn quad-as-BPM data, and look at multi-turn BPM data to estimate orbit excursions from closed orbit. Time: 30 minutes.
+\end{enumerate}
+
+ Total (minimum) time for steering: $\approx 6$ hours. Time estimates are for total measurement/ beam-on time, more time should be added for trouble-shooting and general unruly behavior.
+
+
+
+
+
+
