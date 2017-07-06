@@ -1,44 +1,100 @@
-%Chapter 3
+%Chapter 4
 
-\renewcommand{\thechapter}{3}
+\renewcommand{\thechapter}{4}
 
-\chapter{Centroid Steering}
+\chapter{Steering and Orbit Correction}
 
 \section{Motivation}
 
+Precise control of centroid orbit is necessary for good beam recirculation, with low losses due to large centroid deviations. This allows for observation of beam losses due to more complex effects, such as resonant excitation of particle and/or beam envelope amplitudes, as well as longitudinal losses. 
+The proposed quasi-integrable nonlinear optics experiment has, as its lowest-order, most straightforward diagnostic, a characterization of resonantly driven beam losses with and without nonlinear damping. Therefore, a reduction of transverse scraping losses is imperative for observation of these likely slower loss rates. Additionally, the nonlinear optics experiments require a low-current, high-emittance $60 \mu A$ beam. A large emittance beam corresponds to a large cross-section beam in configuration space, which places a more stringent requirement on steering tolerances. %todo: link to table of UMER beam quantities
 
+In an ideal linear accelerator, there exists a "reference trajectory," which describes the path of an ideal particle. This trajectory is typically centered within the focusing quadrupoles and the beam pipe. A beam with imperfect injection conditions will oscillate about the ideal trajectory. 
+In this section, we define "first-turn orbit" to mean the measured or simulated centroid trajectory on the first turn. "Closed orbit" refers to the orbit about which the trajectory oscillates. This is also referred to as the "equilibrium orbit." Ideally this orbit is centered in the quadrupoles, but due to background field, alignment errors and number of available correctors, it is only possible to minimize orbit deviation from quadrupole centers.
+
+In general, for straightforward operation of UMER, lowest-possible deviation of beam centroid from quadrupole centers in multi-turn operation is desireable, for the smallest coupling between focusing strength and closed orbit deviation. As seen in Section \ref{HERE}, the dynamic aperture of the quasi-integrable octupole lattice suffers greatly for orbit distortions, and it is desirable to minimize centroid offset from octupole centers in the octupole insert.   
+
+
+%todo: link to write-up of toy model simulations
 
 \section{Considerations for low-ridgidity electron beam}
 
+In typical high-energy accelerating or storage rings (for which steering algorithms are well-developed), the beam travels in straight lines between steering elements (dipoles or off-centered quadrupoles), effectively tracing out an N-sided polygon where N is the number of dipoles. Steering in UMER is complicated by the fact that at low-energies, the beam is significantly bent by background, ambient fields. For a 10 keV electron beam, rigidity $B\rho = \frac{p}{q}$ is $338.859$ G-cm. The required integrated field to bend the beam $10^o$ is $59.154$ G-cm. Given an average ambient vertical field of $\approx 400$ mG, per $32$ cm cell, the integrated field is $ 32 * 0.400 = 12.8$ G-cm. Therefore, approximately $22\%$ of the total horizontal bending in the ring is due to the ambient vertical fields. The ambient horizontal field is weaker, on average $<1$ mG, which gives only a small orbit distortion (requiring only a small correction) from turn-to-turn. However, local closed orbit distortions due to the horizontal fields can be large (up to $\approx 200$ mG), and large vertical corrections are necessary to minimize deviation from quadrupole centers. Measured ambient field data can be seen in Figs. \ref{fig:earthfield} and \ref{fig:earthfield3D}. 
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{3.figures/Earth_field.png}
+\includegraphics[width=\textwidth]{3.figures/earth_field_new.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
 \begin{quote}
-\caption[Figure with caption indented]{Measured Earth field, from Dave Sutter measurements 6/1/2010. Red dashed = radial field (positive = outward direction). Blue solid = vertical field.}
+\caption[]{Ambient fields measured at UMER dipoles, from Dave Sutter measurements 6/1/2010 and 7/22/2016.}
 \label{fig:earthfield}
 \end{quote}
 \end{figure} 
 \renewcommand{\baselinestretch}{2}
 \small\normalsize
 
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{3.figures/earth_field_3D.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Ambient field data vectors, including xy projection. x,y units are meters, z-axis is milli-Gauss.}
+\label{fig:earthfield3D}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+Because the beam is immersed in a bending field, in the perfectly aligned case a beam orbit that is centered in the quadrupoles is required to be displaced in the BPMs, as in Fig. \ref{fig:BPMcartoon}. Simple calculations with a constant background field show that we expect the ideal orbit to be radially displaced by [todo:]. However, in the case of azimuthally-varying ambient fields and displacements up to several millimeters, we expect larger displacements of the "best-possible" orbit.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{3.figures/bpm_quads_cartoon.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Diagram of beam position in diagnostic (BPM) for an orbit that is horizontally centered in the quadrupoles.}
+\label{fig:BPMcartoon}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+Steering in the ring is controlled by 36 horizontal bending dipoles, which determine the shape of the horizontal closed orbit, and which can be independently adjusted to optimizie the orbit. This is different from the typical case of a larger ring, which uses fixed dipoles and adjustable corrector magnets. There is 1 independent horizontal dipole every 2 quadrupoles.  Vertical correction is made with 18 printed circuit corrector magnets located at pipe flanges, which are named "RSV" magnets. There is 1 RSV corrector every 4 quadrupoles. Additional vertical correctors have been added and proposed, as described in Section \ref{sec:steering:vertical}. Steering near injection is controlled by 6 vertical and horizontal corrector magnets in the injection line, in the "SDH" and "SDV" families. Additionally, there are two correctors (one horizontal and one vertical) in the ring near the intersection of the injection pipe (the "Y-section"), named "SDR6H" and "SDR6V." 
+
+
+
+
+
 
 \section{Prior Approach}
 
+%todo: recap Kamal thesis
+
+
 
 % New Approach
-This note describes the quad-as-BPM measurement procedure and a new steering algorithm designed to horizontally center the beam in the quadrupoles. 
-The quad-as-BPM measurement, described in Section \ref{sec:quad_as_BPM}, was developed by Kiersten and Irv and measures the position of the beam 
-on the first turn using quad scan data. The horizontal steering algorithm, Section \ref{sec:horz_steer}, is a methodical, "front to back" approach 
-that first minimizes the position of the beam in the quadrupoles on the first turn then minimizes orbit deviations in subsequent turns. This is 
-proposed as a alternative to the response matrix steering algorithm \cite{KPRnote:2011}, and may be more useful for applications where orbit 
+An alternative approach to steering was developed using a steering procedure with local corrections to ensure the equilibrium orbit is centered (or as close to centered as possible) in the quadrupoles. This is unique from the response matrix method, in which a global correction is calculated that aims to center the equilibrium orbit at the 14 BPM locations. The steering algorithm is a methodical, "front to back" approach that first minimizes the position of the beam in the quadrupoles on the first turn then minimizes orbit deviations in subsequent turns. This algorithm should result in smaller local orbit excursions from quadrupole centers, since it utilizes 36 position data points at quadrupole locations for the first turn orbit as opposed to 14 at the BPMs.
+This is proposed as a alternative to the response matrix steering algorithm \cite{KPRnote:2011}, and may be more useful for applications where orbit 
 centering in the quadrupoles is essential.
 
+The remainder of this chapter describes the tools and algorithmic approach to centering the first turn orbit in the quadrupole centers. First I describe the quad-as-BPM procedure for measuring first-turn centroid position at the quadrupoles (Section \ref{sec:steering:quad-as-bpm}). Then I summarize the application of various algorithms to set horizontal and vertical steerers in Section \ref{sec:steering:ringsteering}, including theoretical "best-case" orbit excursions and proposed vertical steering upgrades to meet the dynamic aperture requirements for the nonlinear optics experiments. This includes first-turn data taken during ring steering tests.
+Section \ref{sec:steering:implementation} lays out a sample steering procedure, including injection and multi-turn optimization routines. 
 
-\section{Quadrupole as BPM technique}
+
+
+ 
+
+\section{Quadrupole as BPM technique} \label{sec:steering:quas-as-bpm}
+
+First-turn position data is garnered from quadrupole response data, also called "quad as BPM" or "virtual BPM." A beam that is off-centered in a quadrupole will experience a dipole force acting on the centroid motion as well as a quadrupole focusing force that acts on the beam envelope. The strength of the dipole kick will depend on the position of the centroid in the quadrupole as well as strength of the quadrupole. Variation of the quadrupole strength will cause variation of the centroid as detected on a downstream BPM. Knowledge of the centroid transformation between quadrupole and BPM allows reconstruction of the beam position 
+
 
 The quad as BPM method is a way to measure the beam orbit in the first turn. We calculate the beam position at the center of 
 each quadrupole by measuring the change in beam position due to a perturbation in the quadrupole current. 
@@ -46,18 +102,16 @@ This is an essentially identical method to that described by Kamal Poor Rezaei i
 with the main difference being the use of the VRUMER beam tracking code to calibrate position, rather than a transfer matrix calculation.  
 
 
-%% ADD MORE
+%todo: ADD MORE
 
-In the work described here, calibration of quadrupole response (measured directly at nearest downstream BPM) is accomplished using VRUMER. VRUMER, described in detail in Appendix [TBD], 
-is a simple orbit integrator written in Matlab, originally developed by Irv Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
-The model used here includes the measured background earth field, applied as a continuously 
-acting, lab-frame-position dependent force based on linear interpolation between measurement points at the 36 dipoles.
-This model does not include centroid kicks as a result of magnet fringe fields or the steering effect of the offset YQ magnet, although 
-the framework can support these refinements.
+In the work described here, calibration of quadrupole response (measured directly at nearest downstream BPM) is accomplished using VRUMER. VRUMER, described in detail in Appendix [TBD],
+is a simple orbit integrator written in Matlab, originally developed by Irving Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
+The model used here includes the measured background earth field, applied as a continuously acting, lab-frame-position dependent force based on linear interpolation between measurement points at the 36 dipoles.
+This model does not include centroid kicks as a result of magnet fringe fields or the steering effect of the offset YQ magnet, although the framework can support these refinements.
 
 
 
-\subsection{Avoiding null points} \label{sec:QAB:nulls}
+\subsection{Avoiding null points} \label{sec:steering:nulls}
 
 Generally, the quad as BPM measurement uses response data from the nearest downstream BPM. However, for certain quad-BPM pairs this may not be appropriate due to the BPM being located near a null point of the betatron oscillation. 
 
@@ -121,7 +175,7 @@ This effect should also be (but is not currently) included in the calculation of
 
 
 
-\section{Ring steering}
+\section{Ring steering} \label{sec:steering:ringsteering}
 
 
 
@@ -287,30 +341,7 @@ I conclude that the existing vertical correcters provide too weak of a correctio
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{2D Parameter search for Injection and Recirculation Settings}
-
-
-
-\section{Comments on steering the Alternative Lattice}
-
-
-
-\section{Implementation}
+\section{Implementation} \label{sec:steering:implementation}
 % This section for technical details of implementation
 
 
@@ -396,6 +427,17 @@ To set D34 and D35, I scan the currents in each and record the BPM response for 
 \caption{Scan results for first 3 BPMs for iteration 3 in table \ref{tab:close_ring}. Color scale is rms value of $\Delta x$ over first 4 turns [mm], white asterisk indicates optimal setting (D34=2.0129 A, D35=1.5802 A) }
 \label{fig:close_scan}
 \end{figure}
+
+
+
+\section{Increasing Vertical Steering Capability} \label{sec:steering:vertical}
+
+
+
+
+
+
+\section{Comments on steering the Alternative Lattice}
 
 
 
