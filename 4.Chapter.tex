@@ -164,6 +164,15 @@ QR70 & RC1 (turn 2) & 0.88  \\
 In subsequent quad as BPM data in this note, QR14, QR32 and QR62 use the BPM response in the next nearest downstream BPM to avoid artificial blow-up or suppression of $x_q$ and $y_q$. 
 This effect should also be (but is not currently) included in the calculation of errorbars for the quad as BPM data.
 
+\subsection{Systematic Error in Quad-as-BPM Calibration} \label{sec:steering:errors}
+
+The previous section begs the question, what is the amount of systematic error introduced by differences between reality and the model used for calibration (in this case, VRUMER). Most notably, bare tune in the model and measured tune differ by $\Delta \nu_x = 0.340$ horizontally, $\Delta \nu_y = 0.459$ vertically. It is covenient to define phase advance per cell, $\sigma = \frac{2\pi\nu}{36}$. In a lattice with low phase advance per cell (such as UMER, with $66.4^o$ and $67.5^p$ in the x,y planes), the particle motion is approximately sinusoidal, described by: 
+
+\begin{equation} x(s) = A\cosine{\frac{\sigma}{L}s} \end{equation}
+
+The derivative of this motion is
+
+\begin{equation} x'(s) = \frac{dX}{ds} = -A\frac{\sigma}{L}\sine{\frac{\sigma}{L}s} \end{equation}
 
 
 
