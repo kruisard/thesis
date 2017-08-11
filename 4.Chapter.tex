@@ -166,15 +166,17 @@ This effect should also be (but is not currently) included in the calculation of
 
 \subsection{Systematic Error in Quad-as-BPM Calibration} \label{sec:steering:errors}
 
-The previous section begs the question, what is the amount of systematic error introduced by differences between reality and the model used for calibration (in this case, VRUMER). Most notably, bare tune in the model and measured tune differ by $\Delta \nu_x = 0.340$ horizontally, $\Delta \nu_y = 0.459$ vertically. It is covenient to define phase advance per cell, $\sigma = \frac{2\pi\nu}{36}$. In a lattice with low phase advance per cell (such as UMER, with $66.4^o$ and $67.5^p$ in the x,y planes), the particle motion is approximately sinusoidal, described by: 
+The previous section begs the question, what is the amount of systematic error introduced by differences between reality and the model used for calibration (in this case, VRUMER). Most notably, bare tune in the model and measured tune differ by $\Delta \nu_x = 0.340$ horizontally, $\Delta \nu_y = 0.459$ vertically. It is covenient to define phase advance per cell, $\sigma = \frac{2\pi\nu}{36}$. In a lattice with low phase advance per cell (such as UMER, with $66.4 ^o$ and $67.5 ^o$ in the x,y planes), the particle motion is approximately sinusoidal, described by: 
 
-\begin{equation} x(s) = A\cosine{\frac{\sigma}{L}s} \end{equation}
+\begin{equation} x(s) = A_1\cos{\frac{\sigma}{L}s} + A_2\sin{\frac{\sigma}{L}s}\end{equation}
 
 The derivative of this motion is
 
-\begin{equation} x'(s) = \frac{dX}{ds} = -A\frac{\sigma}{L}\sine{\frac{\sigma}{L}s} \end{equation}
+\begin{equation} x'(s) = \frac{dX}{ds} = -A_1\frac{\sigma}{L}\sin{\frac{\sigma}{L}s} + A_2\frac{\sigma}{L}\cos{\frac{\sigma}{L}s}\end{equation}
 
+Generally, the centroid is not confined to the reference orbit (the orbit that goes through the center of every quad), so the equilibrium centroid orbit oscillates with a frequency of $2\pi \times \nu$, with amplitudes $A$. Now, let's consider an orbit that has been perturbed, due to changing the strength of a single quad. We treat the quadrupole as "thin," an appropriate simplification when phase advance is low. Using the analog of thin lens optics in the paraxial approximation, $\Delta x' \approx tan \Delta x' = \frac{x_Q}{f}$ where $x_Q$ is the centroid offset in the quad and $f$ is the focal length. For a thin quadrupole, $\frac{1}{f} = \frac{G}{B\rho}$ for integrated gradient $G$ and magnetic rigidity $B\rho$. For UMER ring quadrupoles, $G=13.50I$ [Gauss/A] and for 10 keV electrons, $B\rho = 338.85$ G-cm. 
 
+Consider a perturbed orbit $\tilde{x}(s) = x(s) + \Delta x(s)$, where $s=0$ is the perturbed quad location. The initial conditions are $\tilde{x}(0) = x(0)$ and $\tilde{x'}(0) = x'(0) + \Delta x'_Q$ where $\Delta x'_Q = x(\frac{G \Delta I}{B\rho})$ is the change in angle due to perturbation on the quad. Apply these initial conditions:
 
 
 
