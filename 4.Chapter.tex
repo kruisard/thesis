@@ -95,17 +95,31 @@ Section \ref{sec:steering:implementation} lays out a sample steering procedure, 
 
 First-turn position data is garnered from quadrupole response data, also called "quad as BPM" or "virtual BPM." A beam that is off-centered in a quadrupole will experience a dipole force acting on the centroid motion as well as a quadrupole focusing force that acts on the beam envelope. The strength of the dipole kick will depend on the position of the centroid in the quadrupole as well as strength of the quadrupole. Variation of the quadrupole strength will cause variation of the centroid as detected on a downstream BPM. Knowledge of the centroid transformation between quadrupole and BPM allows reconstruction of the beam position 
 
+%%%%%%%%%%%%%%%% THEORY
 
-The quad as BPM method is a way to measure the beam orbit in the first turn. We calculate the beam position at the center of 
-each quadrupole by measuring the change in beam position due to a perturbation in the quadrupole current. 
+In a lattice with low phase advance per cell (such as UMER, with $66.4 ^o$ and $67.5 ^o$ in the x,y planes), the particle motion is approximately sinusoidal, described by: 
+
+\begin{equation} x(s) = A_1\cos{\frac{\sigma}{L}s} + A_2\sin{\frac{\sigma}{L}s}\end{equation}
+
+The derivative of this motion is
+
+\begin{equation} x'(s) = \frac{dX}{ds} = -A_1\frac{\sigma}{L}\sin{\frac{\sigma}{L}s} + A_2\frac{\sigma}{L}\cos{\frac{\sigma}{L}s}\end{equation}
+
+Generally, the centroid is not confined to the reference orbit (the orbit that goes through the center of every quad), so the equilibrium centroid orbit oscillates with a frequency of $2\pi \times \nu$, with amplitudes $A$. Now, let's consider an orbit that has been perturbed, due to changing the strength of a single quad. We treat the quadrupole as "thin," an appropriate simplification when phase advance is low. Using the analog of thin lens optics in the paraxial approximation, $\Delta x' \approx tan \Delta x' = \frac{x_Q}{f}$ where $x_Q$ is the centroid offset in the quad and $f$ is the focal length. For a thin quadrupole, $\frac{1}{f} = \frac{G}{B\rho}$ for integrated gradient $G$ and magnetic rigidity $B\rho$. For UMER ring quadrupoles, $G=13.50I$ [Gauss/A] and for 10 keV electrons, $B\rho = 338.85$ G-cm. 
+
+Consider a perturbed orbit $\tilde{x}(s) = x(s) + \delta x(s)$, where $s=0$ is the perturbed quad location. The initial conditions are $\tilde{x}(0) = x(0)$ and $\tilde{x'}(0) = x'(0) + \Delta x'_Q$ where $\Delta x'_Q = x(\frac{G \Delta I}{B\rho})$ is the change in angle due to perturbation on the quad. Letting $\delta x(s) = B_1\cos{\sigma s / L} + B_2\sin{\sigma s / L}$ and applying these initial conditions, we find $B_1 = 0$, $B_2 = x_Q L/\sigma \times G \Delta I / B\rho$ and the perturbed orbit is:
+
+\begin{equation} \tilde{x}(s) = x(s) + x_Q \frac{L}{\sigma} \frac{G \Delta I}{B\rho} \sin{\frac{\sigma}{L}s} \end{equation}
+
+With variation of the quadrupole strength, we find the dependence of the centroid position in a downstream BPM is linear in the position in the quadrupole, $x_Q$: 
+
+\begin{equation} \frac{d \tilde{x}(s_{BPM})}{d\Delta I} = x_Q \frac{L}{\sigma} \frac{G}{B\rho} \sin{\frac{\sigma}{L}s_{BPM}} \label{eq:quad-response} \end{equation}
+
+In the approach described here, we recover the first-turn position in the quadrupoles by measuring the slope $\frac{d \tilde{x}(s_{BPM})}{d\Delta I}$. A model of the ring using the VRUMER beam tracking code is used to calculate the constant $\frac{L}{\sigma} \frac{G}{B\rho} \sin{\frac{\sigma}{L}s_{BPM}}$, the result is a measurement of $x_Q$.
 This is an essentially identical method to that described by Kamal Poor Rezaei in an earlier technical note \cite{KPRnote:2012}, 
 with the main difference being the use of the VRUMER beam tracking code to calibrate position, rather than a transfer matrix calculation.  
 
-
-%todo: ADD MORE
-
-In the work described here, calibration of quadrupole response (measured directly at nearest downstream BPM) is accomplished using VRUMER. VRUMER, described in detail in Appendix [TBD],
-is a simple orbit integrator written in Matlab, originally developed by Irving Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
+VRUMER, described in detail in Appendix [TBD], is a simple orbit integrator written in Matlab, originally developed by Irving Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
 The model used here includes the measured background earth field, applied as a continuously acting, lab-frame-position dependent force based on linear interpolation between measurement points at the 36 dipoles.
 This model does not include centroid kicks as a result of magnet fringe fields or the steering effect of the offset YQ magnet, although the framework can support these refinements.
 
@@ -164,20 +178,27 @@ QR70 & RC1 (turn 2) & 0.88  \\
 In subsequent quad as BPM data in this note, QR14, QR32 and QR62 use the BPM response in the next nearest downstream BPM to avoid artificial blow-up or suppression of $x_q$ and $y_q$. 
 This effect should also be (but is not currently) included in the calculation of errorbars for the quad as BPM data.
 
+
+
+
+
 \subsection{Systematic Error in Quad-as-BPM Calibration} \label{sec:steering:errors}
 
-The previous section begs the question, what is the amount of systematic error introduced by differences between reality and the model used for calibration (in this case, VRUMER). Most notably, bare tune in the model and measured tune differ by $\Delta \nu_x = 0.340$ horizontally, $\Delta \nu_y = 0.459$ vertically. It is covenient to define phase advance per cell, $\sigma = \frac{2\pi\nu}{36}$. In a lattice with low phase advance per cell (such as UMER, with $66.4 ^o$ and $67.5 ^o$ in the x,y planes), the particle motion is approximately sinusoidal, described by: 
+The previous section begs the question, what is the amount of systematic error introduced by differences between reality and the model used for calibration (in this case, VRUMER). Most notably, bare tune in the model and measured tune differ by $\Delta \nu_x = 0.340$ horizontally, $\Delta \nu_y = 0.459$ vertically. It is covenient to define phase advance per cell, $\sigma = \frac{2\pi\nu}{36}$. Additionally, there are measurement errors 
 
-\begin{equation} x(s) = A_1\cos{\frac{\sigma}{L}s} + A_2\sin{\frac{\sigma}{L}s}\end{equation}
+Examining the formula for $x_Q$ from Eq. \ref{eq:quad-response} above, re-written here as:
 
-The derivative of this motion is
+\begin{equation} x_Q = \frac{\sigma}{L} \frac{d \tilde{x}_{BPM}}{d \Delta I} \sin^{-1} \frac{\sigma}{L}s_{BPM} \end{equation}
 
-\begin{equation} x'(s) = \frac{dX}{ds} = -A_1\frac{\sigma}{L}\sin{\frac{\sigma}{L}s} + A_2\frac{\sigma}{L}\cos{\frac{\sigma}{L}s}\end{equation}
 
-Generally, the centroid is not confined to the reference orbit (the orbit that goes through the center of every quad), so the equilibrium centroid orbit oscillates with a frequency of $2\pi \times \nu$, with amplitudes $A$. Now, let's consider an orbit that has been perturbed, due to changing the strength of a single quad. We treat the quadrupole as "thin," an appropriate simplification when phase advance is low. Using the analog of thin lens optics in the paraxial approximation, $\Delta x' \approx tan \Delta x' = \frac{x_Q}{f}$ where $x_Q$ is the centroid offset in the quad and $f$ is the focal length. For a thin quadrupole, $\frac{1}{f} = \frac{G}{B\rho}$ for integrated gradient $G$ and magnetic rigidity $B\rho$. For UMER ring quadrupoles, $G=13.50I$ [Gauss/A] and for 10 keV electrons, $B\rho = 338.85$ G-cm. 
 
-Consider a perturbed orbit $\tilde{x}(s) = x(s) + \Delta x(s)$, where $s=0$ is the perturbed quad location. The initial conditions are $\tilde{x}(0) = x(0)$ and $\tilde{x'}(0) = x'(0) + \Delta x'_Q$ where $\Delta x'_Q = x(\frac{G \Delta I}{B\rho})$ is the change in angle due to perturbation on the quad. Apply these initial conditions:
+Applying error analysis and assuming no significant error is introduced by our choice of $L$, $G$, $B\rho$, or $s_{BPM}$ in the model, we find the position error to be dependent on errors in the measured slope $m$, $\sigma_m$, and the systematic error of the model phase advance $\sigma$, $\sigma_\sigma$. 
 
+\begin{equation} \frac{\sigma_{x_Q}}{x_Q} = \bigg[1-\frac{s_{BPM}}{L}\cot{\frac{\sigma}{L}s_{BPM}} \bigg]\frac{\sigma_\sigma}{\sigma} + \frac{\sigma_m}{m} \end{equation}
+
+In this case, error $\sigma_m$ encompasses to statistical and systematic noise, as well as systematic calibration errors, related to the collection and processing of BPM data. For all the data shown here, $\sigma_m$ was taken to be the $90\%$ confidence bounds of the slope for the linear fit to the measured BPM position versus quadrupole strength curve. This encompasses shot-to-shot noise and nonlinearities introduced by beam scraping. Additionally, background was subtracted from scope traces to reduce the effect of systematic, repeatable noise picked up by the BPM amplifiers. 
+
+$\sigma_\sigma$ is an error introduced by using the VRUMER model to calibrate quadrupole response data, and can be reduced by tweaking the focusing strength in the model. In this case, quadrupole strength parameters were set according to standard hard-edged approximation for the UMER quadrupoles: length$=4.475$ cm, peak strength $g=3.609$ G/cm.
 
 
 
