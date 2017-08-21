@@ -2,8 +2,273 @@
 
 \renewcommand{\thechapter}{6}
 
-\chapter{Quasi-integrable Octupole Lattice}
-
-\section{Toy Model}
+\chapter{Distributed Octupole Lattice}
 
 
+
+%% Following is copy of HB paper
+
+
+\section{Introduction}
+
+This paper will discuss preliminary testing of a distributed octupole lattice, conducted in parallel with preparations for the more robust single-channel design.
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+   \includegraphics*[width=174pt]{6.figures/N4_lattice}
+   \caption{N4 octupole lattice imposed on alternative lattice, large blocks indicate octupole positions}
+   \label{N4lattice}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+
+\section{Experimental Setup}
+
+UMER is a 10 keV, 11.52 meter circumference ring designed for the study of high intensity beam dynamics. The facility consists of an electron source and pulsed dipole injection into the ring, containing 36 FODO cells and 36 dipole magnets. At present, the ring has 5 available beam current settings, ranging from 0.6 mA to 100 mA, with corresponding tune depressions of 0.85 - 0.14.  Transport of the 0.6 mA (or "pencil") beam is largely emittance dominated, while higher currents are space charge dominated.\cite{UMER} A 60 $\mu$A beam is currently being characterized for use in the nonlinear experiments.
+
+The Nonlinear Optics project at UMER has examined two variants of the quasi-integrable octupole lattice \cite{DN}.  One test lattice, referred to as the single-channel lattice, will have one long octupole insert (64 cm, or 6\% of the ring) over a symmetric beam waist. \cite{KRAAC} This will resemble the octupole and elliptic lattices at the IOTA ring.
+
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+   \includegraphics*[width=174pt]{6.figures/UMER_FODO}
+   \caption{Two standard UMER FODO cells (blue quadrupoles and green dipoles). In the Alternatice lattice, the crossed quadrupoles are unpowered, leaving a vacancy for octupole elements.}
+   \label{FODOcell}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+The primary focus of this paper is the second consideration, an N4 distributed octupole lattice. The nonlinear inserts are comprised of 4 short octupoles distributed at even intervals about the ring ($90^o$ points, see Fig. \ref{N4lattice}). This configuration utilizes a mode of UMER operation known as the “alternative lattice” in which the total number of FODO cells in the ring is halved (by removing half of the quadrupoles).  The two lattices are illustrated in Fig. \ref{FODOcell}. The nominal tune of the ring is also approximately halved, from $\nu \approx 6.7$ to $\approx 3.8$. The alternative lattice uses printed circuit octupoles with the same aspect ratio as the standard UMER PC quad, which are seated in unused quadrupole mounts at the mid-point of the FODO cell. 
+
+
+The lattice can be tuned to have a tune of $4+\delta 2\pi$, where $\delta$ indicates the phase advance through the octupoles. For a turn length of 11.52 m, effective octupole length of 5.2 cm and tune near 4, the phase advance through the octupoles will be near $\psi = 0.07 *2\pi$. 
+
+The N4 lattice is natively suited to the UMER structure, allowing the installation of octupoles with minimal disruptions to the ring (utilizing existing mounts and power supplies). However, it is a coarse approximation of the quasi-integrable octupole lattice and it is expected that these approximations will limit the extent to which the Hamiltonian $H_N$ is conserved.
+
+A key liberty taken with the quasi-integrable theory is the requirement that $\beta_x=\beta_y$ throughout the nonlinear element. In the N4 case, $\beta_x \approx \beta_y$, with differences on order 15\%. The other approximation is that the PC octupole is fringe-dominated, meaning the longitudinal profile is not flat top and therefore the magnet cannot perfectly meet the requirement that $V_{oct} = 1/\beta^3 =$ constant. Theoretical calculations of the UMER magnets predict that fringe fields cancel due to the relatively short magnet length.\cite{venturini} It is yet to be seen if this cancellation will help preserve the nonlinear invariant. Octupole models used in simulations shown here utilize a hard-edged approximation. 
+
+
+
+
+\subsection{Printed Circuit Octupole Magnets}
+
+UMER utilizes air core flexible printed circuit magnets for focusing and steering. The printed circuits are cost-effective, lightweight and stackable, making any combination of multipoles possible. They can operate in DC or pulsed mode, and are easily tunable with no hysteresis as well as inexpensive and rapid to prototype.
+
+The first generation of printed circuit octupoles has been produced and initial characterization made. The PC circuits, pictured in Fig \ref{pcb}, are made in two double-layered halves, which fit inside the standard UMER quadrupole mount. Based on the similarity to existing UMER PC quadrupoles and dipoles, each magnet should easily be able to sustain 2 A DC with the existing mounts and up to 10 A with addition of water cooling. Maxwell 3D calculations show $75 T/m^3/A$ peak fields in the octupole, with the 16-pole as the next significant multipole, against theoretical predicts that the 24-pole is the next highest allowed multipole. \cite{venturini}
+
+The magnet has been characterized using an integrated rotating coil measurement. A long coil rotating at 1 Hz sends EMF signal to an oscilloscope. The resulting scope FFT can be seen in Fig. \ref{rotcoil}. The large dipole contribution is primarily due to the earth’s magnetic field. Sextupole and quadrupole terms are minimized by adjusting the transverse position of the octupole.
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+   \includegraphics*[width=174pt]{6.figures/octupole_PCB}
+   \caption{Half of a UMER printed circuit octupole magnet}
+   \label{pcb}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+   \includegraphics*[width=174pt]{6.figures/OctupoleFFTreal}
+   \caption{FFT measurement of octupole from rotating coil measurement}
+   \label{rotcoil}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+
+\section{Distributed Octupole Lattice Simulations}
+
+Simulations of N4 distributed lattices in the Elegant and Warp codes predict enhanced stability near the ideal tune operating point.
+
+\subsection{Elegant}
+
+The idea of the distributed octupole lattice was first explored in the Elegant code, which allows beam tracking through third order matrices and symplectic elements.\cite{elegant} Frequency map analysis shows the dynamic aperture is largest for an evenly distributed N4-octupole lattice With an octupole strength of $200 T/m^3$, which corresponds to approximately 2.66 A in the physical octupoles, we see a tune shifts up to $ \Delta \nu \approx 0.07$. This comes at the cost of operating near the integer resonance band. 
+
+The Elegant calculation was run at $\delta \psi_x = 1.06 *2 \pi$, $\delta \psi_y = 1.08 *2 \pi$ between octupoles (ring tune of $\nu_x=4.45$, $\nu_y=4.54$), slightly displaced from the ideal $\delta \psi_x =  \delta \psi_y = 2 \pi$ between octupoles. At this offset, the integer resonance band $\nu_x=\nu_y$ is visible in both configuration and tune space as an evacuated band, as seen in Fig. \ref{fma}. This integer band is destructive and cannot be mitigated by increasing octupole strength to drive up tune spread; The maximum externally induced tune spread is fixed, while the dynamic aperture decreases with octupole current (and amplitude dependent tunes scale accordingly). 
+
+A comparable analysis for single channel design was done in Elegant. The single channel octupole is expected to have a maximum tune shift of roughly twice what is expected in the N4 lattice ($\delta \nu \approx 0.23$), and less apparent sensitivity to the $\nu_x=\nu_y$ band.
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+	\begin{subfigure}[]{0.5\textwidth}   \centering
+    \includegraphics*[width=174pt]{6.figures/paper_umer_oct_A}
+	\end{subfigure}
+	\begin{subfigure}[]{0.5\textwidth}   \centering
+	\includegraphics*[width=174pt]{6.figures/paper_umer_oct_nu}
+	\end{subfigure}
+ 	\caption{Frequency Map Analysis of N4 lattice in configuration and tune space}
+   \label{fma}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+
+
+
+\subsection{WARP}
+
+We use the WARP PIC code to track the invariant quantity (Hamiltonian) in the nonlinear lattice \cite{warp}. We first model an ideal quasi-integrable octupole channel, in which octupoles are perfectly scaled as $\beta^{-3}$ across a 64 cm drift (equivalent 20 degree section of UMER), and the remaining 340 degrees of the ring is condensed to a thin-lens axisymmetric focusing kick. This system is discussed in more detail in previous presentations \cite{KRAAC}.  For 100 passes through this octupole channel, we see a particle of $\langle H_N\rangle =1E-5$ experience RMS variations of $2.8E-10$ without octupoles (jitter apparently due to computational noise) and variations of $1.5E-8$ for maximum octupole current of 2 A. These values can be compared to Table \ref{l2ea4-t1}. Despite low-frequency oscillations, the particle energy appears to be well-bounded as expected, see Fig. \ref{toyinvar}.
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+    \includegraphics*[width=174pt]{6.figures/HvsZ_crun1_toylattice}
+ 	\caption{Conserved invariant $H_N$ for simple quasi-integrable octupole lattice, WARP simulation}
+   \label{toyinvar}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+
+\subsubsection{N4 distributed lattice}
+
+In comparison, invariant tracking through the N4 distributed lattice shows much larger amplitude oscillations in $H_N$, most likely due to the approximations on the nonlinear portion of the lattice. For the WARP model, we use hard edged elements in the alternative lattice configuration. Octupoles of length 5.2 cm and peak strength $75 T/m^3/A$ are placed at 2.88 m intervals. 
+
+Two cases are considered:  The historically utilized alternative lattice operating point $I_F=I_D=0.87 A$, which has a tune (as calculated in WARP) of $\nu_x=3.88$, $\nu_y=3.83$ and $I_F=0.938 A$, $I_D=0.944 A$, with tunes $\nu_x=4.13$, $\nu_y=4.11$. The two operating points are marked in Fig. \ref{warpscan}. 
+
+\begin{figure}[!tb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+    \includegraphics*[width=174pt]{6.figures/warp_tune_scan_plot}
+ 	\caption{Tune scan, simulated with WARP. Color axis shows particle survival over a range of operating points. Black marker indicates operating point $\nu_x=3.88$, $\nu_y=3.83$, while white marker indicates $\nu_x=4.13$, $\nu_y=4.11$.}
+   \label{warpscan}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+One expects the invariant to be perfectly conserved in the linear case ($I_{oct}=0$). Also, decrease of dynamic aperture with increasing octupole strength is can be seen through high-amplitude unstable chaotic orbits leaving the system. Recall, for the nonlinear invariant to be conserved, particles must have continuous motion through the octupole elements otherwise chaotic, unbounded orbits are permitted.\cite{DN} In the case continuous motion (or quasi-continuous, allowing for linear inserts between octupoles) cannot be maintained, we expect the invariant quantity to be less bounded. As seen Fig. \ref{N4invar1} and Fig. \ref{N4invar2}, particles seem to gain stability as the external focusing nears the $\nu_x=\nu_y=4.07$ condition. However, simulations at this operating point yield poor results, and the invariant is not well conserved. 
+
+While the Hamiltonian is not well conserved, long term stability (past the tested 50 turns) may be possible. A natural extension of this work is to include predicted experimental errors into the invariant calculation, as well as extend consideration to a wider range of operating points.
+
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+	\begin{subfigure}[]{0.5\textwidth} \centering
+    \includegraphics*[width=174pt]{6.figures/Ioct=0_F0870_D0870}
+	\end{subfigure}
+	\begin{subfigure}[]{0.5\textwidth} \centering
+    \includegraphics*[width=174pt]{6.figures/Ioct=2_F0870_D0870}
+	\end{subfigure}
+	\begin{subfigure}[]{0.5\textwidth} \centering
+    \includegraphics*[width=174pt]{6.figures/Ioct=4_F0870_D0870}
+	\end{subfigure}
+ 	\caption{Invariant $H_N$ for N4 distributed lattice at $\nu_x=3.88$, $\nu_y=3.83$}
+   \label{N4invar1}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+	\begin{subfigure}[]{0.5\textwidth} \centering 
+    \includegraphics*[width=174pt]{6.figures/Ioct=0_F09385_D09435}
+	\end{subfigure}
+	\begin{subfigure}[]{0.5\textwidth} \centering
+    \includegraphics*[width=174pt]{6.figures/Ioct=2_F09385_D09435}
+	\end{subfigure}
+	\begin{subfigure}[]{0.5\textwidth} \centering
+    \includegraphics*[width=174pt]{6.figures/Ioct=4_F09385_D09435}
+	\end{subfigure}
+ 	\caption{Invariant $H_N$ for N4 distributed lattice at $\nu_x=4.13$, $\nu_y=4.11$}
+   \label{N4invar2}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+
+
+\begin{table}[hbt]
+%   \vspace*{-.5\baselineskip}
+   \centering
+   \caption{INVARIANT TRACKING IN N4 LATTICE}
+   \begin{tabular}{lccc}
+       \toprule
+	   $\nu_x=4.13$ & $\nu_y=4.11$\\
+       \textbf{$I_{oct}$ [A]} & \textbf{$\langle H_N \rangle$}        &RMS variation             & \% variation  \\
+	   & & & peak to peak\\
+       \midrule
+           0        & 3.22E-6    &2.3E-8      & 2.4       \\ %[3pt]
+          0.5       & 3.17E-6     &4.2E-8     & 6.2       \\ %[3pt]
+           2.0        & 3.05E-6    &1.1E-7     &17.6       \\ %[3pt]
+           4.0      & 2.91E-6      &2.1E-7   & 33.5        \\
+       \bottomrule
+       \toprule
+	   $\nu_x=3.88$ & $\nu_y=3.83$\\
+       \textbf{$I_{oct}$ [A]} & \textbf{$\langle H_N \rangle$}          &RMS variation          & \% variation \\
+		& & & peak to peak\\
+       \midrule
+           0        & 2.92E-6      &1.5E-8    & 2.3       \\ %[3pt]
+          0.5       & 2.90E-6      &3.5E-8    & 6.8       \\ %[3pt]
+           2.0        & 2.82E-6     & 1.0E-7    & 20.8       \\ %[3pt]
+           4.0      & 2.93E-6       & 1.4E-7   & 59.9        \\
+       \bottomrule
+
+   \end{tabular}
+   \label{l2ea4-t1}
+%   \vspace*{-\baselineskip}
+\end{table}
+
+
+\section{Preliminary Measurements}
+
+\subsection{Alternative Lattice Tune Scan}
+
+In preparation for N4 lattice testing, measurements are taken on the alternative lattice to gauge beam losses over a variety of operating parameters. The tune scan technique, described in more detail in \cite{tunescan}, measures variations in beam losses as a function of quadrupole strength in two families of quadrupoles (horizontally focusing and defocusing, notated as $I_F$ and $I_D$). Fig. \ref{data} shows beam survival measurements of the 0.6 mA beam for a range of quadrupole values.  Transformation to tune-space was done using WARP simulations with hard-edged elements and a thin-lens model of dipole edge focusing. The obvious integer resonance bands are used to orient the measurement in tune-space. An offset of $\nu_x = -0.45$ and $\nu_y = -0.35$ from the WARP prediction is necessary to line up integer bands. 
+
+The tunescan shows broad bands at the even integer tune resonances. As this N4 lattice is intended to be run at $\nu_x=\nu_y=4 + \delta$, tuning the beam closer to this operating point will be necessary if any beneficial effect is to be observed over the integer band losses. With octupoles on (Figs. \ref{data},\ref{profile}), no apparent increase in dynamic aperture is seen. 
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+%	\begin{subfigure}[]{0.5\textwidth}
+%	\centering
+%  \includegraphics*[width=174pt]{6.figures/pencil_tune_scan_plot_currentspace}
+%	\end{subfigure}
+	\begin{subfigure}[]{0.5\textwidth}
+	\centering
+    \includegraphics*[width=174pt]{6.figures/pencil_tune_scan_plot_currentspace_Oct0}
+	\caption{Alternative lattice tune scan }
+	\end{subfigure}
+	\begin{subfigure}[]{0.5\textwidth}
+	\centering
+    \includegraphics*[width=174pt]{6.figures/pencil_tune_scan_plot_currentspace_Oct5}
+	\caption{N4 lattice tune scan with octupoles powered at 0.5 A}
+	\end{subfigure}
+ 	\caption{Tune scan data for 0.6 mA "pencil" beam, beam survival plot at 25 turns. Color axis is peak beam current normalized to 10th turn.}
+   \label{data}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+\begin{figure}[!htb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+    \includegraphics*[width=0.5\textwidth]{6.figures/oct_profile}
+ 	\caption{Beam profile after 1 pass through octupole, imaged using phosphor screen. From left to right: $I_{oct} >0$, $I_{oct} =0$, $I_{oct} <0$}
+   \label{profile}
+%   \vspace*{-\baselineskip}
+\end{figure}
+
+\subsubsection{Errors: Beam Matching and Steering}
+The beam matching quadrupoles and steering correctors were optimized to a single operating point, at $I_F=I_D = 0.87$ A. It is expected that the accrued errors in the match and the steering grow with greater distance from the ideal operating point, although it is not clear that they accrue anisoptropically.
+%Steering in UMER is significantly complicated by the presence of a nominally 400 mG vertical Earth field component, which provides approximately 20 degrees of bending over a 32 cm FODO cell. The horizontal component, with maximum value approximately 200 mG, also contributes to the dynamics. The ideal closed orbit therefore is not centered on the beam pipe, but rather arcs across a FODO cell through the centers of the quadrupoles, complicating the steering procedure. 
+
+
+
+The steering solution for this operating point had first turn horizontal offsets in the quadrupoles  of RMS 0.5 mm with a maximum of 1.3 mm. Vertically, RMS offsets are 3.2 mm with maximum value of approximately 8.5 +- 0.5 mm. The contribution of these steering errors can be seen in the width of the integer resonance bands in the tune scan data (Fig. \ref{data}). More precise control of the steering will likely improve this characteristic by reducing the steering error for all operating points.
+
+The beam match was not well-tuned, with percent RMS variations of 33\% in the horizontal and 28\% in the vertical. More accurate matching solutions have been demonstrated in UMER, up to standard deviations of 0.17 mm horizontally and 014 mm vertically for the 6 mA beam. \cite{hao}
+
+
+
+\section{Conclusion}
+
+In conclusion, UMER is equipped to test quasi-integrable octupole lattices. Insight has been built into the behavior of the N4
+octupole lattice, which has potential to be an approximate testbed for quasi-integrable dynamics. However, the proximity to an integer resonance band may ultimately limit its usefulness and implementation, at least with short octupole elements. On UMER, the large $\nu_x = 4$ band overshadows any resonant loss mitigation induced by the octupoles. 
+
+Additional work to improve the matching and steering errors near the desired tune operating point may increase the viability of the N4 lattice. However, the emphasis of future work will be on implementing the single-channel lattice on UMER, by modifying a 20 degree ring section to accommodate a long octupole insert, as depicted in Fig. \ref{SClattice}.
+
+\begin{figure}[!tb]
+%   \vspace*{-.5\baselineskip}
+   \centering
+   \includegraphics*[width=174pt]{6.figures/SC_lattice}
+   \caption{Single octupole lattice layout, with 4 symmetric $\beta_x = \beta_y$ points, one of which will accommodate the octupole insert.}
+   \label{SClattice}
+%   \vspace*{-\baselineskip}
+\end{figure}
