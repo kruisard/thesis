@@ -12,10 +12,10 @@
 % Select the version that fits how you are making this LaTeX document (its driver).
 % The first two are the most likely ones to be needed.
 %
-% \newcommand{\mydriver}{pdftex} %Making a PDF directly using pdflatex.
+\newcommand{\mydriver}{pdftex} %Making a PDF directly using pdflatex.
 %\newcommand{\mydriver}{dvipdfmx} %Making a DVI and converting that to PDF using dvipdfmx.
 % \newcommand{\mydriver}{dvipdfm} %Making a DVI and converting that to PDF using dvipdfm.
- \newcommand{\mydriver}{dvips} %Making a DVI and converting that to PS using dvips (may later be converted to PDF).  (Used with my pc)
+% \newcommand{\mydriver}{dvips} %Making a DVI and converting that to PS using dvips (may later be converted to PDF).  (Used with my pc)
 % \newcommand{\mydriver}{dvipsone} %Making a DVI and converting that to PS using dvipsone (may later be converted to PDF).
 % \newcommand{\mydriver}{ps2pdf} %Same as the one for dvips except it is compatible with Ghostscript's PDF writer.
 
@@ -27,19 +27,23 @@
       {\normalfont\large}{Chapter \thechapter:}{1em}{}
 
 \usepackage{graphicx}
+\usepackage{epstopdf}
+\epstopdfsetup{update} % only regenerate pdf files when eps file is newer
 \usepackage{cite}
 \usepackage{lscape}
 \usepackage{indentfirst}
 \usepackage{latexsym}
+%\usepackage{amsmath}
 \usepackage{multirow}
 \usepackage{tabls}
 \usepackage{wrapfig}
 \usepackage{slashbox}
 \usepackage{longtable}
 \usepackage{supertabular}
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
 \usepackage{subeqn}
-\usepackage{subfigure}
-\usepackage[dvips, bookmarks, colorlinks=true, plainpages=false, citecolor=blue, urlcolor=blue, filecolor=blue, linkcolor=blue]{hyperref} 
+%\usepackage{subfigure}
+\usepackage[pdftex, bookmarks, colorlinks=true, plainpages=false, citecolor=blue, urlcolor=blue, filecolor=blue, linkcolor=blue]{hyperref} 
 	%Works with PcTex.  You may have to choose one of the drivers above if dvips does not work.
 
 \newcommand{\tbsp}{\rule{0pt}{18pt}} %used to get a vertical distance after \hline
@@ -65,6 +69,16 @@
 %Pages from this point start at Arabic numeral 1
 \setcounter{page}{1}
 \pagenumbering{arabic}
-\include{Chapter1}
+\include{1.Chapter}
+
+% Bibliography
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+
+\newpage
+\bibliographystyle{unsrt} 
+\bibliography{mybib} 
+
 
 \end{document}
+

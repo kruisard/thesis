@@ -4,6 +4,37 @@
 
 \chapter{Introduction}
 
-\section{To be named}
+\section{Quasi-integrable Nonlinear Optics}
 
+
+
+Beam resonances that drive particle losses and beam halo present a significant challenge for high intensity accelerators, limiting beam current due to risk of damage and/or activation. While landau damping can control resonant effects, the addition of weak nonlinearities to a linear lattice can introduce resonant islands and chaotic phase space orbits, which reduce dynamic aperture and lead to destructive particle loss. Theory predicts that lattices with one or two invariants and sufficiently strong nonlinear elements should suppress tune and envelope resonances without loss of stable phase space area \cite{DN}. 
+
+In \cite{DN}, the small-angle Hamiltonian for transverse motion of a particle in an external linear focusing system is given by 
+
+\begin{equation}
+H_N = \frac{1}{2} \left( p_{x}^2 + p_{y}^2 + K(s) \left(x^2 + y^2 \right) \right) + V(x,y,s)
+\end{equation}
+
+where $V(x,y,s)$ is a generic nonlinear term. In the normalized frame, the Hamiltonian becomes 
+
+\begin{equation}
+H_N = \frac{1}{2} \left( p_{x,N}^2 + p_{y,N}^2 +x_N^2 + y_N^2 \right) + \kappa U(x_N,y_N,s)
+\end{equation}
+
+where $x_N = \frac{x}{\sqrt{\beta(s)}}$ and $p_N = p\sqrt{\beta(s)}-\frac{\alpha x}{\sqrt{\beta(s)}}$. 
+
+In order for $U(x_N,y_N)$ to be an invariant quantity (and therefore for $H_N$ to be conserved), $\beta_x=\beta_y$ inside the nonlinear element and the nonlinear element strength parameter $\kappa (s)$ depends on $\beta (s)$. In particular, for an octupole element $\kappa \propto \frac{1}{\beta(s)^3}$.
+
+For an elliptic nonlinear magnet, the transverse motion of a particle will be fully integrable with two conserved invariants, the normalized Hamiltonian and an additional quadratic term. The theory of the integrable lattice will be tested at the IOTA ring, currently under construction at Fermilab \cite{ipac12,antipov}. The proposed lattice consists of a transversely symmetric ($\beta_x = \beta_y$) beam in an axially varying nonlinear insert, linked by linear sections of $n\pi$ phase advance that provide external focusing and image the beam between nonlinear sections, for pseudo-continuous motion of particles through the nonlinear insert. This lattice is illustrated in Fig. \ref{iota}.
+
+The goal of the nonlinear optics program at UMER is to test a quasi-integrable octupole lattice, experimentally demonstrating increased transverse stability and halo mitigation, predicted in \cite{Webb}. While IOTA aims to test a fully integrable nonlinear solution, UMER does not have the precision necessary to verify integrability \cite{ipac12}. The strength of UMER lies in its flexibility to accommodate variable space charge beams with flexible focusing schemes. For the quasi-integrable lattice, the conserved $H_N$ will result in chaotic but bounded motion, while still providing large amplitude-dependent tune spreads to reduce resonant behavior.
+
+
+\begin{figure}[!htb]
+   \centering
+   \includegraphics*[width=174pt]{1.figures/toy_model}
+   \caption{Ideal nonlinear lattice composed of $\beta_x = \beta_y$ channel and ideal thin lens transfer matrix.}
+   \label{iota}
+\end{figure}
 

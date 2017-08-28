@@ -23,7 +23,7 @@ In typical high-energy accelerating or storage rings (for which steering algorit
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{3.figures/earth_field_new.png}
+\includegraphics[width=\textwidth]{4.figures/earth_field_new.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -37,7 +37,7 @@ In typical high-energy accelerating or storage rings (for which steering algorit
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{3.figures/earth_field_3D.png}
+\includegraphics[width=\textwidth]{4.figures/earth_field_3D.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -54,7 +54,7 @@ Because the beam is immersed in a bending field, in the perfectly aligned case a
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.5\textwidth]{3.figures/bpm_quads_cartoon.png}
+\includegraphics[width=0.5\textwidth]{4.figures/bpm_quads_cartoon.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -93,85 +93,117 @@ Section \ref{sec:steering:implementation} lays out a sample steering procedure, 
 
 \section{Quadrupole as BPM technique} \label{sec:steering:quas-as-bpm}
 
-First-turn position data is garnered from quadrupole response data, also called "quad as BPM" or "virtual BPM." A beam that is off-centered in a quadrupole will experience a dipole force acting on the centroid motion as well as a quadrupole focusing force that acts on the beam envelope. The strength of the dipole kick will depend on the position of the centroid in the quadrupole as well as strength of the quadrupole. Variation of the quadrupole strength will cause variation of the centroid as detected on a downstream BPM. Knowledge of the centroid transformation between quadrupole and BPM allows reconstruction of the beam position 
+First-turn position data is garnered from quadrupole response data, also called "quad as BPM" or "virtual BPM." A beam that is off-centered in a quadrupole will experience a dipole force acting on the centroid motion as well as a quadrupole focusing force that acts on the beam envelope, as shown in Fig. \ref{fig:simple-beamline}. The strength of the dipole kick will depend on the position of the centroid in the quadrupole as well as strength of the quadrupole. Variation of the quadrupole strength will cause variation of the centroid as detected on a downstream BPM. Knowledge of the centroid transformation between quadrupole and BPM allows reconstruction of the beam position. 
+
+%%%%%%%%%%%%%%%% THEORY
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/simple_beamline.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Diagram of UMER beamline, with quadrupoles (blue), dipoles (green) and BPMs (circles). Black curve is possible centroid trajectory, dashed-red curve is perturbed centroid due to change in quadrupole strength at 40 cm. Phase advance per cell (32 cm) is $66.4^o$.}
+\label{fig:simple-beamline}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
 
 
-The quad as BPM method is a way to measure the beam orbit in the first turn. We calculate the beam position at the center of 
-each quadrupole by measuring the change in beam position due to a perturbation in the quadrupole current. 
-This is an essentially identical method to that described by Kamal Poor Rezaei in an earlier technical note \cite{KPRnote:2012}, 
+
+
+In a lattice with low phase advance per cell (such as UMER, with $66.4 ^o$ and $67.5 ^o$ in the x,y planes), the particle motion is approximately sinusoidal, described by: 
+
+\begin{equation} x(s) = A_1\cos{\frac{\sigma}{L}s} + A_2\sin{\frac{\sigma}{L}s}\end{equation}
+
+The derivative of this motion is
+
+\begin{equation} x'(s) = \frac{dX}{ds} = -A_1\frac{\sigma}{L}\sin{\frac{\sigma}{L}s} + A_2\frac{\sigma}{L}\cos{\frac{\sigma}{L}s}\end{equation}
+
+Generally, the centroid is not confined to the reference orbit (the orbit that goes through the center of every quad), so the equilibrium centroid orbit oscillates with a frequency of $2\pi \times \nu$, with amplitudes $A$. Now, let's consider an orbit that has been perturbed, due to changing the strength of a single quad. We treat the quadrupole as "thin," an appropriate simplification when phase advance is low. Using the analog of thin lens optics in the paraxial approximation, $\Delta x' \approx tan \Delta x' = \frac{x_Q}{f}$ where $x_Q$ is the centroid offset in the quad and $f$ is the focal length. For a thin quadrupole, $\frac{1}{f} = \frac{G}{B\rho}$ for integrated gradient $G$ and magnetic rigidity $B\rho$. For UMER ring quadrupoles, $G=13.50I$ [Gauss/A] and for 10 keV electrons, $B\rho = 338.85$ G-cm. 
+
+Consider a perturbed orbit $\tilde{x}(s) = x(s) + \delta x(s)$, where $s=0$ is the perturbed quad location. The initial conditions are $\tilde{x}(0) = x(0)$ and $\tilde{x'}(0) = x'(0) + \Delta x'_Q$ where $\Delta x'_Q = x(\frac{G \Delta I}{B\rho})$ is the change in angle due to perturbation on the quad. Letting $\delta x(s) = B_1\cos{\sigma s / L} + B_2\sin{\sigma s / L}$ and applying these initial conditions, we find $B_1 = 0$, $B_2 = x_Q L/\sigma \times G \Delta I / B\rho$ and the perturbed orbit is:
+
+\begin{equation} \tilde{x}(s) = x(s) + x_Q \frac{L}{\sigma} \frac{G \Delta I}{B\rho} \sin{\frac{\sigma}{L}s} \end{equation}
+
+With variation of the quadrupole strength, we find the dependence of the centroid position in a downstream BPM is linear in the position in the quadrupole, $x_Q$: 
+
+\begin{equation} \frac{d \tilde{x}(s_{BPM})}{d\Delta I} = x_Q \frac{L}{\sigma} \frac{G}{B\rho} \sin{\frac{\sigma}{L}s_{BPM}} \label{eq:quad-response} \end{equation}
+
+In the approach described here, we recover the first-turn position in the quadrupoles by measuring the slope $\frac{d \tilde{x}(s_{BPM})}{d\Delta I}$. A model of the ring using the VRUMER beam tracking code is used to calculate the constant $\frac{L}{\sigma} \frac{G}{B\rho} \sin{\frac{\sigma}{L}s_{BPM}}$, the result is a measurement of $x_Q$.
+This is an essentially identical method to that described by Kamal Poor Rezaei \cite{KPRnote:2012}, 
 with the main difference being the use of the VRUMER beam tracking code to calibrate position, rather than a transfer matrix calculation.  
 
-
-%todo: ADD MORE
-
-In the work described here, calibration of quadrupole response (measured directly at nearest downstream BPM) is accomplished using VRUMER. VRUMER, described in detail in Appendix [TBD],
-is a simple orbit integrator written in Matlab, originally developed by Irving Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
+VRUMER, described in detail in Appendix [TBD], is a simple orbit integrator written in Matlab, originally developed by Irving Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
 The model used here includes the measured background earth field, applied as a continuously acting, lab-frame-position dependent force based on linear interpolation between measurement points at the 36 dipoles.
 This model does not include centroid kicks as a result of magnet fringe fields or the steering effect of the offset YQ magnet, although the framework can support these refinements.
 
-
-
-\subsection{Avoiding null points} \label{sec:steering:nulls}
-
-Generally, the quad as BPM measurement uses response data from the nearest downstream BPM. However, for certain quad-BPM pairs this may not be appropriate due to the BPM being located near a null point of the betatron oscillation. 
-
-There are two reasons why the BPM response will be very flat: the beam is near the center of the quadrupole, or quad-BPM separation is close to $n \frac{\lambda}{2}$ for integer n, where $\lambda$ is the betatron wavelength. The beam transformation in VRUMER is not exactly equivalent to the transformation in UMER (VRUMER does not include edge focusing, SC effects, etc). Therefore, quad-BPM separations near $n \frac{\lambda}{2}$, the BPM response slope will be small in both VRUMER and UMER but not identical. (This is true for all quad-BPM pairs, but will generally be a small error). 
-%For a non-zero BPM response slope, the Newton Raphson calculation will tend to pick a very large $x_q$ for the simulation reponse to match the measured response. 
-
 At an operating point of 1.826 A, the UMER 6 mA beam has $\nu_x = 6.636$, $\nu_y=6.752$ \cite{RKnote:2010}. This corresponds to betatron wavelengths $\lambda_x = 1.736$ m, $\lambda_y=1.706$ m.
-In the VRUMER simulation, horizontal and vertical tunes are equal (no edge focusing), $\nu=6.293$, equivalently $\lambda = 1.83$ m. This is consistent with the simplifications made in VRUMER. 
+In the VRUMER simulation, horizontal and vertical tunes are equal (no edge focusing), $\nu=6.293$, equivalently $\lambda = 1.83$ m.
+In this case, quadrupole strength parameters were set according to standard hard-edged approximation for the UMER quadrupoles: length$=4.475$ cm, peak strength $g=3.609$ G/cm, hard-edge factor $f=0.8354$.
 
-We can see that the quad-BPM separations for which unusually high $x_q$, $y_q$ values appear (Table \ref{tab:nulls}) are close to the the VRUMER wavelength $\lambda = 1.83$ m, $\frac{\lambda}{2} = 0.92$ m. There are two inaccuracies that may result from this:
 
-\begin{itemize}
-\item Quad-BPM separation is close to UMER betatron wavelength (a null in the actual ring). VRUMER sees a small $\frac{\partial x_{BPM}}{\partial I_Q}$ slope and predicts $x_q \sim 0$, while in reality $x_q$ could be fairly large. This is hard to discern from the data, and may artifically obscure bad first-turn steering.
-\item Quad-BPM separation is close to VRUMER betatron wavelength. If BPM response slope is not very flat (but VRUMER thinks this should be a null point) the VRUMER calculation for $x_q$ blows up. This can be seen in Fig. \ref{fig:nulls}, where QR14, QR32 and QR62 in particular have unphysically large $x_q$.  
-\end{itemize}
+\subsection{Systematic Error in Quad-as-BPM Calibration} \label{sec:steering:errors}
 
+The previous section begs the question, what is the amount of systematic error introduced by differences between reality and the model used for calibration (in this case, VRUMER). Most notably, bare tune in the model and measured tune differ by $\Delta \nu_x = 0.340$ horizontally, $\Delta \nu_y = 0.459$ vertically. It is covenient to define phase advance per cell, $\sigma = \frac{2\pi\nu}{36}$. Additionally, there are measurement errors included in the measurement of position with BPM.
+
+Examining the formula for $x_Q$ from Eq. \ref{eq:quad-response} above, re-written here as:
+
+\begin{equation} x_Q = \frac{\sigma}{L} \frac{d \tilde{x}_{BPM}}{d \Delta I} \sin^{-1} \frac{\sigma}{L}s_{BPM} \end{equation}
+
+
+Applying error analysis and assuming no significant error is introduced by our choice of $L$, $G$, $B\rho$, or $s_{BPM}$ in the model, we find the position error to be dependent on errors in the measured slope $m$, $\sigma_m$, and the systematic error of the model phase advance $\sigma$, $\sigma_\sigma$. 
+
+\begin{equation} \frac{\sigma_{x_Q}}{x_Q} = \bigg[1-\frac{s_{BPM}}{L}\cot{\frac{\sigma}{L}s_{BPM}} \bigg]\frac{\sigma_\sigma}{\sigma} + \frac{\sigma_m}{m} 
+\label{eq:quad-as-bpm-error}
+\end{equation}
+
+In this case, error $\sigma_m$ encompasses to statistical and systematic noise, as well as systematic calibration errors, related to the collection and processing of BPM data. For all the data shown here, $\sigma_m$ was taken to be the $90\%$ confidence bounds of the slope for the linear fit to the measured BPM position versus quadrupole strength curve. This encompasses shot-to-shot noise and nonlinearities introduced by beam scraping. Additionally, background was subtracted from scope traces to reduce the effect of systematic, repeatable noise picked up by the BPM amplifiers. 
+
+$\sigma_\sigma$ is an error introduced by using the VRUMER model to calibrate quadrupole response data, and can be reduced by tweaking the focusing strength in the model. 
+
+Fig. \ref{fig:quad-as-bpm-error} shows the dependence of the fractional error of measured position in the quadrupole, $x_Q$, as a function of separation between quadrupole and BPM used to measure quadrupole response. In this case, $\sigma_\sigma$ is taken to be the systematic error in phase advance between the VRUMER model and UMER experiment, $\sigma_\sigma = \mid \sigma_Vr - \sigma_U \mid = 0.06$. Only discrete quad-BPM separations exist, in the range $[8,24,40,...]$ cm with maximum separation between quadrupole and nearest neighbor $120$ cm. 
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/quad_as_BPM_error.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Fractional error in quad-as-BPM position due to phase error, versus quad and BPM separation}
+\label{fig:quad-as-bpm-error}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+As seen from Eq. \ref{eq:quad-as-bpm-error}, the error approaches $\infty$ where $\frac{\sigma}{L}s_{BPM} = n\pi$. This is the point where the betatron wavelength is equal to the quad-BPM separation, a null point of the perturbed orbit $\delta x(s) = x_Q \frac{L}{\sigma} \frac{G \Delta I}{B\rho} \sin{\frac{\sigma}{L}s}$. Near this null, the returned quad-as-BPM measurement will have large errors, and in general be very sensitive to error in the BPM measurement as well as differences in the model and experiment. 
 
 
 \begin{table}
 \centering
 \caption{}
 \label{tab:nulls}
-\begin{tabular}{|c|c|c|c|c|}
-Quad \# & Nearest BPM & $\Delta S_{Q \rightarrow BPM}$ [m] \\
+\begin{tabular}{|c|c|}
+Quad \# & Nearest BPM  \\
 \hline
-QR14 & RC5 & 0.88   \\
-QR32 & RC11 & 1.84 \\
-QR38 & RC11 & 0.88 \\
-QR62 & RC17 & 0.88  \\
-QR70 & RC1 (turn 2) & 0.88  \\
+QR14 & RC5  \\
+QR38 & RC11  \\
+QR62 & RC17  \\
+QR70 & RC1 (turn 2)  \\
 \end{tabular}
 \end{table}
 
 
-% \begin{figure}
-% \centering
-% \caption{Quad as BPM data taken 6/9/15, position in each quad is determined by response in next downstream BPM. Solid circles are BPM data.}
-% \label{fig:nulls}
-% \includegraphics[width=\textwidth,trim={.7in 5.2in .7in 2.6in},clip]{figures/scan150609_withBPMdata_xy.pdf}
-% \end{figure}
+In standard UMER operation, the BPM spacing is 64 cm (see Fig. \ref{fig:simple-beamline}), and the associated error is max. $10\%$. However, 4 BPM's are omitted for injection, longitudinal focusing and the wall current monitor. Larger errors are permitted at larger separations. 
+Table \ref{tab:nulls}) shows quadrupole-BPM pairs with fractional error $>1$. The spacing for these 4 pairs is 88 cm, close to half the betatron wavelength, $\frac{\lambda}{2} \approx 86 cm$. 
 
-% \begin{figure}
-% \centering
-% \caption{Null point effect as seen in VRUMER simulation. Each trace represents a different simulation, where the strength of RQ14 is varied. The null point occurs near RC15 for both horizontal (top) and vertical (bottom). }
-% \label{fig:nulls_vrumer}
-% \includegraphics[width=\textwidth,trim={.7in 5.2in .7in 2.6in},clip]{figures/Q14_allBPMS_VRUMER_zoomin.pdf}
-% \end{figure}
-
-
-In subsequent quad as BPM data in this note, QR14, QR32 and QR62 use the BPM response in the next nearest downstream BPM to avoid artificial blow-up or suppression of $x_q$ and $y_q$. 
-This effect should also be (but is not currently) included in the calculation of errorbars for the quad as BPM data.
-
-
-
-
-
-
-
-
-
+In subsequent data shown, the 4 quads identified in Table \ref{tab:nulls} use the response measured in the next downstream BPM in order to avoid artificial blow-up or suppression of measured $x_Q$ and $y_Q$. 
 
 
 
@@ -208,10 +240,10 @@ $x_D,\thinspace x'_F$ & $\sqrt{x_D^2+(x_D-x_F)^2}$  & 0.2 & 7.0 & {\color{magent
 \begin{figure}[!htb]
 \centering
 \subfloat[No misalignments]{
-	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{3.figures/vrumer_steering_algorithm_compare_x1_xp0.pdf}}
+	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{4.figures/vrumer_steering_algorithm_compare_x1_xp0.pdf}}
 \hspace{.05in}
 \subfloat[Random quad misalignments from Gaussian distribution, $\sigma=5$mm]{
-	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{3.figures/vrumer_steering_algorithm_compare_x1_xp0_sig5.pdf}}
+	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{4.figures/vrumer_steering_algorithm_compare_x1_xp0_sig5.pdf}}
 \caption{First turn VRUMER orbits for initial condition $x=1$mm, $x'=0$. 
 %blue circle: $x_F$, red triangle: $x_D$, black asterisk: $x_F$,$x'_F$, 
 %magenta plus:  $x_F$,$x'_F$, green diamond: $x_F$,$x_D$
@@ -231,7 +263,7 @@ The caveats associated with using both of these algorithms will be further discu
 
 
 \begin{figure}[!h]
-\includegraphics[width=\textwidth]{3.figures/quadscan_151113_151116.png}
+\includegraphics[width=\textwidth]{4.figures/quadscan_151113_151116.png}
 \caption{1st turn solution generated on 11/13/15 (top) and 11/16/15 (bottom), by steering through defocusing quadrupoles.}
 \label{fig:ring_steering}
 \end{figure}
@@ -240,14 +272,14 @@ The caveats associated with using both of these algorithms will be further discu
 \begin{figure}[htb]
 \centering
 \subfloat[Position in defocusing quad]{\label{fig:ring_steering:xd}
-	\includegraphics[width=0.45\textwidth]{3.figures/ring_steering_D15_it2_Q32.png}}
+	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_it2_Q32.png}}
 \hspace{.05in}
 \subfloat[Position in focusing quad]{
-	\includegraphics[width=0.45\textwidth]{3.figures/ring_steering_D15_it2_Q31.png}}
+	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_it2_Q31.png}}
 \hspace{.25in}
 \raggedleft
 \subfloat[RMS minimization of $x_F$ and $x_D-x_F$]{ \label{fig:ring_steering:rms}
-	\includegraphics[width=0.45\textwidth]{3.figures/ring_steering_D15_RMS_it2.png}}
+	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_RMS_it2.png}}
 
 \caption{Steering through D15 using two different algorithms, 11/11/15}
 \label{fig:injection_steering}
@@ -266,10 +298,10 @@ The $x_F,\thinspace x'_F$ algorithm seems less likely to be led astray by nonlin
 \begin{figure}[h]
 \centering
 \subfloat[Vertical position of beam in quads for 1st turn.]{\label{fig:vertical_quads}
-	\includegraphics[width=\textwidth,trim={.5in 6.4in .5in 2.4in}, clip]{3.figures/quad_as_BPM_Y.pdf}}
+	\includegraphics[width=\textwidth,trim={.5in 6.4in .5in 2.4in}, clip]{4.figures/quad_as_BPM_Y.pdf}}
 \hspace{.05in}
 \subfloat[Vertical position of beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
-	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{3.figures/BPM_position_sol151116_Y.pdf}}
+	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{4.figures/BPM_position_sol151116_Y.pdf}}
 \end{figure}
 
 Vertical steering in UMER is accomplished by 18 vertical correction magnets located at the pipe flanges between plates. All of these magnets are fairly weak, due to the wide bore. With an integrated field of 3.886 G-cm/A, this gives a corrective kick with magntiude $0.66^{\circ}$/A. (For comparison, ring dipoles have a correction of $3.4^{\circ}$/A.) The largest source of vertical alignment errors is the radial component of the Earth's field, shown in Fig. \ref{fig:EarthField}. Although the amplitude 200 mGauss is comparable to the vertical field, the average is only $\sim3$ mGauss.
@@ -325,15 +357,15 @@ I conclude that the existing vertical correcters provide too weak of a correctio
 \begin{figure}[h]
 \centering
 \subfloat[Vertical steering for perfect alignment, no SV limit. Steering by minimizing $\| y_4 \|$. Red dotted trace is vertical solution without steering corrections.]{
-     \includegraphics[width=.8\textwidth]{3.figures/steering_rms_y4.png}
+     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4.png}
      \label{fig:SV_y4}}
 \hspace{0.5in}
 \subfloat[Vertical steering for perfect alignment, SV current limited to 2 A. ]{
-     \includegraphics[width=.8\textwidth]{3.figures/steering_rms_y4_CL.png}
+     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_CL.png}
      \label{fig:SV_y4_CL}}
 \hspace{0.5in}
 \subfloat[Vertical steering for misalignment of $\sigma=1$ mm, SV current limited to 2 A.]{
-     \includegraphics[width=.8\textwidth]{3.figures/steering_rms_y4_misalign1.png}
+     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_misalign1.png}
      \label{fig:SV_y4_misalign}}
 \end{figure}
 
@@ -416,14 +448,14 @@ To set D34 and D35, I scan the currents in each and record the BPM response for 
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=\textwidth,trim={.5in 2.7in .5in 2.7in},clip]{3.figures/closing_orbit_BPMs.pdf}
+\includegraphics[width=\textwidth,trim={.5in 2.7in .5in 2.7in},clip]{4.figures/closing_orbit_BPMs.pdf}
 \caption{BPM response for first 4 turns, for D34, D35 currents listed in table \ref{tab:close_ring}. 1st turn: heavy blue trace. 2nd turn: solid blue. 3rd turn: long dash red. 4th turn: short dash black.}
 \label{fig:close_BPMs}
 \end{figure}
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=\textwidth,trim={0 2.7in 1in 2.7in},clip]{3.figures/closing_orbit_iteration3.pdf}
+\includegraphics[width=\textwidth,trim={0 2.7in 1in 2.7in},clip]{4.figures/closing_orbit_iteration3.pdf}
 \caption{Scan results for first 3 BPMs for iteration 3 in table \ref{tab:close_ring}. Color scale is rms value of $\Delta x$ over first 4 turns [mm], white asterisk indicates optimal setting (D34=2.0129 A, D35=1.5802 A) }
 \label{fig:close_scan}
 \end{figure}
@@ -438,8 +470,6 @@ To set D34 and D35, I scan the currents in each and record the BPM response for 
 
 
 \section{Comments on steering the Alternative Lattice}
-
-
 
 
 
