@@ -1,8 +1,18 @@
 %Chapter 4
 
+
+%todo:
+% Look up old "best" steering solution
+% re-plot old "best steering" solution 
+% Get umer steering diagram from laptop
+% Vertical steering SSV run
+% WRite up simulated annealing
+% 
+
 \renewcommand{\thechapter}{4}
 
 \chapter{Steering and Orbit Correction}
+\label{ch:steering}
 
 \section{Motivation}
 
@@ -15,7 +25,7 @@ In this section, we define "first-turn orbit" to mean the measured or simulated 
 In general, for straightforward operation of UMER, lowest-possible deviation of beam centroid from quadrupole centers in multi-turn operation is desireable, for the smallest coupling between focusing strength and closed orbit deviation. As seen in Section \ref{HERE}, the dynamic aperture of the quasi-integrable octupole lattice suffers greatly for orbit distortions, and it is desirable to minimize centroid offset from octupole centers in the octupole insert.   
 
 
-%todo: link to write-up of toy model simulations
+%todo: link to write-up of toy model simulations (also to-do:write up toy model sims)
 
 \section{Considerations for low-ridgidity electron beam}
 
@@ -164,7 +174,7 @@ In this case, error $\sigma_m$ encompasses to statistical and systematic noise, 
 
 $\sigma_\sigma$ is an error introduced by using the VRUMER model to calibrate quadrupole response data, and can be reduced by tweaking the focusing strength in the model. 
 
-Fig. \ref{fig:quad-as-bpm-error} shows the dependence of the fractional error of measured position in the quadrupole, $x_Q$, as a function of separation between quadrupole and BPM used to measure quadrupole response. In this case, $\sigma_\sigma$ is taken to be the systematic error in phase advance between the VRUMER model and UMER experiment, $\sigma_\sigma = \mid \sigma_Vr - \sigma_U \mid = 0.06$. Only discrete quad-BPM separations exist, in the range $[8,24,40,...]$ cm with maximum separation between quadrupole and nearest neighbor $120$ cm. 
+Fig. \ref{fig:quad-as-bpm-error} shows the dependence of the fractional error of measured position in the quadrupole, $x_Q$, as a function of separation between quadrupole and BPM used to measure quadrupole response. In this case, $\sigma_\sigma$ is taken to be the systematic error in phase advance between the VRUMER model and UMER experiment, $\sigma_\sigma = \mid \sigma_{sim} - \sigma_{exp} \mid = 0.06$. Only 8 discrete quad-BPM separations exist, in the range $[8,24,40,... 120]$ cm.
 
 
 \begin{figure}
@@ -187,7 +197,7 @@ As seen from Eq. \ref{eq:quad-as-bpm-error}, the error approaches $\infty$ where
 
 \begin{table}
 \centering
-\caption{}
+\caption{"Next-downstream" Quad-BPM pairs with separations near half of a betatron wavelength, which results in large errors in the quad-as-BPM method.}
 \label{tab:nulls}
 \begin{tabular}{|c|c|}
 Quad \# & Nearest BPM  \\
@@ -200,7 +210,7 @@ QR70 & RC1 (turn 2)  \\
 \end{table}
 
 
-In standard UMER operation, the BPM spacing is 64 cm (see Fig. \ref{fig:simple-beamline}), and the associated error is max. $10\%$. However, 4 BPM's are omitted for injection, longitudinal focusing and the wall current monitor. Larger errors are permitted at larger separations. 
+In standard UMER operation, the BPM spacing is 64 cm (see Fig. \ref{fig:simple-beamline}), and the associated error is maximum $10\%$. However, 4 BPM's are omitted for injection, longitudinal focusing and the wall current monitor. Larger errors are permitted at larger separations. 
 Table \ref{tab:nulls}) shows quadrupole-BPM pairs with fractional error $>1$. The spacing for these 4 pairs is 88 cm, close to half the betatron wavelength, $\frac{\lambda}{2} \approx 86 cm$. 
 
 In subsequent data shown, the 4 quads identified in Table \ref{tab:nulls} use the response measured in the next downstream BPM in order to avoid artificial blow-up or suppression of measured $x_Q$ and $y_Q$. 
@@ -376,40 +386,55 @@ I conclude that the existing vertical correcters provide too weak of a correctio
 \section{Implementation} \label{sec:steering:implementation}
 % This section for technical details of implementation
 
+\subsection{Quad-as-BPM position measurement}
 
-%% Quad as BPM
-The quad as BPM measurement is controlled by UMER control script \newline kiersten\_quad\_scan\_v2.m. 
-In this procedure, the current in each ring quadrupole (RQ2-RQ71) is independently scanned about it's nominal 
-operating point. The horizontal and vertical position of the nearest downstream BPM is recorded. This data is 
-fitted to a linear curve, using the linear least squares method. The fitted slope is the BPM response to the 
-quad scan, $\frac{\partial x_{BPM}}{\partial I_{quad}}$, equivalently the uncalibrated position in the quad. 
-The errorbars are defined as the 95\% confidence interval of the slope coefficient. 
+The process for collecting quadrupole reponse data and converting to quadrupole position data has been automated and stream-lined into the UMER control system. The procedure is conceptually straightforward. For a specified quadrupole, the algorithm:
 
-To calibrate the position in the quad, I use the VRUMER code to determine what initial condition in the quadrupole gives the appropriate BPM response.
-I first choose an arbitrary starting position $x_{0,q}$, $x'_{0,q}$ and simulate a quad scan.
-I then apply the Newton-Raphson method to determine the appropriate $x_q$ to give the desired (measured) BPM response, $m_{sim} = m_{data}$ (where $m_{data} = \frac{\partial x_{BPM}}{\partial I_{quad}}$): 
+\begin{enumerate}
+\item Grabs a list of functioning BPM's, chooses downstream BPM for measurement of quad response (excluding pairs listed in Table \ref{tab:nulls}).
+\item Varies quadrupole over a preset range of $\pm 0.09$ A around nominal set-point, using 5 data points total to calculate response.
+\item Calculates response slopes $\frac{\Delta X_{BPM}}{\Delta I_{quad}}$ and $\frac{\Delta Y_{BPM}}{\Delta I_{quad}}$ by applying linear least squares fit to response data.
+\item Runs VRUMER simulation 9 times to calculate simulated response slope for given quad-BPM pair. Divide $x_q$, $y_q$ by response slope to determine slope-to-position calibration factor. 
+\item Applies VRUMER calibration factor to measured response slope to return measured position in quad. 
+\item Calculates error to response slope, including $95\%$ confidence interval to slope, as well as quad-BPM separation relation to phase advance, according to Eq. \ref{eq:quad-as-bpm-error}. 
+\end{enumerate}
 
+Arguably, the slope-to-position calibration factor could be generated using a matrix-based tracking technique (as outlined in \cite{KPRnote}) and saved as a look-up table. For a given quad-BPM separation (for 72 quadrupoles there are only 8 possible separations), this number is not expected to change much and this approach would require fewer computations. However, this comes with an added loss of flexibility. The look-up table would have to be recalculated for UMER operating points with different quad focusing strengths or non-FODO orientations. For example, Chapter \ref{ch:altlattice} uses an alternative lattice configuration with half the quads turned off. 
+The time savings for using a look-up table are small. Running VRUMER takes $\sim 0.06$ 
+seconds, so even for the an entire quad scan (9 points) VRUMER costs $\sim 0.5$ second per quad. This is negligible compared to the time required to measure BPM response for multiple quad settings.
 
-\begin{equation}
- x_q = x_{0,q} - \left( m_{sim} - m_{data} \right) \left(\frac{dm_{sim}}{dx_q}\right)^{-1}
-\end{equation}
-
-This allows us to define a calibration factor between the BPM response and the position at the center of each quadrupole, 
-
-\begin{equation}
-x_q = C_{q,BPM} \times \frac{\partial x_{BPM}}{\partial I_{quad}}
-\end{equation}
-
-
-While this factor will not change for a static version of VRUMER, the \newline  kiersten\_quad\_scan\_v2.m procedure is 
-set up to do the Newton-Raphson calculation for every set of quad scan data. This was mainly a matter of convenience at 
-the time, as having a lookup table for the calibration factors would result in slight decrease in run time and a loss of 
-flexibility (changes to ring operation would require recalculation of the look-up table, etc). Running VRUMER takes $\sim 0.06$ 
-seconds, so even for the an entire quad scan (9 points) repeated twice for the Newton-Raphson calculation VRUMER 
-costs $\sim 1$ second per quad. 
+There is a slight discrepancy with the phase-advance contribution to error bar calculation. 
+The error $\sigma_\sigma \equiv | \sigma_{exp} - \sigma_{sim}|$. Simulated phase advance $\sigma_{sim}$ is estimated from VRUMER results using NAFF algorithm \cite{Laskar2003},\cite{Pedro2012}. Experimental phase advance $\sigma_{exp}$ is hard-coded to be $\nu_x = 6.636$, $\nu_y = 6.752$ for standard $1.826$ A operating point.  This will result in erroneaously large error bars for different operating points and should be modified in the future to be more general.
 
 
 
+%% Quad as BPM (outdated-method)
+% The quad as BPM measurement is controlled by UMER control script \newline kiersten\_quad\_scan\_v2.m. 
+% In this procedure, the current in each ring quadrupole (RQ2-RQ71) is independently scanned about it's nominal 
+% operating point. The horizontal and vertical position of the nearest downstream BPM is recorded. This data is 
+% fitted to a linear curve, using the linear least squares method. The fitted slope is the BPM response to the 
+% quad scan, $\frac{\partial x_{BPM}}{\partial I_{quad}}$, equivalently the uncalibrated position in the quad. 
+% The errorbars are defined as the 95\% confidence interval of the slope coefficient. 
+
+% To calibrate the position in the quad, I use the VRUMER code to determine what initial condition in the quadrupole gives the appropriate BPM response.
+% I first choose an arbitrary starting position $x_{0,q}$, $x'_{0,q}$ and simulate a quad scan.
+% I then apply the Newton-Raphson method to determine the appropriate $x_q$ to give the desired (measured) BPM response, $m_{sim} = m_{data}$ (where $m_{data} = \frac{\partial x_{BPM}}{\partial I_{quad}}$): 
+% \begin{equation}
+ % x_q = x_{0,q} - \left( m_{sim} - m_{data} \right) \left(\frac{dm_{sim}}{dx_q}\right)^{-1}
+% \end{equation}
+% This allows us to define a calibration factor between the BPM response and the position at the center of each quadrupole, 
+% \begin{equation}
+% x_q = C_{q,BPM} \times \frac{\partial x_{BPM}}{\partial I_{quad}}
+% \end{equation}
+% While this factor will not change for a static version of VRUMER, the \newline  kiersten\_quad\_scan\_v2.m procedure is 
+% set up to do the Newton-Raphson calculation for every set of quad scan data. 
+
+
+
+
+
+
+\subsection{How to steer}
 %% Steering approach
 This is a description of the horizontal steering method I used to steer the 6 mA beam on November, 2015. The final solution was saved as settings file kiersten\_6mA\_151116.csv.
 
@@ -430,16 +455,7 @@ The procedure is as follows:
  
  
  
- 
- 
- 
- 
- 
- 
- 
- %%%%%% closing orbit
-\subsection{Closing the orbit}
-
+%%%%% closing orbit
 The final step is to set the current in the dipoles near the end of the ring so that the closed orbit is close to the p1 closed orbit.  Two dipoles are required for control of x and x'. Naively, one would vary the last two dipoles, D35 and PD-Rec. Unfortunately PD-Rec has significant coupling with the first turn beam position. For a scan of PD-Rec from $8.25 \rightarrow 13.75$ A, the position of the beam in the first BPM varies in the range $\Delta x = \pm 2$mm. Changing PD-Rec would mean changing all ring dipole settings to compensate, which is undesirable. 
 
 It is possible but difficult to optimize the value of PD-Rec. Instead, I assume that the present setting (PD-Rec I$=11$ A) is reasonably close to the ideal value such that closing the orbit with D34 and D35 will result in a bump in the closed orbit in that neighborhood. It may be possible to infer, based on the difference in the D34 currents optimized for a) steering through RQ69 and RQ70 and b) a closed orbit solution, the size of the orbit bump. 
@@ -473,6 +489,7 @@ To set D34 and D35, I scan the currents in each and record the BPM response for 
 
 
 
+\section{Global Optimization of Closed Orbit}
 
-
-
+\cite{Kirkpatrick2015} % simulated annealing
+\cite{Huang2013}, \cite{LevonRCDS} % RCDS
