@@ -29,6 +29,7 @@ In general, for straightforward operation of UMER, lowest-possible deviation of 
 
 \section{Considerations for low-ridgidity electron beam}
 
+
 In typical high-energy accelerating or storage rings (for which steering algorithms are well-developed), the beam travels in straight lines between steering elements (dipoles or off-centered quadrupoles), effectively tracing out an N-sided polygon where N is the number of dipoles. Steering in UMER is complicated by the fact that at low-energies, the beam is significantly bent by background, ambient fields. For a 10 keV electron beam, rigidity $B\rho = \frac{p}{q}$ is $338.859$ G-cm. The required integrated field to bend the beam $10^o$ is $59.154$ G-cm. Given an average ambient vertical field of $\approx 400$ mG, per $32$ cm cell, the integrated field is $ 32 * 0.400 = 12.8$ G-cm. Therefore, approximately $22\%$ of the total horizontal bending in the ring is due to the ambient vertical fields. The ambient horizontal field is weaker, on average $<1$ mG, which gives only a small orbit distortion (requiring only a small correction) from turn-to-turn. However, local closed orbit distortions due to the horizontal fields can be large (up to $\approx 200$ mG), and large vertical corrections are necessary to minimize deviation from quadrupole centers. Measured ambient field data can be seen in Figs. \ref{fig:earthfield} and \ref{fig:earthfield3D}. 
 
 \begin{figure}
@@ -83,6 +84,43 @@ Steering in the ring is controlled by 36 horizontal bending dipoles, which deter
 
 
 
+
+\section{UMER Steering Magnets}
+
+\begin{table}[h]
+\centering
+\caption{UMER Steering magnet strengths}
+\label{tab:UMERsteererstrength}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Magnet Name & length [cm] & radius [cm] & Integ. Field / A [G-cm/A] & strength [$^o$/A] \\
+BD & 4.44 & 2.87 & 19.917& 3.37 \\
+PD & 4.40 & 4.40 & 1.913 & 0.32 \\
+RSV& 3.80 & 5.75 & 3.886 & 0.66 \\
+SD & 2.37 & 4.73 & 3.317 & 0.56 \\
+SSV& 1.54 & 2.79 & 3.627 & 0.61 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/full_ring_steerers_labelled.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{UMER Diagram with all steerers labelled. SSV family is discussed in Section \ref{sec:steering:SSV}}
+\label{fig:steerers-labelled}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+
 \section{Prior Approach}
 
 %todo: recap Kamal thesis
@@ -91,8 +129,7 @@ Steering in the ring is controlled by 36 horizontal bending dipoles, which deter
 
 % New Approach
 An alternative approach to steering was developed using a steering procedure with local corrections to ensure the equilibrium orbit is centered (or as close to centered as possible) in the quadrupoles. This is unique from the response matrix method, in which a global correction is calculated that aims to center the equilibrium orbit at the 14 BPM locations. The steering algorithm is a methodical, "front to back" approach that first minimizes the position of the beam in the quadrupoles on the first turn then minimizes orbit deviations in subsequent turns. This algorithm should result in smaller local orbit excursions from quadrupole centers, since it utilizes 36 position data points at quadrupole locations for the first turn orbit as opposed to 14 at the BPMs.
-This is proposed as a alternative to the response matrix steering algorithm \cite{KPRnote:2011}, and may be more useful for applications where orbit 
-centering in the quadrupoles is essential.
+This is proposed as a alternative to the response matrix steering algorithm \cite{KPRnote:2011}, and may be more useful for applications where orbit centering in the quadrupoles is essential.
 
 The remainder of this chapter describes the tools and algorithmic approach to centering the first turn orbit in the quadrupole centers. First I describe the quad-as-BPM procedure for measuring first-turn centroid position at the quadrupoles (Section \ref{sec:steering:quad-as-bpm}). Then I summarize the application of various algorithms to set horizontal and vertical steerers in Section \ref{sec:steering:ringsteering}, including theoretical "best-case" orbit excursions and proposed vertical steering upgrades to meet the dynamic aperture requirements for the nonlinear optics experiments. This includes first-turn data taken during ring steering tests.
 Section \ref{sec:steering:implementation} lays out a sample steering procedure, including injection and multi-turn optimization routines. 
@@ -101,9 +138,9 @@ Section \ref{sec:steering:implementation} lays out a sample steering procedure, 
 
  
 
-\section{Quadrupole as BPM technique} \label{sec:steering:quas-as-bpm}
+\section{Quadrupole as BPM technique} \label{sec:steering:quad-as-bpm}
 
-First-turn position data is garnered from quadrupole response data, also called "quad as BPM" or "virtual BPM." A beam that is off-centered in a quadrupole will experience a dipole force acting on the centroid motion as well as a quadrupole focusing force that acts on the beam envelope, as shown in Fig. \ref{fig:simple-beamline}. The strength of the dipole kick will depend on the position of the centroid in the quadrupole as well as strength of the quadrupole. Variation of the quadrupole strength will cause variation of the centroid as detected on a downstream BPM. Knowledge of the centroid transformation between quadrupole and BPM allows reconstruction of the beam position. 
+First-turn position data is extrapolated from quadrupole response data, also called "quad as BPM" or "virtual BPM." A beam that is off-centered in a quadrupole will experience a dipole force acting on the centroid motion as well as a quadrupole focusing force that acts on the beam envelope, as shown in Fig. \ref{fig:simple-beamline}. The strength of the dipole kick will depend on the position of the centroid in the quadrupole as well as strength of the quadrupole. Variation of the quadrupole strength will cause variation of the centroid as detected on a downstream BPM. Knowledge of the centroid transformation between quadrupole and BPM allows reconstruction of the beam position. 
 
 %%%%%%%%%%%%%%%% THEORY
 
@@ -217,19 +254,23 @@ In subsequent data shown, the 4 quads identified in Table \ref{tab:nulls} use th
 
 
 
-\section{Ring steering} \label{sec:steering:ringsteering}
+\section{Steering Algorithms} \label{sec:steering:steeringalgorithm}
 
 
 
 
-\subsection{Horizontal Steering Procedure}
+\subsection{Horizontal Steering Algorithm}
 
-Using VRUMER, I explored the effectiveness of various minimization functions on the first-turn beam orbit for a variety of injection conditions and misalignments. The available minimization functions include steering through downstream focusing or defocusing quad (minimize position in a single quad) or minimization of an RMS quantity dependent on position in both downstream quads. In the thin lens approximation for a focusing dipole separated from a defocusing dipole by a drift of distance $L$, $x'_F = \frac{x_D-x_F}{L}$. I used $x'_F \propto x_D-x_F$ to include $x'_F$ in the RMS minimization term, see Table \ref{tab:algorithm}.
+Horizontal orbit in the ring is controlled by 35 ring dipoles and the pulsed injection magnet (PD), for a ratio of 1 corrector per 2 quads. As the ring dipoles are designed to bend the beam $10^o$, they are sufficient to correct the background Earth field, which on average bends the beam $\approx 2.1^o$ per cell. 
+
+I applied VRUMER simulation to determine an effective algorithm for minimizing first turn orbit position in the quadrupoles by setting the 36 dipoles. As there are 2 quadrupoles per dipole, there are a variety of minimization functions available (aim for the center of either quadrupole, or some weighted combination of the two). I only considered quadrupoles immediately downstream of a given dipole, upstream of the next dipole. In these cases, multiple passes would be necessary to find a "centered" orbit, and relaxation is slow. The 2 downstream quadrupoles are indicated as focusing "F" or defocusing "D" based on polarity in the horizontal plane. The nearest downstream quadrupole for any dipole is focusing (in the standard FODO configuration), an sketched in Fig. \ref{fig:BPMcartoon}.
+ 
+I considered steering algorithms with an angle term $x'$. In the thin lens approximation for a focusing dipole separated from a defocusing dipole by a drift of distance $L$, $x'_F \equiv \frac{x_D-x_F}{L}$. I used $x'_F \propto x_D-x_F$ to include $x'_F$ in the RMS minimization term, see Table \ref{tab:algorithm}.
 
 \begin{table}[h]
 \centering
 \caption{Different algorithms and their performance (RMS position in quads) for initial condition $x=1$mm, $x'=0$. }
-\label{tab:algorithm}
+\label{tab:steeringalgorithm}
 \begin{tabular}{|l|l|c|c|c|}
 \hline
 shorthand & Minimization function & RMS($x_Q$) [mm] & RMS($x_Q$) [mm]  & plot trace \\
@@ -258,81 +299,54 @@ $x_D,\thinspace x'_F$ & $\sqrt{x_D^2+(x_D-x_F)^2}$  & 0.2 & 7.0 & {\color{magent
 %blue circle: $x_F$, red triangle: $x_D$, black asterisk: $x_F$,$x'_F$, 
 %magenta plus:  $x_F$,$x'_F$, green diamond: $x_F$,$x_D$
 }
-\label{fig:algorithm}
+\label{fig:steeringalgorithm}
 \end{figure}
 
 
 
 
-Qualitatively, steering by $x_D$ and $x_F$,$x'_F$ result in almost identical orbits (sub-millimeter differences) that converge very quickly towards the center of the quads given an injection error or quad misalignment.
- In practice, it is much faster to minimize $x_D$, as that requires 1 quad scan for every dipole setting rather than 2 quad scans. It also allows interpolation between scanned dipole settings, as the data can be fit to a line and the zero-crossing calculated (the RMS minimization functions do not lend themselves to fitting by a simple function). However, the $x_F$,$x'_F$ algorithm seems to yield better results in the lab. 
-This may be because of its ability to handle relative misalignments between the focusing and defocusing quadrupoles.
+The results of multiple steering algorithms are shown in Table \ref{tab:steeringalgorithm}. Simulated orbits with and without misalignment errors are shown in Fig. \ref{fig:steeringalgorithm}. Qualitatively, the best performers were $x_D$, $x_F$,$x'_F$, $x_D$,$x'_F$, resulting in almost identical orbits (sub-millimeter differences) that converge very quickly towards the center of the quads given an injection error or quad misalignment.
 
-The caveats associated with using both of these algorithms will be further discussed in the following section.
-
-
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{4.figures/quadscan_151113_151116.png}
-\caption{1st turn solution generated on 11/13/15 (top) and 11/16/15 (bottom), by steering through defocusing quadrupoles.}
-\label{fig:ring_steering}
-\end{figure}
-
-
-\begin{figure}[htb]
-\centering
-\subfloat[Position in defocusing quad]{\label{fig:ring_steering:xd}
-	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_it2_Q32.png}}
-\hspace{.05in}
-\subfloat[Position in focusing quad]{
-	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_it2_Q31.png}}
-\hspace{.25in}
-\raggedleft
-\subfloat[RMS minimization of $x_F$ and $x_D-x_F$]{ \label{fig:ring_steering:rms}
-	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_RMS_it2.png}}
-
-\caption{Steering through D15 using two different algorithms, 11/11/15}
-\label{fig:injection_steering}
-\end{figure}
-
-
-%%% Point rejection algorithm
-A weakness of the  $\| x_D \|$ minimization is that occasionally the data will not fall on a straight line. This is most likely due to scraping between the dipole and BPM or noise in the region near the pulser. In the ring steering scripts, I have implemented a points rejection critera that throws away quad position data with errorbar $> 1$ mm. As the quad position is proportional to the slope of the beam position in the BPM during the quad scan, the error bar is proportional to the uncertainty in the fitted slope -- large nonlinearities in the quad scan data will have large error bars bracketing the estimate of position in the quadrupole. However, some clearly nonlinear points do not have associated large error bars, and one can still get sidetracked by this effect.
-
-The $x_F,\thinspace x'_F$ algorithm seems less likely to be led astray by nonlinear response in one of the quads. However, similar problems originating around D15 and D29 arose when using the $x_F$, $x'_F$ minimization, as seen in Fig. \ref{fig:QAB1}. This may be due to misalignments, but will likely be improved by stepping through the ring dipoles for a second steering iteration (at least from D15 onwards). 
+In the lab, it is much faster to minimize $x_D$, as the data collection is faster. It also allows interpolation between scanned dipole settings, as the data can be fit to a line and the zero-crossing calculated (the RMS minimization functions do not lend themselves to fitting by a simple function). 
+However, when applied in the lab, the $x_F$,$x'_F$ algorithm seems to yield better results. 
+This may be because of its ability to handle relative misalignments between the focusing and defocusing quadrupoles, as well as reduced sensitivity to nonlinearities in the quad fields and BPM response for large centroid positions. 
+For implementation in the lab (described in Section \ref{sec:steering:implementation}), I chose to use $x_D$ as the minimization function, due to faster steering time.
 
 
 
-\subsection{Vertical Steering Procedure}
 
+
+\subsection{Vertical Steering Algorithm}
+
+%todo: newer data would be nice
 \begin{figure}[h]
 \centering
-\subfloat[Vertical position of beam in quads for 1st turn.]{\label{fig:vertical_quads}
+\subfloat[Vertical position of 6 mA beam in quads for 1st turn.]{\label{fig:vertical_quads}
 	\includegraphics[width=\textwidth,trim={.5in 6.4in .5in 2.4in}, clip]{4.figures/quad_as_BPM_Y.pdf}}
 \hspace{.05in}
-\subfloat[Vertical position of beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
+\subfloat[Vertical position of 6 mA beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
 	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{4.figures/BPM_position_sol151116_Y.pdf}}
 \end{figure}
 
-Vertical steering in UMER is accomplished by 18 vertical correction magnets located at the pipe flanges between plates. All of these magnets are fairly weak, due to the wide bore. With an integrated field of 3.886 G-cm/A, this gives a corrective kick with magntiude $0.66^{\circ}$/A. (For comparison, ring dipoles have a correction of $3.4^{\circ}$/A.) The largest source of vertical alignment errors is the radial component of the Earth's field, shown in Fig. \ref{fig:EarthField}. Although the amplitude 200 mGauss is comparable to the vertical field, the average is only $\sim3$ mGauss.
+Vertical steering in UMER is accomplished by 18 vertical correction magnets (RSV's) located at the pipe flanges every $20^o$. All of these magnets are fairly weak (see Table \ref{tab:UMERsteererstrength}) and spaced half as densely as horizontal correctors.  The largest source of vertical alignment errors is the radial component of the Earth's field, shown in Fig. \ref{fig:earthfield}. Although the amplitude 200 mG is comparable to the vertical field, the average is only $<1$ mG.
 
-Previous assumption has been that sparsely populated, low-field vertical correctors were sufficient to correct for the low average radial field. Fig. \ref{fig:vertical_quads} and \ref{fig:vertical_BPMs} show measurement of typical vertical steering solution for the 6 mA beam. This solution was obtained by Brian using a trial and error method, settings are saved in kiersten\_6mA\_151116.csv. In the first turn, the maximum vertical displacement from quad center is 10 mm and the RMS displacement is 3.2 mm. Deviation about this orbit in the first 4 turns is $\sim10$ mm. 
+Previous assumption has been that sparsely populated, low-field vertical correctors were sufficient to correct for the low average radial field. However, at regions of locally high radial field, the radial field bends $\approx 2.1^o$ per 2 ring cells, while the corrector at maximum safe excitation (determined by heat damage) of 2 A can only supply $1.2^o$ of correction. This results in locally high vertical excursions, as seen in Fig. \ref{fig:vertical_quads} and Fig. \ref{fig:vertical_BPMs}. In the first turn, the maximum vertical displacement from quad center is 10 mm and the RMS displacement is 3.2 mm. 
+%Deviation about this orbit in the first 4 turns is $\sim10$ mm. 
 
-This is much worse than the best horizontal steering solution described in this note. For horizontal beam position, the first-turn orbit (Fig. \ref{fig:ring_steering}) exhibited maximum horizontal displacement of 3.1 mm and RMS displacement of 0.8 mm. Deviation about this orbit in the first 4 turns is $\sim2$ mm. 
+% This is much worse than the best horizontal steering solution described in this note. For horizontal beam position, the first-turn orbit (Fig. \ref{fig:ring_steering}) exhibited maximum horizontal displacement of 3.1 mm and RMS displacement of 0.8 mm. Deviation about this orbit in the first 4 turns is $\sim2$ mm. 
 
-
-While good recirculation is possible using the existing correctors, an attempt to steer through the vertical center of the quads will inherently be limited by the strength and density of vertical correctors. We use VRUMER to test various vertical steering algorithms and place a lower bound on the best possible first turn orbit using existing vertical steerers, results are shown in Table \ref{tab:vert_algorithm}. This note considers three cases: 
+While good recirculation is possible using the existing correctors, an attempt to steer through the vertical center of the quads will inherently be limited by the strength and density of vertical correctors. I use VRUMER to test various vertical steering algorithms and place a lower bound on the best possible first turn orbit using existing vertical steerers, results are shown in Table \ref{tab:vert_algorithm}. I considered three test cases:
 
 \begin{itemize} 
-\item Ideal: Perfect alignment, SV current constrained to be $\le10$ A. 
-\item SV limit: Perfect alignment, SV current limited to $\le2$ A.
-\item Misaligned: Random misalignment, from Gaussian distribution $\sigma=1$ mm, SV current limited to $\le2$ A.
+\item Ideal: Perfect alignment, RSV current constrained to be $\le10$ A. 
+\item SV limit: Perfect alignment, RSV current limited to $\le2$ A.
+\item Misaligned: Random misalignment, from Gaussian distribution $\sigma=1$ mm, RSV current limited to $\le2$ A.
 \end{itemize}
 
 
-\begin{table}[h]
+\begin{table}[!htb]
 \centering
-\caption{Vertical steering algorithms and their performance (RMS position in quads) for initial condition $y=0$ mm, $y'=0$. Subscript indicates quad \# counting downstream from vertical steerer ($y_1$ is position in first quad downstream from each RSV).}
+\caption{Vertical steering algorithms and their performance (RMS position in quads) for perfect alignment. Subscript indicates quad \# counting downstream from vertical steerer ($y_1$ is position in first quad downstream from each RSV).}
 \label{tab:vert_algorithm}
 \begin{tabular}{|l|l|c|c|c|}
 \hline
@@ -359,22 +373,22 @@ $y_1$,$y_2$,$y_3$,$y_4$ &  $\sqrt{\frac{1}{4}\left(y_1^2 +y_2^2+ y_3^2 +y_4^2\ri
 \end{tabular}
 \end{table}
 
-In summary, in the ideal case (strong correctors, no mechanical misalignments), we can obtain vertical steering through the quads with comparable accuracy to the measured horizontal solution, $\max{(y)} \sim 3$ mm, rms$(y) \sim 1$ mm. This requires maximum SV currents in the range 3-4 A.  If we restrict ourselves to 2 A in the SVs, we are now limited to best possible solution $\max{(y)} \sim 7$ mm, rms$(y) \sim 2$ mm. Additionally, allowing for random vertical misalignments of order 1 mm, this increases to $\max{(y)} \sim 10$ mm, rms$(y) \sim 3-4$ mm.
+In summary, in the ideal case (strong correctors, no mechanical misalignments), we can obtain vertical steering with $\max{(y)} \sim 3$ mm, rms$(y) \sim 1$ mm (Fig. \ref{fig:SV_y4}). This requires maximum RSV currents in the range 3-4 A, which is not possible given exiting heat dissipation limits.  If we restrict ourselves to 2 A in the RSVs, the best possible solution is $\max{(y)} \sim 7$ mm, rms$(y) \sim 2$ mm (Fig. \ref{fig:SV_y4_CL}). Additionally, allowing for random vertical misalignments of order 1 mm, this increases to $\max{(y)} \sim 10$ mm, rms$(y) \sim 3-4$ mm (Fig. \ref{fig:SV_y4_misalign}).
 
-I conclude that the existing vertical correcters provide too weak of a correction to offer significant improvement on the existing first-turn solution (Fig. \ref{fig:vertical_quads}). Also, closing the orbit will likely be more difficult as the adjustability of y,y' at the recirculation point will be limited. Any experiments that require multi-turn operation with modified quadrupole strengths, as well as the nonlinear optics experiments, would benefit from improved control over the vertical orbit. Continued work will investigate the effectiveness of increasing the number of vertical steerers. 
+I conclude that the existing vertical correcters provide too weak of a correction to offer significant improvement on the existing first-turn solution. Enhanced vertical correction is necessary to achieve steering comparable to horizontal plane. This is possible through the use of radial field-cancelling Helmholtz coils or through addition of more weak vertical correctors (see Section \ref{sec:steering:SSV}). 
 
 
-\begin{figure}[h]
+\begin{figure}[!htb]
 \centering
-\subfloat[Vertical steering for perfect alignment, no SV limit. Steering by minimizing $\| y_4 \|$. Red dotted trace is vertical solution without steering corrections.]{
+\subfloat[Vertical steering for perfect alignment, no current limit. Steering by minimizing $\| y_4 \|$. Red dotted trace is vertical solution without steering corrections.]{
      \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4.png}
      \label{fig:SV_y4}}
 \hspace{0.5in}
-\subfloat[Vertical steering for perfect alignment, SV current limited to 2 A. ]{
+\subfloat[Vertical steering for perfect alignment, RSV current limited to 2 A. ]{
      \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_CL.png}
      \label{fig:SV_y4_CL}}
 \hspace{0.5in}
-\subfloat[Vertical steering for misalignment of $\sigma=1$ mm, SV current limited to 2 A.]{
+\subfloat[Vertical steering for misalignment of $\sigma=1$ mm, RSV current limited to 2 A.]{
      \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_misalign1.png}
      \label{fig:SV_y4_misalign}}
 \end{figure}
@@ -385,6 +399,7 @@ I conclude that the existing vertical correcters provide too weak of a correctio
 
 \section{Implementation} \label{sec:steering:implementation}
 % This section for technical details of implementation
+
 
 \subsection{Quad-as-BPM position measurement}
 
@@ -431,10 +446,8 @@ The error $\sigma_\sigma \equiv | \sigma_{exp} - \sigma_{sim}|$. Simulated phase
 
 
 
+\subsection{Steering Procedure}
 
-
-
-\subsection{How to steer}
 %% Steering approach
 This is a description of the horizontal steering method I used to steer the 6 mA beam on November, 2015. The final solution was saved as settings file kiersten\_6mA\_151116.csv.
 
@@ -453,15 +466,48 @@ The procedure is as follows:
  
  
  
+ %todo: UPDATE THIS PLOT!
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{4.figures/quadscan_151113_151116.png}
+\caption{1st turn solution generated on 11/13/15 (top) and 11/16/15 (bottom), by steering through defocusing quadrupoles.}
+\label{fig:ring_steering}
+\end{figure}
+
+
+% todo: Generate better example plot
+\begin{figure}[htb]
+\centering
+\subfloat[Position in defocusing quad]{\label{fig:ring_steering:xd}
+	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_it2_Q32.png}}
+\hspace{.05in}
+\subfloat[Position in focusing quad]{
+	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_it2_Q31.png}}
+\hspace{.25in}
+\raggedleft
+\subfloat[RMS minimization of $x_F$ and $x_D-x_F$]{ \label{fig:ring_steering:rms}
+	\includegraphics[width=0.45\textwidth]{4.figures/ring_steering_D15_RMS_it2.png}}
+
+\caption{Steering through D15 using two different algorithms, 11/11/15}
+\label{fig:injection_steering}
+\end{figure}
+
+
+\subsubsection{Points Rejection}
+%%% Point rejection algorithm
+A weakness of the  $\| x_D \|$ minimization is that occasionally the data will not fall on a straight line. This is most likely due to scraping between the dipole and BPM or noise in the region near the pulser. In the ring steering scripts, I have implemented a points rejection critera that throws away quad position data with errorbar $> 1$ mm. As the errors is proportional to the uncertainty in the fitted slope of the quad response, large non-linearities in the quad response will manifest as large error bars. This is typical of large centroid excursion in either the quad or the BPM.
+
  
- 
-%%%%% closing orbit
+
+%%%%%% closing orbit
+\subsubsection{Closing the orbit}
+
 The final step is to set the current in the dipoles near the end of the ring so that the closed orbit is close to the p1 closed orbit.  Two dipoles are required for control of x and x'. Naively, one would vary the last two dipoles, D35 and PD-Rec. Unfortunately PD-Rec has significant coupling with the first turn beam position. For a scan of PD-Rec from $8.25 \rightarrow 13.75$ A, the position of the beam in the first BPM varies in the range $\Delta x = \pm 2$mm. Changing PD-Rec would mean changing all ring dipole settings to compensate, which is undesirable. 
 
 It is possible but difficult to optimize the value of PD-Rec. Instead, I assume that the present setting (PD-Rec I$=11$ A) is reasonably close to the ideal value such that closing the orbit with D34 and D35 will result in a bump in the closed orbit in that neighborhood. It may be possible to infer, based on the difference in the D34 currents optimized for a) steering through RQ69 and RQ70 and b) a closed orbit solution, the size of the orbit bump. 
 
 To set D34 and D35, I scan the currents in each and record the BPM response for the first four turns in the first 3 BPMs. I try to minimize the RMS change in position between turn 1 and turn $N\le4$ in the first three BPM's. For each BPM 1-3, I define an RMS quantity $\sqrt{\frac{1}{3}\left[ \left(x_2-x_1\right)^2+\left(x_3-x_1\right)^2+\left(x_4-x_1\right)^2\right]}$. In order to find a good closed orbit, I ran 3 scans, increasing the resolution and/or re-centering the scan range for each successive scan. Scan takes $\sim$13 minutes to read 3 BPMs for 11 current settings in each dipole. 
 
+%todo: Update this plot with new data
 \begin{figure}[htb]
 \centering
 \includegraphics[width=\textwidth,trim={.5in 2.7in .5in 2.7in},clip]{4.figures/closing_orbit_BPMs.pdf}
@@ -478,7 +524,7 @@ To set D34 and D35, I scan the currents in each and record the BPM response for 
 
 
 
-\section{Increasing Vertical Steering Capability} \label{sec:steering:vertical}
+\section{Increasing Vertical Steering Capability} \label{sec:steering:SSV}
 
 
 
