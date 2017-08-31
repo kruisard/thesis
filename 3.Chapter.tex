@@ -1,0 +1,42 @@
+%Chapter 3
+
+\renewcommand{\thechapter}{3}
+
+\chapter{Apparatus}
+\label{ch:apparatus}
+
+\section{UMER Layout}
+
+UMER is laid out as a 36-sided polygon, comprised of 18 modular $20^o$ sections. Each section houses 2 dipole magnets over $10^o$ pipe bends and 4 quadrupole magnets in a FODO (focusing-defocusing) arrangement.
+
+\section{UMER Beams}
+	\subsection{Generation and Detection of Low-Current Beam}
+	
+\section{Lattice Configurations}
+\subsection{FODO}
+\subsection{Alternative FODO lattice}
+\subsection{Octupoles Lattices}
+
+\section{Printed Circuit Octupoles}
+
+\section{Simulation Codes}
+\subsection{WARP}
+\subsection{Elegant}
+\subsection{VRUMER}
+
+\section{Simulation Techniques}
+\subsection{Frequency Map Analysis}
+
+A standard approach to understanding long term behaviour of single particle dynamics in an accelerator, particularly the effects of nonlinearities and resonances on dynamic aperture, is frequency map analysis (FMA). Originally applied to study of celestial mechanics, the technique has been successfuly applied to accelerator dynamics [\cite{Laskar2003}]. This is a powerful technique for simulation studies, but has also been applied to experimental data as well. 
+
+As applied to UMER lattices, many test particles are launched over a range of possible initial conditions and the orbits tracked over a long path length. I calculate fundamental orbit frequency, splitting the orbit into two halves ($t_o \to t_{mid}$ and $t_{mid} \to t_{final}$) to obtain two frequency values, $\nu_1$ and $\nu_2$. The difference between these values, $\Delta \nu = \nu_1-\nu_2$ is a measure of chaos in the orbit. An orbit with irregular frequency will typically have a large $\Delta \nu$, while $\Delta \nu \to 0$ for regular orbits. 
+
+It can be useful to plot $\Delta \nu $ versus initial conditions, which indicates dynamics aperture. Lines of high $\Delta \nu$ indicate resonance structures, which may or may not contribute to aperture limitation through particle diffusion. Another approach is to plot $\Delta \nu $ versus fundamental frequency, which depicts the "tune footprint," or frequency space inhabited by the beam. Again, high $\Delta \nu$ will align with resonance lines in the tune diagram, allowing easy identification of harmful resonances. 
+
+In accelerators, position data used for frequency calculation is often limited in length. Frequency resolution using Fourier transformation scales as $\frac{1}{N}$ for number of sample points $N$. For higher precision, most algorithms use Numerical Analysis of Fundamental Frequency (NAFF), with a resolution $\propto \frac{1}{N^4}$. 
+
+%todo: describe NAFF
+
+
+
+FMA is built-in in many standrd accelerator codes, including Elegant. While not included in standard WARP packages, I wrote an FMA module accessed at the Python level. 
