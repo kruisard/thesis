@@ -123,7 +123,7 @@ SSV& 1.54 & 2.79 & 3.627 & 0.61 \\
 
 \section{Prior Approach}
 
-%todo: recap Kamal thesis
+%todo: recap Chao thesis?
 
 
 
@@ -318,24 +318,9 @@ For implementation in the lab (described in Section \ref{sec:steering:implementa
 
 \subsection{Vertical Steering Algorithm}
 
-%todo: newer data would be nice
-\begin{figure}[h]
-\centering
-\subfloat[Vertical position of 6 mA beam in quads for 1st turn.]{\label{fig:vertical_quads}
-	\includegraphics[width=\textwidth,trim={.5in 6.4in .5in 2.4in}, clip]{4.figures/quad_as_BPM_Y.pdf}}
-\hspace{.05in}
-\subfloat[Vertical position of 6 mA beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
-	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{4.figures/BPM_position_sol151116_Y.pdf}}
-\end{figure}
-
 Vertical steering in UMER is accomplished by 18 vertical correction magnets (RSV's) located at the pipe flanges every $20^o$. All of these magnets are fairly weak (see Table \ref{tab:UMERsteererstrength}) and spaced half as densely as horizontal correctors.  The largest source of vertical alignment errors is the radial component of the Earth's field, shown in Fig. \ref{fig:earthfield}. Although the amplitude 200 mG is comparable to the vertical field, the average is only $<1$ mG.
 
-Previous assumption has been that sparsely populated, low-field vertical correctors were sufficient to correct for the low average radial field. However, at regions of locally high radial field, the radial field bends $\approx 2.1^o$ per 2 ring cells, while the corrector at maximum safe excitation (determined by heat damage) of 2 A can only supply $1.2^o$ of correction. This results in locally high vertical excursions, as seen in Fig. \ref{fig:vertical_quads} and Fig. \ref{fig:vertical_BPMs}. In the first turn, the maximum vertical displacement from quad center is 10 mm and the RMS displacement is 3.2 mm. 
-%Deviation about this orbit in the first 4 turns is $\sim10$ mm. 
-
-% This is much worse than the best horizontal steering solution described in this note. For horizontal beam position, the first-turn orbit (Fig. \ref{fig:ring_steering}) exhibited maximum horizontal displacement of 3.1 mm and RMS displacement of 0.8 mm. Deviation about this orbit in the first 4 turns is $\sim2$ mm. 
-
-While good recirculation is possible using the existing correctors, an attempt to steer through the vertical center of the quads will inherently be limited by the strength and density of vertical correctors. I use VRUMER to test various vertical steering algorithms and place a lower bound on the best possible first turn orbit using existing vertical steerers, results are shown in Table \ref{tab:vert_algorithm}. I considered three test cases:
+I use VRUMER to test various vertical steering algorithms and place a lower bound on the best possible first turn orbit using existing vertical steerers, results are shown in Table \ref{tab:vert_algorithm}. I considered three test cases:
 
 \begin{itemize} 
 \item Ideal: Perfect alignment, RSV current constrained to be $\le10$ A. 
@@ -526,15 +511,98 @@ To set D34 and D35, I scan the currents in each and record the BPM response for 
 \end{figure}
 
 
+\subsubsection{Corrected Beam Orbit}
+
+
+%todo: newer data would be nice
+\begin{figure}[h]
+\centering
+\subfloat[Vertical position of 6 mA beam in quads for 1st turn.]{\label{fig:vertical_quads}
+	\includegraphics[width=\textwidth,trim={.5in 6.4in .5in 2.4in}, clip]{4.figures/quad_as_BPM_Y.pdf}}
+\hspace{.05in}
+\subfloat[Vertical position of 6 mA beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
+	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{4.figures/BPM_position_sol151116_Y.pdf}}
+\end{figure}
+
 
 \section{Increasing Vertical Steering Capability} \label{sec:steering:SSV}
 
+Vertical orbit correction is inherently limited by the strength of vertical corrector magnets, RSV in Table \ref{tab:UMERsteererstrength}.
+Previous assumption has been that sparsely populated, low-field vertical correctors were sufficient to correct for the low average radial field. However, at regions of locally high radial field, the radial field bends $\approx 2.1^o$ per vertical corrector (every 2 ring cells), while the corrector at maximum safe excitation of 2 A can only supply $1.2^o$ of correction. This results in locally high vertical excursions, as seen in Fig. \ref{fig:vertical_quads} and Fig. \ref{fig:vertical_BPMs}. In the first turn, the maximum vertical displacement from quad center is 10 mm and the RMS displacement is 3.2 mm. 
+%Deviation about this orbit in the first 4 turns is $\sim10$ mm. 
+
+% This is much worse than the best horizontal steering solution described in this note. For horizontal beam position, the first-turn orbit (Fig. \ref{fig:ring_steering}) exhibited maximum horizontal displacement of 3.1 mm and RMS displacement of 0.8 mm. Deviation about this orbit in the first 4 turns is $\sim2$ mm. 
+
+While good recirculation with small turn-to-turn oscillation amplitude is possible using the existing correctors, alignment of the orbit to the vertical center of the quads is limited by the strength and density of vertical correctors. In other words, the beam can be injected with minimum deviation from the closed orbit, but this orbit has large deviations ($\ge 5$ mm) from the quadrupole centers.  
+
+\begin{wrapfigure}{r}{0.4\textwidth} 
+\includegraphics[width=0.4\textwidth]{4.figures/SSV/SSVdrawing.pdf}
+\caption{Circuit winding for SSV magnets.}
+\label{fig:SSVdrawing}
+\end{wrapfigure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.5\textwidth]{4.figures/SSV/SSVlocations.png}
+\caption{Locations of SSV's on UMER $20^o$ plate indicated with arrows. RSV's are located at vacuum flanges at ends of $20^o$ section.}
+\label{fig:SSVlocation}
+\end{figure}
+
+Increased strength and/or density is required for vertical orbit control comparable to horizontal control. I tested the use of "Short Steerers," abbreviated SSV. These are short circuits of length [] that are used for orbit correction in the injection line, pictured in Fig. \ref{fig:SSVdrawing}. There is space in the dense UMER lattice for two additional SSV's per $20^o$ plate, as shown in Fig. \ref{fig:SSVlocation}. From Table \ref{tab:UMERsteererstrength}, the available correction of the SSV is $\approx 1.2^o$ per amp, comparable to RSV strength. With twice the density of the RSV, orbit correction should be sufficient for the $\approx 2.1^o$ of distortion per cell.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.75\textwidth]{4.figures/SSV/steering_behaviour_vs_lever_arm_distance.png}
+\caption{Steering statistics for varying steerer-target distance. Quad center locations are indicated by dashed lines. Red dashes indicate distance from 1st SSV on $20^o$ plate, blue from 2nd SSV on $20^o$ plate.}
+\label{fig:lever_arm}
+\end{figure}
+
+The target for steering with the SSV's is second downstream quadrupole, at a distance of $\approx 12$ cm from the SSV center. Dependence of SSV strength and correction on SSV-target separation is plotted in Fig. \ref{fig:lever_arm}. Similar to dipole steering, choice of "too-close" target leads to over-correction, reflected in the maximum SSV set-point which is at maximum safe current. Longer distances between steerer and target are necessary for corrections within the available strength, and there is a sharp transition between "good steering" and "poor steering" at $\approx 12$ cm. The target quadrupoles for the two SSV locations are at 20 cm and 28 cm respectively, within the range of good correction.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.75\textwidth]{4.figures/SSV/orbit_uneven_ssvs.png}
+\caption{"Best-case" simulated orbits for quad-centered steering with just RSVs, hybrid (SSV's in 28 available locations, plot four RSV's for "glass gap" sections), and 36 SSV's}
+\label{fig:SSVsimorbit}
+\end{figure}
+
+The resulting first turn orbit with SSV correction from VRUMER calculations is plotted in Fig. \ref{fig:SSVsimorbit}. There are three orbits plotted: orbit correction using only 18 RSV's (black dot), orbit correction using only 36 RSV's (blue dash), and orbit correction using 8 RSV's and 28 SSV's. In the ring, there are 4 $20^o$ sections with welded glass gap breaks in the pipe. Extra supports needed to protect the glass inhabit the available SSV space. In these sections, the two RSV's bookending the $20^o$ plate are also utilized. As seen in \ref{fig:SSVsimorbit}, there are large local deviations at the four glass gap sections.
 
 
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.75\textwidth]{4.figures/SSV/vert_steering_with_ssv_170831.png}
+\caption{Measured first turn orbit for vertical steering with SSV's on 30\% of the ring (locations indicated by gray shading)}
+\label{fig:SSVexporbit}
+\end{figure}
+
+The SSV's were very successful in simulation. To test their effectiveness in the lab, a trial run of 11 SSV's were installed on ring sections 5 - 11 (skipping section 10 due to glass gap in wall current monitor diagnostic). The SSV numbering system corresponds with the nearest horizontal dipole (SSV9 is immediately downstream of dipole D9, SSV10 upstream of D10, etc). The resulting first turn orbit, using the quad-centering algorithm with RSV1-5, SSV9-18, SSV21-22, RSV10-18 is plotted in Fig. \ref{fig:SSVexporbit}. Orbit statistics are in Table \ref{tab:SSVexporbit}. The addition of SSV's reduces the vertical orbit deviation by a factor of $\approx 2$, almost to a tolerance of $\pm 1$ mm.   
+
+\begin{table}[h]
+\centering
+\caption{First turn orbit statistics for SSV trial run.}
+\label{tab:SSVexporbit}
+\begin{tabular}{|l|c|}
+\hline
+First turn RMS & 0.98 mm\\
+First turn Max. & 3.25 mm\\
+Shaded RMS & 0.45 mm\\
+Shaded Max. & 1.11 mm \\
+\hline
+\end{tabular}
+\end{table}
 
 
 
 \section{Comments on steering the Alternative Lattice}
+
+
+\section{Comments on Octupole Lattice Steering}
+
+Orbit correction results suggest ring section 9 (location of quadrupole magnets \# 34-37) as a likely candidate for the octupole channel, as the vertical orbit control has been demonstrated to be within $\pm 0.1$ mm measured in the quadrupoles on the first turn with addition of SSV corrector magnets. However, leaving room for SSV correctors in the octupole section limits the length of the octupole channel, which should be as long as possible to maximize tune spread. Without the SSV correctors, orbit deviations are likely to be larger. 
+
+SSV's should be avoided in the octupole section, but good orbit control with low deviations is essential for preserving the dynamics aperture of the octupole lattice. Other possibilities for orbit correction over a single $20^o$ section include field cancelling Helmholtz coils or $\mu$-metal shielding. These should be implemented in both horizontal and vertical planes. Low vertical background field will necessitate increased cooling capabilities for the two dipoles on this section, as they will have to be run $>3$ A to produce $10^o$ of bend. 
+
 
 
 
