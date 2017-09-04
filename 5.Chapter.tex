@@ -1,5 +1,16 @@
 %Chapter 5
 
+
+
+\makeatletter
+\def\env@matrix{\hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \linespread{1}\selectfont
+  \renewcommand{\arraystretch}{0.5}%
+  \array{*\c@MaxMatrixCols c}}
+\makeatother
+
+
 \renewcommand{\thechapter}{5}
 
 \chapter{Quasi-integrable Octupole Lattice}
@@ -11,12 +22,12 @@ As introduced in Chapter 1, a quasi-integrable octupole lattice is proposed as a
 
 \section{Toy Model}
 
-The prescription for a strongly nonlinear lattice with 1 or 2 analytic invariants is laid out in Danilov and Nagatisev's 2010 publication [\cite{Danilov2010}].
+The prescription for a strongly nonlinear lattice with 1 or 2 analytic invariants is laid out in Danilov and Nagatisev's 2010 publication \cite{Danilov2010}.
 
 
 \begin{figure}
 \centering
-\includegraphics[width=.3\textwidth]{2.figures/toy_model.png}
+\includegraphics[width=.5\textwidth]{gen.figures/toy_model.png}
 \caption{Simple quasi-integrable system: FOFO focusing with nonlinear insert }
 \label{fig:toymodel}
 \end{figure}
@@ -31,12 +42,152 @@ The prescription for a strongly nonlinear lattice with 1 or 2 analytic invariant
 
 \subsection{Steering Tolerances}
 
-The effect of background fields on the low-rigidity UMER beam is significant. The closed orbit is necessarily not straight but arcs between corrector magnets. The vertical field is almost constant at all ring sections at an average of 400 mG for approximately 2.2° of bend angle per horizontal dipole. The radial field has a sinusoidal variation with amplitude 200 mG, for maximum bend angle of 2.2° per vertical corrector. The effect on particle stability must be considered for the strongly nonlinear lattice. 
+The effect of background fields on the low-rigidity UMER beam is significant.  The vertical field is almost constant at all ring sections at an average of 400 mG for approximately 2.2° of bend angle per horizontal dipole. The radial field has a sinusoidal variation with amplitude 200 mG, for maximum bend angle of 2.2° per vertical corrector. Therefore, the closed orbit will not be perfectly aligned to element centers, but rather lie within an acheivable tolerance. Additionally, the closed orbit is necessarily not straight but arcs between corrector magnets. Finally, the beam centroid will not perfectly follow the closed orbit, but oscillates about it at the betatron frequency. 
 
-A simulation model in the WARP PIC code of a 64 cm octupole channel with an ideal linear thin-lens transformation was used to probe dynamic aperture and tune spread under these non-ideal conditions. In the simulation, a constant closed orbit distortion term is included in the trajectory calculations for each particle as thin lens transformations.
+To consider the effect of imperfect orbit correction on particle stability in the quasi-integrable octupole lattice, I apply frequency map analysis and examine dynamic aperture and maximum tune spread. I consider distortions of closed orbit, but oscillations about closed orbit. I also do not consider mis-alignment of octupole elements in the channel. A gross mis-alignment of the long-channel mount can be considered equivalent to an orbit distortion, while misalignments between individual circuits in the long channel require different treatment.
 
-We see that the presence of a vertical background field, there is an $80\%$ loss of dynamic aperture at 400 mG when compared to the ideal case. The addition of radial field causes severe loss of stability. We choose to place the nonlinear channel at a azimuthal location of locally low radial field. Additionally, shielding the background field down to 100 mG or less will limit dynamic aperture loss to $92\%$ of ideal area. Dynamic aperture calculations assume a round beam through the channel.
+Tolerance simulations use the WARP PIC code to model a 64 cm octupole channel with an ideal linear FOFO thin-lens transformation. In the simulation, a constant closed orbit distortion term is included in the trajectory calculations for each particle as thin lens transformations. Two cases are examined:
 
+\begin{enumerate}
+\item Orbit distortion in otherwise shielded 64 cm section (centroid has straight trajectory between steering elements.)
+\item Curved orbit distortion due to constant background field
+\end{enumerate}
+
+\subsubsection{Case 1: Straight/shielded orbit distortion}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{5.figures/steeringtolerance/orbit_distortion_cartoon.png}
+\caption{Red line is centroid motion of beam with initial offset $x_0$, $x'_0$. Thick red lins indicate thin lens centroid transformation. Black line is centroid motion without centroid transformation.}
+\label{fig:straightorbitdistortion}
+\end{figure}
+
+Fig. \ref{fig:straightorbitdistortion} shows distortion of the closed orbit in the case where particle trajectories are straight between magnetic elements (. The distortion is defined by initial conditions $x_0$ and $x'_0$. At the same location as the FOFO thin lens transformation (that represents focusing in the linear part of the ring), a centroid transformation is also made. For a single plane,
+
+\begin{equation}
+\begin{bmatrix} x \\ x' \end{bmatrix}_f = \begin{bmatrix} x \\ x' \end{bmatrix}_i + \begin{bmatrix} -L x_0 \\ k(x_0 + Lx_0') \end{bmatrix}
+\label{eq:straightorbitdistortion}
+\end{equation}
+
+The derivation follows. Consider single particle matrix equations for propagation through a focusing element (strength $k$) and a drift of length $L$. 
+
+\begin{equation}
+\begin{split}
+\begin{bmatrix} x \\ x' \end{bmatrix}_f 
+& = \begin{bmatrix} 1&0 \\ -k&1 \end{bmatrix}_i \ast \begin{bmatrix} 1&L \\ 0&1 \end{bmatrix}_i \ast \begin{bmatrix} x \\ x' \end{bmatrix}_i \\
+& = \begin{bmatrix} x_i + Lx'_i \\ -kx_i + (1-kL)x'_i \end{bmatrix}
+\end{split}
+\end{equation}
+
+Now divide motion into single particle $x_p$ and centroid $x_c$ components, where $x_i = x_{c,i} + x_{p,i}$ and $x'_i = x'_{c,i} + x'_{p,i}$. The matrix equation for a single pass becomes:
+
+\begin{equation}
+\begin{split}
+\begin{bmatrix} x \\ x' \end{bmatrix}_f 
+&= \begin{bmatrix} x_{c,i} + Lx'_{c,i} \\ -kx_{c,i} + (1-kL)x'_{c,i} \end{bmatrix} + \begin{bmatrix} x_{p,i} + Lx'_{p,i} \\ -kx_{p,i} + (1-kL)x'_{p,i} \end{bmatrix} \\
+&=\begin{bmatrix} x_p \\ x'_p \end{bmatrix}_f + \begin{bmatrix} x_c \\ x'_c \end{bmatrix}_i + \begin{bmatrix} L x_{c,i} \\ -k(x_{c,i} + Lx'_{c,i}) \end{bmatrix}
+\end{split}
+\end{equation}
+
+Considering $\begin{bmatrix} x \\ x' \end{bmatrix}_f = \begin{bmatrix} x_c \\ x'_c \end{bmatrix}_f + \begin{bmatrix} x_p \\ x'_p \end{bmatrix}_f$, one can examine just the centroid motion $\begin{bmatrix} x_c \\ x'_c \end{bmatrix}_f = \begin{bmatrix} x_c \\ x'_c \end{bmatrix}_i + \begin{bmatrix} L x_{c,i} \\ k(x_{c,i} + Lx'_{c,i}) \end{bmatrix}$. Let $x_{c,i} = x_0$ and $x'_{c,i} = x'_0$. The centroid will propogate identically through the 64 cm channel from turn to turn if $\begin{bmatrix} L x_0 \\ -k(x_0 + Lx_0') \end{bmatrix}$ is subtracted at the end of each pass, as in Eq. \ref{eq:straightorbitdistortion}.
+
+It should be noted that in case 1, I ignore the effect of the bending dipoles, which are spaced at 32 cm intervals. This is palatable under two assumptions: the bending dipole field is "flat" (bend angle does not depend on displacement in dipole) and, in a shielded environment, there is a setting for the dipoles that allows the beam to propogate centered through all elements. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8 \textwidth]{5.figures/steeringtolerance/DA_deltanu_plots_vs_orbit_distortion.png}
+\caption{Dependence of dynamic aperture and tune spread on orbit distortion. On dynamic aperture (DA) plot, horizontal dashed line indicates $90\%$ of ideal aperture.}
+\label{fig:DAvsorbitdistort}
+\end{figure}
+
+While $x_0$, $x'_0$ is a two-dimensional space of possible orbit distortion, I simplified the problem by requiring that the distortion be symmetric in a 64 cm drift. That is, $x_f = -x_0$ and $<x(s)> = 0$. In this case, $x'_0 \approx \sin{x'_0} = L/2x_0$ and the distortion is parametrized in terms of $x_0$ only. For a range of distortions $x_0$, I run the WARP simulation and apply FMA. Octupole strength is parametrized by peak strength in the channel, set at $50 T/m^3$ for these simulations, which is approximately $1 A$ excitation for the physical coils. 
+ 
+I assume a round beam in the channel. As the dynamic aperture is not round, in this case I quantify radial dynamic aperture as the largest radius circle for which no particles are lost. Fig. \ref{fig:DAvsorbitdistort} shows the results from multiple dynamic aperture calculations. There is quite a stringent requirement on distortion, with $x_0 < 0.2$ mm desired for preservation of dynamic aperture. At $x_0 = 0.2$ mm, decrease of RMS tune spread from ideal case of 0.025 is $\approx 6\%$.
+
+
+
+
+\subsubsection{Case 2: Curved orbit distortion due to background field}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{5.figures/steeringtolerance/vert_bg_field_distortion_cartoon.png}
+\caption{Red line is centroid motion of beam with thin lens centroid transformation at thick red arrows. Black line is centroid motion without centroid transformation, just periodic thin lens focusing element.}
+\label{fig:vertcurvedorbitdistortion}
+\end{figure}
+
+To model the effect of orbit  due to immersion in ambient background fields, I applied a similar thin-lens centroid transformation. Fig. \ref{fig:vertcurvedorbitdistortion} shows the case where steering corrections are made every 64 cm, which represents vertical steering with RSV steerers. The orbit is assumed to be "as centered as possible." For a given background field, initial conditions $y_0$ and $y'_0$ are chosen so that $y_i=y_f$ across a 64 cm drift, and $\max{y}=\min{y}$ in the drift. In this case, the centroid correction is simply:
+
+\begin{equation}
+\begin{bmatrix} y \\ y' \end{bmatrix}_f = \begin{bmatrix} y \\ y' \end{bmatrix}_i + \begin{bmatrix} 0 \\ ky_0 + \theta \end{bmatrix}
+\label{eq:curvedorbitdistortion}
+\end{equation}
+
+$\theta$ is the bending angle due to the background field. Assuming a constant background field, $\theta = \frac{LB_x}{B \rho}$ depends only on channel length (64 cm), background field $B_x$ and particle rigidity $B \rho$. To meet the condition $y_i=y_f$, $y'_0 = \theta/2$. To satisfy $\max{y}=\min{y}$, $y_0=\rho/2 \cdot ( 1-\cos{(\theta/2)} )$.    
+
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{5.figures/steeringtolerance/horz_bg_field_distortion_cartoon.png}
+\caption{Red line is centroid motion of beam with thin lens centroid transformation at thick red arrows. Thick black arrows indicate thin-lens focusing element.}
+\label{fig:horzcurvedorbitdistortion}
+\end{figure}
+
+As horizontal steerers are located every 32 cm and will be co-housed in the long 64-cm octupole channel, a slightly different transformation is applied for the case of horizontal steering. The steering correction of Eq. \ref{eq:curvedorbitdistortion} is split and applied at different locations: 
+
+\begin{subequations}
+\begin{equation}
+\begin{bmatrix} x \\ x' \end{bmatrix}_f = \begin{bmatrix} x \\ x' \end{bmatrix}_i + \begin{bmatrix} 0 \\ kx_0 \end{bmatrix}
+\label{eq:horzcurvedorbitdistortion1}
+\end{equation}
+\begin{equation}
+\begin{bmatrix} x \\ x' \end{bmatrix}_f = \begin{bmatrix} x \\ x' \end{bmatrix}_i + \begin{bmatrix} 0 \\ \theta \end{bmatrix}
+\label{eq:horzcurvedorbitdistortion2}
+\end{equation}
+\end{subequations}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{5.figures/steeringtolerance/sp_traces.png}
+\caption{Particle tracing results showing particle launched on closed orbit (black) and particle with initial offset (blue) in horizontal plan. Octupole fields are turned off.}
+\label{fig:horsptraces}
+\end{figure}
+
+
+Eq. \ref{eq:horzcurvedorbitdistortion1} is applied at the ends of the 64 cm channel, same location as the thin-lens focusing kick, essentially cancelling the effect of thin lens focusing on the centroid. Eq. \ref{eq:horzcurvedorbitdistortion1} is applied every 32 cm at dipole locations (in 64 cm channel, at $s=16,48$ cm). This is pictured in Fig. \ref{fig:horzcurvedorbitdistortion}. Fig. \ref{fig:horsptraces} shows resulting orbits over 10 passes through a 64 cm drift. No steering compensation is made when octupole fields are included.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{5.figures/steeringtolerance/DA_deltanu_plots_vs_background_By.png}
+\caption{Dependence of dynamic aperture and tune spread on vertical background field. On dynamic aperture (DA) plot, horizontal dashed line indicates $90\%$ of ideal aperture.}
+\label{fig:DAvsBGfield}
+\end{figure}
+
+
+
+
+\begin{figure}
+\centering
+\subfigure[Dynamic aperture contours for beam immersed in vertical field, Max. Octupole strength $50 T/m^3$.]{
+	\centering
+	\includegraphics[width=0.45\linewidth]{5.figures/steeringtolerance/FMA_007_DAcontours.png}
+	}
+	\label{fig:FMADA1}
+\hfill
+\subfigure[Dynamic aperture contours for beam immersed in vertical and horizontal fields, Max. Octupole strength $50 T/m^3$.]{
+	\centering
+	\includegraphics[width=0.45\linewidth]{5.figures/steeringtolerance/FMA_009_DAcontours.png}
+	}
+	\label{fig:FMADA2}
+\end{figure}
+
+
+In Fig. \ref{fig:DAvsBGfield} and Fig. \ref{fig:FMADA1} we see that the presence of a vertical background field, there is an $80\%$ loss of radial dynamic aperture at 400 mG when compared to the ideal case. The addition of horizontal/radial field, shown in Fig. \ref{fig:DMADA2}, causes severe loss of stability. No particles are stable when $B_y=400 mG, B_x=200 mG$, which is close to the "worst-case" over all 18 ring sections (see Fig. \ref{fig:earthfield} for background field data). 
+
+For reasonably dynamic aperture for the octupole channel experiment, I recommend that horizontal/radial field, $B_x$, be shielded or compensated to allow vertical excursions of $<0.2$ mm through the octupole channel. I also recommend that vertical field, which is in general much stronger, be shielded or compensated to $< 100$ mG. 
+
+There is a lot of freedom in choice of $20^o$ ring section for channel location. An important consideration is low radial field / low vertical field excursion. However, as the field has been measured to significantly between dipoles, the field will not be identically zero along the 64 cm channel and additional compensation is necessary. 
 
 
 
