@@ -4,37 +4,49 @@
 
 \chapter{Introduction}
 
-\section{Quasi-integrable Nonlinear Optics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HB intro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+UMER is a 10 keV, 11.52 meter circumference ring designed for the study of high intensity beam dynamics. The facility consists of an electron source and pulsed dipole injection into the ring, containing 36 FODO cells and 36 dipole magnets. At present, the ring has 5 available beam current settings, ranging from 0.6 mA to 100 mA, with corresponding tune depressions of 0.85 - 0.14.  Transport of the 0.6 mA (or "pencil") beam is largely emittance dominated, while higher currents are space charge dominated. A 60 $\mu$A beam is currently being characterized for use in the nonlinear experiments.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% IPAC 2015 intro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Conventional accelerators are based on Courant and Snyder’s theory of the alternating-gradient synchrotron, developed in 1952.\cite{Courant} 
+%This theory holds that the linear forces of an alternating gradient quadrupole lattice result in regular and bounded particle orbits. 
+In an AG focusing lattice, particles oscillate transversely with a characteristic tune. Unfortunately, this system is susceptible to coherent resonances which lead to beam loss and halo growth. 
+Thin lens octupoles for Landau damping limit coherent resonances, but introduce unbounded chaotic orbits, leading to particle losses, wall activation and ultimately limited achievable beam intensity.
+
+%A novel approach by Danilov and Nagaitsev discards the paradigm of linear alternating-gradient focusing in favor of a strongly nonlinear lattice, which is free from tune resonance limitations.[3] In a nonlinear lattice, particle tunes depend on oscillation amplitude. Particles that gain energy through resonant forcing will fall off resonance and the beam distribution will reach equilibrium, rather than growing resonantly. This nonlinear detuning is also shown to mitigate halo growth, which is driven by a parametric resonance between large-amplitude particles and beam core oscillations.[4]
+
+A novel approach by Danilov and Nagaitsev suggests an integrable but highly nonlinear lattice as an alternative to the standard AG synchrotron.\cite{Nagaitsev} 
+A large amplitude dependent tune spread detunes resonant particles as they gain energy from a system perturbation, making the beam immune to coherent resonances.
+This nonlinear detuning is also shown to mitigate halo growth, which is driven by a parametric resonance between large-amplitude particles and beam core oscillations.\cite{Webb}
+
+The fully integrable elliptic potential willl be tested at Fermilab's IOTA ring.\cite{iotafma} Danilov and Nagaitsev also consider the case in which the nonlinear field is purely octupolar. 
+Particles contained in an octupole potential that scales as $V(s) \propto \frac{1}{\beta^3(s)}$ will conserve a single invariant of transverse motion, the normalized Hamiltonian, and particle orbits will be chaotic but bounded. 
+The nonlinear optics program at UMER will test this quasi-integrable lattice by incorporating octupole magnets into the existing ring framework. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% AAC14 intro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Beam resonances that drive particle losses and beam halo present a significant challenge for high intensity accelerators, limiting beam current due to risk of damage and/or activation. While landau damping can control resonant effects, the addition of weak nonlinearities to a linear lattice can introduce resonant islands and chaotic phase space orbits, which reduce dynamic aperture and lead to destructive particle loss. Theory predicts that lattices with one or two invariants and sufficiently strong nonlinear elements should suppress tune and envelope resonances without loss of stable phase space area \cite{Danilov2010}. As supported by experimental studies at UMER [], mismatched core oscillations are a significant source of beam halo. This mechanism is destroyed by strong external nonlinearities through decoherence of rigid core oscillations, as shown in [].
+Danilov and Nagaitsev \cite{Danilov2010} propose a nonlinear integrable lattice, to be tested at the IOTA ring at Fermilab []. The proposed lattice consists of a transversely symmetric beam in an axially varying nonlinear channel, linked by linear sections of π phase advance that provide external focusing and image the beam between nonlinear sections. In this lattice, single particle orbits possess two invariants of motion as well as large amplitude-dependent tune spread. 
+Our goal is to realize a nonlinear octupole lattice in UMER, for the purpose of experimentally demonstrating the stability and halo mitigation of a strong nonlinear lattice. While IOTA aims to test a fully integrable nonlinear solution, UMER does not have the precision necessary to achieve and verify integrability. The strength of UMER lies in its flexibility to accommodate variable space charge beams and alternate focusing schemes. The theory of nonlinear integrable optics \cite{Danilov2010} briefly discusses a pseudo-integrable lattice, in which particles in an axially-varying octupole field possess one invariant of motion, the Hamiltonian in the normalized frame. This invariant is guaranteed by varying the field strength with the beam envelope function $\beta(s)$, as $\beta(s)^{-3}$. A lattice of this nature will allow for chaotic but bounded motion, while still providing large amplitude-dependent tune spread to damp resonant behavior.
+
+The University of Maryland Electron Ring is a 10 keV, 11.52 meter diameter ring designed for the study of high intensity beam dynamics. The facility consists of an electron source and pulsed dipole injection into the ring, containing 36 FODO cells and 36 dipole magnets. At present, the ring has 5 current settings, ranging from 0.6 mA (“pencil” beam) to 100 mA, with corresponding incoherent tune depressions of 0.85 - 0.14. In the standard FODO configuration, the pencil beam transport is emittance dominated, while higher currents are space charge dominated. The existing UMER lattice has been extensively benchmarked against simulations, in particular the WARP PIC code and the Elegant matrix code, with good agreement.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-Beam resonances that drive particle losses and beam halo present a significant challenge for high intensity accelerators, limiting beam current due to risk of damage and/or activation. While landau damping can control resonant effects, the addition of weak nonlinearities to a linear lattice can introduce resonant islands and chaotic phase space orbits, which reduce dynamic aperture and lead to destructive particle loss. Theory predicts that lattices with one or two invariants and sufficiently strong nonlinear elements should suppress tune and envelope resonances without loss of stable phase space area \cite{DN}. 
-
-In \cite{DN}, the small-angle Hamiltonian for transverse motion of a particle in an external linear focusing system is given by 
-
-\begin{equation}
-H_N = \frac{1}{2} \left( p_{x}^2 + p_{y}^2 + K(s) \left(x^2 + y^2 \right) \right) + V(x,y,s)
-\end{equation}
-
-where $V(x,y,s)$ is a generic nonlinear term. In the normalized frame, the Hamiltonian becomes 
-
-\begin{equation}
-H_N = \frac{1}{2} \left( p_{x,N}^2 + p_{y,N}^2 +x_N^2 + y_N^2 \right) + \kappa U(x_N,y_N,s)
-\end{equation}
-
-where $x_N = \frac{x}{\sqrt{\beta(s)}}$ and $p_N = p\sqrt{\beta(s)}-\frac{\alpha x}{\sqrt{\beta(s)}}$. 
-
-In order for $U(x_N,y_N)$ to be an invariant quantity (and therefore for $H_N$ to be conserved), $\beta_x=\beta_y$ inside the nonlinear element and the nonlinear element strength parameter $\kappa (s)$ depends on $\beta (s)$. In particular, for an octupole element $\kappa \propto \frac{1}{\beta(s)^3}$.
-
-For an elliptic nonlinear magnet, the transverse motion of a particle will be fully integrable with two conserved invariants, the normalized Hamiltonian and an additional quadratic term. The theory of the integrable lattice will be tested at the IOTA ring, currently under construction at Fermilab \cite{ipac12,antipov}. The proposed lattice consists of a transversely symmetric ($\beta_x = \beta_y$) beam in an axially varying nonlinear insert, linked by linear sections of $n\pi$ phase advance that provide external focusing and image the beam between nonlinear sections, for pseudo-continuous motion of particles through the nonlinear insert. This lattice is illustrated in Fig. \ref{iota}.
-
-The goal of the nonlinear optics program at UMER is to test a quasi-integrable octupole lattice, experimentally demonstrating increased transverse stability and halo mitigation, predicted in \cite{Webb}. While IOTA aims to test a fully integrable nonlinear solution, UMER does not have the precision necessary to verify integrability \cite{ipac12}. The strength of UMER lies in its flexibility to accommodate variable space charge beams with flexible focusing schemes. For the quasi-integrable lattice, the conserved $H_N$ will result in chaotic but bounded motion, while still providing large amplitude-dependent tune spreads to reduce resonant behavior.
 
 
-\begin{figure}[!htb]
-   \centering
-   \includegraphics*[width=174pt]{1.figures/toy_model}
-   \caption{Ideal nonlinear lattice composed of $\beta_x = \beta_y$ channel and ideal thin lens transfer matrix.}
-   \label{iota}
-\end{figure}
+
+
+
 
