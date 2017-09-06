@@ -10,12 +10,13 @@
 UMER is laid out as a 36-sided polygon, comprised of 18 modular $20^o$ sections. Each section houses 2 dipole magnets over $10^o$ pipe bends and 4 quadrupole magnets in a FODO (focusing-defocusing) arrangement.
 
 \section{UMER Beams}
+
+
 	\subsection{Generation and Detection of Low-Current Beam}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% IPAC 2015
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\section{Negligible space charge beam}
 
 \begin{figure}
 \begin{center}
@@ -79,8 +80,8 @@ This configuration utilizes a mode of UMER operation known as the “alternative
 %% from AAC14
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We will modify the ring to include an octupole channel, while maintaining existing ring element placement for easy conversion between nonlinear and FODO lattice configurations. As shown in Fig. 2b, the planned lattice includes a single channel, occupying ~3% of the ring (or 32 cm, the longest straight section). WARP simulations will determine if this design is sufficient to produce an observable effect on beam halo, or if a longer octupole is necessary. Possible alternate configurations include two octupole channels, a longer channel encompassing one or more dipoles (if dispersive effects allow) or, in the extreme case, a long straight (> 32 cm) pipe section in a modular design that can be temporarily installed for these experiments. All but the latter configuration allow the preservation of the linear FODO lattice by superimposing the octupole lattice over existing quadrupole and dipole circuits. The user will be able to switch between linear and nonlinear operation simply by changing power supply settings.  
-Two options exist for octupole magnet design. The first, visualized in Fig. 1, is a quasi-continuous channel composed of multiple short octupoles (~ 4 cm length) with overlapping fields, that “fill-in” the 1⁄〖β(s)〗^3  octupole strength variation. This option allows fine-tuning of the longitudinal strength profile and permits use of existing magnet mounts. The second option is to print the octupole channel as a single, axially extended circuit, which eliminates alignment errors between the components and creates a “frozen-in” longitudinal profile. This reduces the need for additional power supplies but requires redesign of magnet mounts in that section.
-The octupole channel occupies only a small fraction of the ring. The remainder of the ring must act as an external lens that simulates continuous transport through the channel. The linear portion of the nonlinear UMER configuration will consist of a reduced-density FODO section and two matching sections bordering the octupole insert. The reduced-density lattice (or “alternative lattice” [5]) is chosen to avoid asymmetries introduced by a pulsed quadrupole at the beam injection. Elegant code calculations identified several lattice solutions to achieve a symmetric beam in the octupole. One solution is pictured in Fig. 2a.  Quadrupole gradients in the matching sections range from 76% to 117% of the typical operating point in the alternative lattice.
+Two options exist for octupole magnet design. The first, visualized in Fig. 1, is a quasi-continuous channel composed of multiple short octupoles (~ 4 cm length) with overlapping fields, that “fill-in” the $1/\beta(s)^3$ octupole strength variation. This option allows fine-tuning of the longitudinal strength profile and permits use of existing magnet mounts. The second option is to print the octupole channel as a single, axially extended circuit, which eliminates alignment errors between the components and creates a “frozen-in” longitudinal profile. This reduces the need for additional power supplies but requires redesign of magnet mounts in that section.
+The octupole channel occupies only a small fraction of the ring. The remainder of the ring must act as an external lens that simulates continuous transport through the channel. The linear portion of the nonlinear UMER configuration will consist of a reduced-density FODO section and two matching sections bordering the octupole insert. The reduced-density lattice (or “alternative lattice” []) is chosen to avoid asymmetries introduced by a pulsed quadrupole at the beam injection. Elegant code calculations identified several lattice solutions to achieve a symmetric beam in the octupole. One solution is pictured in Fig. 2a.  Quadrupole gradients in the matching sections range from 76% to 117% of the typical operating point in the alternative lattice.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Printed Circuit Octupoles}
@@ -89,23 +90,16 @@ The octupole channel occupies only a small fraction of the ring. The remainder o
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Copy from conf paper
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{figure}[]
-% %   \vspace*{-.5\baselineskip}
-   % \centering
-   % \includegraphics[0.5\textwidth]{3.figures/octupole_PCB}
-   % \caption{Half of a UMER printed circuit octupole magnet}
-   % \label{fig:octupcb}
-% %   \vspace*{-\baselineskip}
-% \end{figure}
-
-% \begin{figure}[]
-% %   \vspace*{-.5\baselineskip}
-   % \centering
-   % \includegraphics*[0.5\textwidth]{3.figures/OctupoleFFTreal}
-   % \caption{FFT measurement of octupole from rotating coil measurement}
-   % \label{fig:octurotcoil}
-% %   \vspace*{-\baselineskip}
-% \end{figure}
+\begin{figure}[]
+\subfigure[Half of a UMER printed circuit octupole magnet]{
+   \centering
+   \includegraphics[width=0.5\textwidth]{3.figures/octu/octu-pic.png}
+   } \label{fig:octupcb}
+\subfigure[FFT measurement of octupole from rotating coil measurement]{
+   \centering
+   \includegraphics[width=0.5\textwidth]{3.figures/octu/OctupoleFFTreal.png}
+   }\label{fig:octurotcoil}
+\end{figure}
 
 
 MER utilizes air core printed circuit magnets, pictured in Fig. 1, for focusing and steering. The printed circuits are incredibly cost-effective as well as lightweight and stackable, making any combination of multipoles possible. They can operate in DC or pulsed mode, and are easily tunable with no hysteresis. 
