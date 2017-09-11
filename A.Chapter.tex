@@ -1,0 +1,48 @@
+\appendix
+\renewcommand{\thechapter}{A}
+\renewcommand{\chaptername}{Appendix}
+
+\chapter{Implementing quad-as-BPM position measurement}
+
+
+
+The process for collecting quadrupole reponse data and converting to quadrupole position data has been automated and stream-lined into the UMER control system. The procedure is conceptually straightforward. For a specified quadrupole, the algorithm:
+
+\begin{enumerate}
+\item Grabs a list of functioning BPM's, chooses downstream BPM for measurement of quad response (excluding pairs listed in Table \ref{tab:nulls}).
+\item Varies quadrupole over a preset range of $\pm 0.09$ A around nominal set-point, using 5 data points total to calculate response.
+\item Calculates response slopes $\frac{\Delta X_{BPM}}{\Delta I_{quad}}$ and $\frac{\Delta Y_{BPM}}{\Delta I_{quad}}$ by applying linear least squares fit to response data.
+\item Runs VRUMER simulation 9 times to calculate simulated response slope for given quad-BPM pair. Divide $x_q$, $y_q$ by response slope to determine slope-to-position calibration factor. 
+\item Applies VRUMER calibration factor to measured response slope to return measured position in quad. 
+\item Calculates error to response slope, including $95\%$ confidence interval to slope, as well as quad-BPM separation relation to phase advance, according to Eq. \ref{eq:quad-as-bpm-error}. 
+\end{enumerate}
+
+Arguably, the slope-to-position calibration factor could be generated using a matrix-based tracking technique (as outlined in \cite{KPRnote}) and saved as a look-up table. For a given quad-BPM separation (for 72 quadrupoles there are only 8 possible separations), this number is not expected to change much and this approach would require fewer computations. However, this comes with an added loss of flexibility. The look-up table would have to be recalculated for UMER operating points with different quad focusing strengths or non-FODO orientations. For example, Chapter \ref{ch:altlattice} uses an alternative lattice configuration with half the quads turned off. 
+The time savings for using a look-up table are small. Running VRUMER takes $\sim 0.06$ 
+seconds, so even for the an entire quad scan (9 points) VRUMER costs $\sim 0.5$ second per quad. This is negligible compared to the time required to measure BPM response for multiple quad settings.
+
+There is a slight discrepancy with the phase-advance contribution to error bar calculation. 
+The error $\sigma_\sigma \equiv | \sigma_{exp} - \sigma_{sim}|$. Simulated phase advance $\sigma_{sim}$ is estimated from VRUMER results using NAFF algorithm \cite{Laskar2003},\cite{Pedro2012}. Experimental phase advance $\sigma_{exp}$ is hard-coded to be $\nu_x = 6.636$, $\nu_y = 6.752$ for standard $1.826$ A operating point.  This will result in erroneaously large error bars for different operating points and should be modified in the future to be more general.
+
+
+
+%% Quad as BPM (outdated-method)
+% The quad as BPM measurement is controlled by UMER control script \newline kiersten\_quad\_scan\_v2.m. 
+% In this procedure, the current in each ring quadrupole (RQ2-RQ71) is independently scanned about it's nominal 
+% operating point. The horizontal and vertical position of the nearest downstream BPM is recorded. This data is 
+% fitted to a linear curve, using the linear least squares method. The fitted slope is the BPM response to the 
+% quad scan, $\frac{\partial x_{BPM}}{\partial I_{quad}}$, equivalently the uncalibrated position in the quad. 
+% The errorbars are defined as the 95\% confidence interval of the slope coefficient. 
+
+% To calibrate the position in the quad, I use the VRUMER code to determine what initial condition in the quadrupole gives the appropriate BPM response.
+% I first choose an arbitrary starting position $x_{0,q}$, $x'_{0,q}$ and simulate a quad scan.
+% I then apply the Newton-Raphson method to determine the appropriate $x_q$ to give the desired (measured) BPM response, $m_{sim} = m_{data}$ (where $m_{data} = \frac{\partial x_{BPM}}{\partial I_{quad}}$): 
+% \begin{equation}
+ % x_q = x_{0,q} - \left( m_{sim} - m_{data} \right) \left(\frac{dm_{sim}}{dx_q}\right)^{-1}
+% \end{equation}
+% This allows us to define a calibration factor between the BPM response and the position at the center of each quadrupole, 
+% \begin{equation}
+% x_q = C_{q,BPM} \times \frac{\partial x_{BPM}}{\partial I_{quad}}
+% \end{equation}
+% While this factor will not change for a static version of VRUMER, the \newline  kiersten\_quad\_scan\_v2.m procedure is 
+% set up to do the Newton-Raphson calculation for every set of quad scan data. 

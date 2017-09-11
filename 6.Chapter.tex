@@ -1,88 +1,381 @@
-%Chapter 6
-
-\renewcommand{\thechapter}{6}
-
-\chapter{Distributed Octupole Lattice}
+%Chapter 4
 
 
+%todo:
+% Look up old "best" steering solution
+% re-plot old "best steering" solution 
+% Get umer steering diagram from laptop
+% Vertical steering SSV run
+% WRite up simulated annealing
+% 
 
-%% Following is copy of HB paper
+\renewcommand{\thechapter}{4}
 
-This chapter discusses preliminary testing of a distributed octupole lattice, conducted in parallel with preparations for the more robust single-channel design.
+\chapter{Steering and Orbit Correction}
+\label{ch:steering}
 
-\section{Theory}
+\section{Motivation}
 
-The primary focus of this paper is the second consideration, a distributed octupole lattice. Thin nonlinear inserts are distributed at even intervals about the ring ($90^o$ points, see Fig. \ref{N4lattice}).  The alternative lattice uses printed circuit octupoles with the same aspect ratio as the standard UMER PC quad, which are seated in unused quadrupole mounts at the mid-point of the FODO cell. 
+Precise control of centroid orbit is necessary for good beam recirculation, with low losses due to large centroid deviations. This allows for observation of beam losses due to more complex effects, such as resonant excitation of particle and/or beam envelope amplitudes, as well as longitudinal losses. 
+The proposed quasi-integrable nonlinear optics experiment has, as its lowest-order, most straightforward diagnostic, a characterization of resonantly driven beam losses with and without nonlinear damping. Therefore, a reduction of transverse scraping losses is imperative for observation of these likely slower loss rates. Additionally, the nonlinear optics experiments require a low-current, high-emittance $60 \mu A$ beam. A large emittance beam corresponds to a large cross-section beam in configuration space, which places a more stringent requirement on steering tolerances. %todo: link to table of UMER beam quantities
 
-The distributed octupole lattice is natively suited to the UMER structure, allowing the installation of octupoles with minimal disruptions to the ring (utilizing existing mounts and power supplies). However, it is a coarse approximation of the quasi-integrable octupole lattice and it is expected that these approximations will limit the extent to which the Hamiltonian $H_N$ is conserved.
+In an ideal linear accelerator, there exists a "reference trajectory," which describes the path of an ideal particle. This trajectory is typically centered within the focusing quadrupoles and the beam pipe. A beam with imperfect injection conditions will oscillate about the ideal trajectory. 
+In this section, we define "first-turn orbit" to mean the measured or simulated centroid trajectory on the first turn. "Closed orbit" refers to the orbit about which the trajectory oscillates. This is also referred to as the "equilibrium orbit." Ideally this orbit is centered in the quadrupoles, but due to background field, alignment errors and number of available correctors, it is only possible to minimize orbit deviation from quadrupole centers.
 
-A key liberty taken with the quasi-integrable theory is the requirement that $\beta_x=\beta_y$ throughout the nonlinear element. In this case, $\beta_x \approx \beta_y$, with differences on order 15\%. The other approximation is that the PC octupole is fringe-dominated, meaning the longitudinal profile is not flat top and therefore the magnet cannot perfectly meet the requirement that $V_{oct} = 1/\beta^3 =$ constant. Theoretical calculations of the UMER magnets predict that fringe fields cancel due to the relatively short magnet length.\cite{VenturiniThesis} It is yet to be seen if this cancellation will help preserve the nonlinear invariant. Octupole models used in simulations shown here utilize a hard-edged approximation. 
-
-% -- unsure about this section
-To meet the $n-\pi$ phase advance requirment from the quasi-integrable theory, the distributed octupole lattice can be tuned to have a tune of $4+\delta 2\pi$, where $\delta$ indicates the phase advance through the octupoles. For a turn length of 11.52 m, effective octupole length of 5.2 cm and tune near 4, the phase advance through the octupoles will be near $\psi = 0.07 *2\pi$. 
-
-
+In general, for straightforward operation of UMER, lowest-possible deviation of beam centroid from quadrupole centers in multi-turn operation is desireable, for the smallest coupling between focusing strength and closed orbit deviation. As seen in Section \ref{HERE}, the dynamic aperture of the quasi-integrable octupole lattice suffers greatly for orbit distortions, and it is desirable to minimize centroid offset from octupole centers in the octupole insert.   
 
 
+%todo: link to write-up of toy model simulations (also to-do:write up toy model sims)
 
-\section{Distributed Octupole Lattice Simulations}
+\section{Considerations for low-ridgidity electron beam}
 
-\subsection{Various configurations of distributed octupoles}
-%todo: other variations? (N:18,12,6,3,2,1 octupoles)
 
+In typical high-energy accelerating or storage rings (for which steering algorithms are well-developed), the beam travels in straight lines between steering elements (dipoles or off-centered quadrupoles), effectively tracing out an N-sided polygon where N is the number of dipoles. Steering in UMER is complicated by the fact that at low-energies, the beam is significantly bent by background, ambient fields. For a 10 keV electron beam, rigidity $B\rho = \frac{p}{q}$ is $338.859$ G-cm. The required integrated field to bend the beam $10^o$ is $59.154$ G-cm. Given an average ambient vertical field of $\approx 400$ mG, per $32$ cm cell, the integrated field is $ 32 * 0.400 = 12.8$ G-cm. Therefore, approximately $22\%$ of the total horizontal bending in the ring is due to the ambient vertical fields. The ambient horizontal field is weaker, on average $<1$ mG, which gives only a small orbit distortion (requiring only a small correction) from turn-to-turn. However, local closed orbit distortions due to the horizontal fields can be large (up to $\approx 200$ mG), and large vertical corrections are necessary to minimize deviation from quadrupole centers. Measured ambient field data can be seen in Figs. \ref{fig:earthfield} and \ref{fig:earthfield3D}. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/earth_field_new.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Ambient fields measured at UMER dipoles, from Dave Sutter measurements 6/1/2010 and 7/22/2016.}
+\label{fig:earthfield}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/earth_field_3D.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Ambient field data vectors, including xy projection. x,y units are meters, z-axis is milli-Gauss.}
+\label{fig:earthfield3D}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+Because the beam is immersed in a bending field, in the perfectly aligned case a beam orbit that is centered in the quadrupoles is required to be displaced in the BPMs, as in Fig. \ref{fig:BPMcartoon}. Simple calculations with a constant background field show that we expect the ideal orbit to be radially displaced by [todo:]. However, in the case of azimuthally-varying ambient fields and displacements up to several millimeters, we expect larger displacements of the "best-possible" orbit.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{4.figures/bpm_quads_cartoon.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Diagram of beam position in diagnostic (BPM) for an orbit that is horizontally centered in the quadrupoles.}
+\label{fig:BPMcartoon}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+Steering in the ring is controlled by 36 horizontal bending dipoles, which determine the shape of the horizontal closed orbit, and which can be independently adjusted to optimizie the orbit. This is different from the typical case of a larger ring, which uses fixed dipoles and adjustable corrector magnets. There is 1 independent horizontal dipole every 2 quadrupoles.  Vertical correction is made with 18 printed circuit corrector magnets located at pipe flanges, which are named "RSV" magnets. There is 1 RSV corrector every 4 quadrupoles. Additional vertical correctors have been added and proposed, as described in Section \ref{sec:steering:vertical}. Steering near injection is controlled by 6 vertical and horizontal corrector magnets in the injection line, in the "SDH" and "SDV" families. Additionally, there are two correctors (one horizontal and one vertical) in the ring near the intersection of the injection pipe (the "Y-section"), named "SDR6H" and "SDR6V." 
+
+
+
+
+
+
+
+\section{UMER Steering Magnets}
+
+\begin{table}[h]
+\centering
+\caption{UMER Steering magnet strengths}
+\label{tab:UMERsteererstrength}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Magnet Name & length [cm] & radius [cm] & Integ. Field / A [G-cm/A] & strength [$^o$/A] \\
+BD & 4.44 & 2.87 & 19.917& 3.37 \\
+PD & 4.40 & 4.40 & 1.913 & 0.32 \\
+RSV& 3.80 & 5.75 & 3.886 & 0.66 \\
+SD & 2.37 & 4.73 & 3.317 & 0.56 \\
+SSV& 1.54 & 2.79 & 3.627 & 0.61 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
 
 
 \begin{figure}
-\subfigure[N36 octupole lattice]{ \centering
-	\includegraphics[width=.3\textwidth]{umer-diagram/altlat_N36octu_full_ring.png}
-	}
-\subfigure[N9 octupole lattice]{ \centering
-	\includegraphics[width=.3\textwidth]{umer-diagram/altlat_N9octu_full_ring.png}
-	}
-\subfigure[N4 octupole lattice]{ \centering
-	\includegraphics[width=.3\textwidth]{umer-diagram/altlat_N4octu_full_ring.png}
-	}	
-\caption{A selection of distributed octupole lattices tested for dynamic aperture and tune spread. }
-\label{fig:Noctulattices}
-\end{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/full_ring_steerers_labelled.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{UMER Diagram with all steerers labelled. SSV family is discussed in Section \ref{sec:steering:SSV}}
+\label{fig:steerers-labelled}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+
+\section{Prior Approach}
+
+%todo: recap Chao thesis?
+
+
+
+% New Approach
+An alternative approach to steering was developed using a steering procedure with local corrections to ensure the equilibrium orbit is centered (or as close to centered as possible) in the quadrupoles. This is unique from the response matrix method, in which a global correction is calculated that aims to center the equilibrium orbit at the 14 BPM locations. The steering algorithm is a methodical, "front to back" approach that first minimizes the position of the beam in the quadrupoles on the first turn then minimizes orbit deviations in subsequent turns. This algorithm should result in smaller local orbit excursions from quadrupole centers, since it utilizes 36 position data points at quadrupole locations for the first turn orbit as opposed to 14 at the BPMs.
+This is proposed as a alternative to the response matrix steering algorithm \cite{KPRnote:2011}, and may be more useful for applications where orbit centering in the quadrupoles is essential.
+
+The remainder of this chapter describes the tools and algorithmic approach to centering the first turn orbit in the quadrupole centers. First I describe the quad-as-BPM procedure for measuring first-turn centroid position at the quadrupoles (Section \ref{sec:steering:quad-as-bpm}). Then I summarize the application of various algorithms to set horizontal and vertical steerers in Section \ref{sec:steering:ringsteering}, including theoretical "best-case" orbit excursions and proposed vertical steering upgrades to meet the dynamic aperture requirements for the nonlinear optics experiments. This includes first-turn data taken during ring steering tests.
+Section \ref{sec:steering:implementation} lays out a sample steering procedure, including injection and multi-turn optimization routines. 
+
+
+
+ 
+
+\section{Quadrupole as BPM technique} \label{sec:steering:quad-as-bpm}
+
+First-turn position data is extrapolated from quadrupole response data, also called "quad as BPM" or "virtual BPM." A beam that is off-centered in a quadrupole will experience a dipole force acting on the centroid motion as well as a quadrupole focusing force that acts on the beam envelope, as shown in Fig. \ref{fig:simple-beamline}. The strength of the dipole kick will depend on the position of the centroid in the quadrupole as well as strength of the quadrupole. Variation of the quadrupole strength will cause variation of the centroid as detected on a downstream BPM. Knowledge of the centroid transformation between quadrupole and BPM allows reconstruction of the beam position. 
+
+%%%%%%%%%%%%%%%% THEORY
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/simple_beamline.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Diagram of UMER beamline, with quadrupoles (blue), dipoles (green) and BPMs (circles). Black curve is possible centroid trajectory, dashed-red curve is perturbed centroid due to change in quadrupole strength at 40 cm. Phase advance per cell (32 cm) is $66.4^o$.}
+\label{fig:simple-beamline}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+
+
+In a lattice with low phase advance per cell (such as UMER, with $66.4 ^o$ and $67.5 ^o$ in the x,y planes), the particle motion is approximately sinusoidal, described by: 
+
+\begin{equation} x(s) = A_1\cos{\frac{\sigma}{L}s} + A_2\sin{\frac{\sigma}{L}s}\end{equation}
+
+The derivative of this motion is
+
+\begin{equation} x'(s) = \frac{dX}{ds} = -A_1\frac{\sigma}{L}\sin{\frac{\sigma}{L}s} + A_2\frac{\sigma}{L}\cos{\frac{\sigma}{L}s}\end{equation}
+
+Generally, the centroid is not confined to the reference orbit (the orbit that goes through the center of every quad), so the equilibrium centroid orbit oscillates with a frequency of $2\pi \times \nu$, with amplitudes $A$. Now, let's consider an orbit that has been perturbed, due to changing the strength of a single quad. We treat the quadrupole as "thin," an appropriate simplification when phase advance is low. Using the analog of thin lens optics in the paraxial approximation, $\Delta x' \approx tan \Delta x' = \frac{x_Q}{f}$ where $x_Q$ is the centroid offset in the quad and $f$ is the focal length. For a thin quadrupole, $\frac{1}{f} = \frac{G}{B\rho}$ for integrated gradient $G$ and magnetic rigidity $B\rho$. For UMER ring quadrupoles, $G=13.50I$ [Gauss/A] and for 10 keV electrons, $B\rho = 338.85$ G-cm. 
+
+Consider a perturbed orbit $\tilde{x}(s) = x(s) + \delta x(s)$, where $s=0$ is the perturbed quad location. The initial conditions are $\tilde{x}(0) = x(0)$ and $\tilde{x'}(0) = x'(0) + \Delta x'_Q$ where $\Delta x'_Q = x(\frac{G \Delta I}{B\rho})$ is the change in angle due to perturbation on the quad. Letting $\delta x(s) = B_1\cos{\sigma s / L} + B_2\sin{\sigma s / L}$ and applying these initial conditions, we find $B_1 = 0$, $B_2 = x_Q L/\sigma \times G \Delta I / B\rho$ and the perturbed orbit is:
+
+\begin{equation} \tilde{x}(s) = x(s) + x_Q \frac{L}{\sigma} \frac{G \Delta I}{B\rho} \sin{\frac{\sigma}{L}s} \end{equation}
+
+With variation of the quadrupole strength, we find the dependence of the centroid position in a downstream BPM is linear in the position in the quadrupole, $x_Q$: 
+
+\begin{equation} \frac{d \tilde{x}(s_{BPM})}{d\Delta I} = x_Q \frac{L}{\sigma} \frac{G}{B\rho} \sin{\frac{\sigma}{L}s_{BPM}} \label{eq:quad-response} \end{equation}
+
+In the approach described here, we recover the first-turn position in the quadrupoles by measuring the slope $\frac{d \tilde{x}(s_{BPM})}{d\Delta I}$. A model of the ring using the VRUMER beam tracking code is used to calculate the constant $\frac{L}{\sigma} \frac{G}{B\rho} \sin{\frac{\sigma}{L}s_{BPM}}$, the result is a measurement of $x_Q$.
+This is an essentially identical method to that described by Kamal Poor Rezaei \cite{KPRnote:2012}, 
+with the main difference being the use of the VRUMER beam tracking code to calibrate position, rather than a transfer matrix calculation.  
+
+VRUMER, described in detail in Appendix [TBD], is a simple orbit integrator written in Matlab, originally developed by Irving Haber to model transverse beam centroid behavior and test UMER-specific steering algorithms.
+The model used here includes the measured background earth field, applied as a continuously acting, lab-frame-position dependent force based on linear interpolation between measurement points at the 36 dipoles.
+This model does not include centroid kicks as a result of magnet fringe fields or the steering effect of the offset YQ magnet, although the framework can support these refinements.
+
+At an operating point of 1.826 A, the UMER 6 mA beam has $\nu_x = 6.636$, $\nu_y=6.752$ \cite{RKnote:2010}. This corresponds to betatron wavelengths $\lambda_x = 1.736$ m, $\lambda_y=1.706$ m.
+In the VRUMER simulation, horizontal and vertical tunes are equal (no edge focusing), $\nu=6.293$, equivalently $\lambda = 1.83$ m.
+In this case, quadrupole strength parameters were set according to standard hard-edged approximation for the UMER quadrupoles: length$=4.475$ cm, peak strength $g=3.609$ G/cm, hard-edge factor $f=0.8354$.
+
+
+\subsection{Systematic Error in Quad-as-BPM Calibration} \label{sec:steering:errors}
+
+The previous section begs the question, what is the amount of systematic error introduced by differences between reality and the model used for calibration (in this case, VRUMER). Most notably, bare tune in the model and measured tune differ by $\Delta \nu_x = 0.340$ horizontally, $\Delta \nu_y = 0.459$ vertically. It is covenient to define phase advance per cell, $\sigma = \frac{2\pi\nu}{36}$. Additionally, there are measurement errors included in the measurement of position with BPM.
+
+Examining the formula for $x_Q$ from Eq. \ref{eq:quad-response} above, re-written here as:
+
+\begin{equation} x_Q = \frac{\sigma}{L} \frac{d \tilde{x}_{BPM}}{d \Delta I} \sin^{-1} \frac{\sigma}{L}s_{BPM} \end{equation}
+
+
+Applying error analysis and assuming no significant error is introduced by our choice of $L$, $G$, $B\rho$, or $s_{BPM}$ in the model, we find the position error to be dependent on errors in the measured slope $m$, $\sigma_m$, and the systematic error of the model phase advance $\sigma$, $\sigma_\sigma$. 
+
+\begin{equation} \frac{\sigma_{x_Q}}{x_Q} = \bigg[1-\frac{s_{BPM}}{L}\cot{\frac{\sigma}{L}s_{BPM}} \bigg]\frac{\sigma_\sigma}{\sigma} + \frac{\sigma_m}{m} 
+\label{eq:quad-as-bpm-error}
+\end{equation}
+
+In this case, error $\sigma_m$ encompasses to statistical and systematic noise, as well as systematic calibration errors, related to the collection and processing of BPM data. For all the data shown here, $\sigma_m$ was taken to be the $90\%$ confidence bounds of the slope for the linear fit to the measured BPM position versus quadrupole strength curve. This encompasses shot-to-shot noise and nonlinearities introduced by beam scraping. Additionally, background was subtracted from scope traces to reduce the effect of systematic, repeatable noise picked up by the BPM amplifiers. 
+
+$\sigma_\sigma$ is an error introduced by using the VRUMER model to calibrate quadrupole response data, and can be reduced by tweaking the focusing strength in the model. 
+
+Fig. \ref{fig:quad-as-bpm-error} shows the dependence of the fractional error of measured position in the quadrupole, $x_Q$, as a function of separation between quadrupole and BPM used to measure quadrupole response. In this case, $\sigma_\sigma$ is taken to be the systematic error in phase advance between the VRUMER model and UMER experiment, $\sigma_\sigma = \mid \sigma_{sim} - \sigma_{exp} \mid = 0.06$. Only 8 discrete quad-BPM separations exist, in the range $[8,24,40,... 120]$ cm.
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{4.figures/quad_as_BPM_error.png}
+\end{center}
+\renewcommand{\baselinestretch}{1}
+\small\normalsize
+\begin{quote}
+\caption[]{Fractional error in quad-as-BPM position due to phase error, versus quad and BPM separation}
+\label{fig:quad-as-bpm-error}
+\end{quote}
+\end{figure} 
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
+
+
+As seen from Eq. \ref{eq:quad-as-bpm-error}, the error approaches $\infty$ where $\frac{\sigma}{L}s_{BPM} = n\pi$. This is the point where the betatron wavelength is equal to the quad-BPM separation, a null point of the perturbed orbit $\delta x(s) = x_Q \frac{L}{\sigma} \frac{G \Delta I}{B\rho} \sin{\frac{\sigma}{L}s}$. Near this null, the returned quad-as-BPM measurement will have large errors, and in general be very sensitive to error in the BPM measurement as well as differences in the model and experiment. 
+
 
 \begin{table}
 \centering
-	\begin{tabular}{|c|c|c|c|}
-	\hline
-	\# octupoles & spacing [m] & $\Delta \nu_x$ & $\Delta \nu_y$ \\
-	\hline
-	36 & 0.32 & 0.11 & 0.11 \\
-	9 & 1.28 & 0.45 & 0.46 \\
-	4 & 2.88 & 1.01 & 1.03 \\
-	\hline
-	\end{tabular}
-\caption{Configurations considered for distributed octupole lattices. $\Delta \nu$ is tune advance between octupole centers in Elegant simulation.}
-\label{tab:Noctlattices}
+\caption{"Next-downstream" Quad-BPM pairs with separations near half of a betatron wavelength, which results in large errors in the quad-as-BPM method.}
+\label{tab:nulls}
+\begin{tabular}{|c|c|}
+Quad \# & Nearest BPM  \\
+\hline
+QR14 & RC5  \\
+QR38 & RC11  \\
+QR62 & RC17  \\
+QR70 & RC1 (turn 2)  \\
+\end{tabular}
+\end{table}
+
+
+In standard UMER operation, the BPM spacing is 64 cm (see Fig. \ref{fig:simple-beamline}), and the associated error is maximum $10\%$. However, 4 BPM's are omitted for injection, longitudinal focusing and the wall current monitor. Larger errors are permitted at larger separations. 
+Table \ref{tab:nulls}) shows quadrupole-BPM pairs with fractional error $>1$. The spacing for these 4 pairs is 88 cm, close to half the betatron wavelength, $\frac{\lambda}{2} \approx 86 cm$. 
+
+In subsequent data shown, the 4 quads identified in Table \ref{tab:nulls} use the response measured in the next downstream BPM in order to avoid artificial blow-up or suppression of measured $x_Q$ and $y_Q$. 
+
+
+
+\section{Steering Algorithms} \label{sec:steering:steeringalgorithm}
+
+
+
+
+\subsection{Horizontal Steering Algorithm}
+
+Horizontal orbit in the ring is controlled by 35 ring dipoles and the pulsed injection magnet (PD), for a ratio of 1 corrector per 2 quads. As the ring dipoles are designed to bend the beam $10^o$, they are sufficient to correct the background Earth field, which on average bends the beam $\approx 2.1^o$ per cell. 
+
+I applied VRUMER simulation to determine an effective algorithm for minimizing first turn orbit position in the quadrupoles by setting the 36 dipoles. As there are 2 quadrupoles per dipole, there are a variety of minimization functions available (aim for the center of either quadrupole, or some weighted combination of the two). I only considered quadrupoles immediately downstream of a given dipole, upstream of the next dipole. In these cases, multiple passes would be necessary to find a "centered" orbit, and relaxation is slow. The 2 downstream quadrupoles are indicated as focusing "F" or defocusing "D" based on polarity in the horizontal plane. The nearest downstream quadrupole for any dipole is focusing (in the standard FODO configuration), an sketched in Fig. \ref{fig:BPMcartoon}.
+ 
+I considered steering algorithms with an angle term $x'$. In the thin lens approximation for a focusing dipole separated from a defocusing dipole by a drift of distance $L$, $x'_F \equiv \frac{x_D-x_F}{L}$. I used $x'_F \propto x_D-x_F$ to include $x'_F$ in the RMS minimization term, see Table \ref{tab:algorithm}.
+
+\begin{table}[h]
+\centering
+\caption{Different algorithms and their performance (RMS position in quads) for initial condition $x=1$mm, $x'=0$. }
+\label{tab:steeringalgorithm}
+\begin{tabular}{|l|l|c|c|c|}
+\hline
+shorthand & Minimization function & RMS($x_Q$) [mm] & RMS($x_Q$) [mm]  & plot trace \\
+& & no misalign. & $\sigma=5$mm & \\
+\hline
+$x_F$ & $\| x_F \|$ & 5.3 & 37.3 & {\color{blue} $\circ$} \\
+$x_D$ & $\| x_D \|$ & 0.2 & 6.9 & {\color{red} $\triangle$} \\
+$x_F,\thinspace x_D$ & $\sqrt{x_F^2+x_D^2}$ &  2.1 & 9.3 & {\color{cyan} $\diamond$} \\
+$x_F,\thinspace x'_F$ & $\sqrt{x_F^2+(x_D-x_F)^2}$ & 0.2 & 6.6 & $\ast$ \\
+$x_D,\thinspace x'_F$ & $\sqrt{x_D^2+(x_D-x_F)^2}$  & 0.2 & 7.0 & {\color{magenta} $+$} \\
+\hline
+\end{tabular}
 \end{table}
 
 
 
 
-\subsection{Frequency Map Analysis} 
+\begin{figure}[!htb]
+\centering
+\subfloat[No misalignments]{
+	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{4.figures/vrumer_steering_algorithm_compare_x1_xp0.pdf}}
+\hspace{.05in}
+\subfloat[Random quad misalignments from Gaussian distribution, $\sigma=5$mm]{
+	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{4.figures/vrumer_steering_algorithm_compare_x1_xp0_sig5.pdf}}
+\caption{First turn VRUMER orbits for initial condition $x=1$mm, $x'=0$. 
+%blue circle: $x_F$, red triangle: $x_D$, black asterisk: $x_F$,$x'_F$, 
+%magenta plus:  $x_F$,$x'_F$, green diamond: $x_F$,$x_D$
+}
+\label{fig:steeringalgorithm}
+\end{figure}
 
-%todo: add to this section other configurations considered. 
 
-The idea of the distributed octupole lattice was first explored in the Elegant code, which allows beam tracking through third order matrices and symplectic elements.\cite{elegant} Frequency map analysis shows the dynamic aperture is largest for an evenly distributed N4-octupole lattice With an octupole strength of $200 T/m^3$, which corresponds to approximately 2.66 A in the physical octupoles, we see a tune shifts up to $ \Delta \nu \approx 0.07$. This comes at the cost of operating near the integer resonance band. 
 
-The Elegant calculation was run at $\delta \psi_x = 1.06 *2 \pi$, $\delta \psi_y = 1.08 *2 \pi$ between octupoles (ring tune of $\nu_x=4.45$, $\nu_y=4.54$), slightly displaced from the ideal $\delta \psi_x =  \delta \psi_y = 2 \pi$ between octupoles. At this offset, the integer resonance band $\nu_x=\nu_y$ is visible in both configuration and tune space as an evacuated band, as seen in Fig. \ref{fma}. This integer band is destructive and cannot be mitigated by increasing octupole strength to drive up tune spread; The maximum externally induced tune spread is fixed, while the dynamic aperture decreases with octupole current (and amplitude dependent tunes scale accordingly). 
 
-A comparable analysis for single channel design was done in Elegant. The single channel octupole is expected to have a maximum tune shift of roughly twice what is expected in the N4 lattice ($\delta \nu \approx 0.23$), and less apparent sensitivity to the $\nu_x=\nu_y$ band.
+The results of multiple steering algorithms are shown in Table \ref{tab:steeringalgorithm}. Simulated orbits with and without misalignment errors are shown in Fig. \ref{fig:steeringalgorithm}. Qualitatively, the best performers were $x_D$, $x_F$,$x'_F$, $x_D$,$x'_F$, resulting in almost identical orbits (sub-millimeter differences) that converge very quickly towards the center of the quads given an injection error or quad misalignment.
 
-\begin{figure}
-	\subfigure[]{\centering
-    \includegraphics[width=0.5\textwidth]{6.figures/paper_umer_oct_A.png}
-	}
-	\subfigure[]{\centering
-	\includegraphics[width=0.5\textwidth]{6.figures/paper_umer_oct_nu.png}
-	}
- 	\caption{Frequency Map Analysis of N4 lattice in configuration and tune space}
-   \label{fig:N4fma}
+In the lab, it is much faster to minimize $x_D$, as the data collection is faster. It also allows interpolation between scanned dipole settings, as the data can be fit to a line and the zero-crossing calculated (the RMS minimization functions do not lend themselves to fitting by a simple function). 
+However, when applied in the lab, the $x_F$,$x'_F$ algorithm seems to yield better results. 
+This may be because of its ability to handle relative misalignments between the focusing and defocusing quadrupoles, as well as reduced sensitivity to nonlinearities in the quad fields and BPM response for large centroid positions. 
+For implementation in the lab (described in Section \ref{sec:steering:implementation}), I chose to use $x_D$ as the minimization function, due to faster steering time.
+
+
+
+
+
+\subsection{Vertical Steering Algorithm}
+
+Vertical steering in UMER is accomplished by 18 vertical correction magnets (RSV's) located at the pipe flanges every $20^o$. All of these magnets are fairly weak (see Table \ref{tab:UMERsteererstrength}) and spaced half as densely as horizontal correctors.  The largest source of vertical alignment errors is the radial component of the Earth's field, shown in Fig. \ref{fig:earthfield}. Although the amplitude 200 mG is comparable to the vertical field, the average is only $<1$ mG.
+
+I use VRUMER to test various vertical steering algorithms and place a lower bound on the best possible first turn orbit using existing vertical steerers, results are shown in Table \ref{tab:vert_algorithm}. I considered three test cases:
+
+\begin{itemize} 
+\item Ideal: Perfect alignment, RSV current constrained to be $\le10$ A. 
+\item SV limit: Perfect alignment, RSV current limited to $\le2$ A.
+\item Misaligned: Random misalignment, from Gaussian distribution $\sigma=1$ mm, RSV current limited to $\le2$ A.
+\end{itemize}
+
+
+\begin{table}[!htb]
+\centering
+\caption{Vertical steering algorithms and their performance (RMS position in quads) for perfect alignment. Subscript indicates quad \# counting downstream from vertical steerer ($y_1$ is position in first quad downstream from each RSV).}
+\label{tab:vert_algorithm}
+\begin{tabular}{|l|l|c|c|c|}
+\hline
+shorthand & Minimization Function & RMS($y_Q$) [mm] & RMS($y_Q$) [mm] & RMS($y_Q$) [mm] \\
+& & & SV limit & $\sigma = 1$mm \\
+\hline
+SV=0 & none  & 4.6 & 4.6 & 10.4 \\ \hline
+$y_1$& $\| y_1 \|$ & 37.0 & & \\
+%$y_2$& $\| y_2 \|$ & & & \\
+$y_3$& $\| y_3 \|$ & 1.5& 2.2 & 3.8\\
+$y_4$& $\| y_4 \|$ &  1.7& 2.5 & 3.4\\ \hline
+$y_1$,$y_2$ & $\sqrt{\frac{1}{2}\left(y_1^2 +y_2^2\right)}$ &  25.9 & & \\
+$y_2$,$y_3$ & $\sqrt{\frac{1}{2}\left(y_1^2 +y_3^2\right)}$ &  1.2& 2.5 & 4.2\\
+$y_3$,$y_4$ & $\sqrt{\frac{1}{2}\left(y_3^2 +y_4^2\right)}$ &  0.98 & 2.4 & 3.7 \\
+$y_1$,$y_3$ & $\sqrt{\frac{1}{2}\left(y_1^2 +y_3^2\right)}$ &  1.1 & 2.5& \\
+(focusing) & & & & \\
+$y_2$,$y_4$ & $\sqrt{\frac{1}{2}\left(y_2^2 +y_4^2\right)}$ &  0.93 & 2.6& 4.6\\
+(defocusing) & & & & \\ \hline 
+$y_1$,$y'_1$ & $\sqrt{\frac{1}{2}\left(y_1^2 +(y_2-y_1)^2\right)}$ & 18.7 & & \\
+$y_2$,$y'_2$ & $\sqrt{\frac{1}{2}\left(y_2^2 +(y_3-y_2)^2\right)}$ & 1.1 & 2.2& \\
+$y_3$,$y'_3$ & $\sqrt{\frac{1}{2}\left(y_2^2 +(y_4-y_3)^2\right)}$ & 1.3 & 2.2& \\
+$y_1$,$y_2$,$y_3$,$y_4$ &  $\sqrt{\frac{1}{4}\left(y_1^2 +y_2^2+ y_3^2 +y_4^2\right)}$ & 0.95 & 2.4 & 5.0\\
+\hline
+\end{tabular}
+\end{table}
+
+In summary, in the ideal case (strong correctors, no mechanical misalignments), we can obtain vertical steering with $\max{(y)} \sim 3$ mm, rms$(y) \sim 1$ mm (Fig. \ref{fig:SV_y4}). This requires maximum RSV currents in the range 3-4 A, which is not possible given exiting heat dissipation limits.  If we restrict ourselves to 2 A in the RSVs, the best possible solution is $\max{(y)} \sim 7$ mm, rms$(y) \sim 2$ mm (Fig. \ref{fig:SV_y4_CL}). Additionally, allowing for random vertical misalignments of order 1 mm, this increases to $\max{(y)} \sim 10$ mm, rms$(y) \sim 3-4$ mm (Fig. \ref{fig:SV_y4_misalign}).
+
+I conclude that the existing vertical correcters provide too weak of a correction to offer significant improvement on the existing first-turn solution. Enhanced vertical correction is necessary to achieve steering comparable to horizontal plane. This is possible through the use of radial field-cancelling Helmholtz coils or through addition of more weak vertical correctors (see Section \ref{sec:steering:SSV}). 
+
+
+\begin{figure}[!htb]
+\centering
+\subfloat[Vertical steering for perfect alignment, no current limit. Steering by minimizing $\| y_4 \|$. Red dotted trace is vertical solution without steering corrections.]{
+     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4.png}
+     \label{fig:SV_y4}}
+\hspace{0.5in}
+\subfloat[Vertical steering for perfect alignment, RSV current limited to 2 A. ]{
+     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_CL.png}
+     \label{fig:SV_y4_CL}}
+\hspace{0.5in}
+\subfloat[Vertical steering for misalignment of $\sigma=1$ mm, RSV current limited to 2 A.]{
+     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_misalign1.png}
+     \label{fig:SV_y4_misalign}}
 \end{figure}
 
 
@@ -91,140 +384,115 @@ A comparable analysis for single channel design was done in Elegant. The single 
 
 
 
-\subsubsection{Tracking Hamiltonian Invariant}
 
-Simulations of N4 distributed lattices in the Elegant and Warp codes predict enhanced stability near the ideal tune operating point. 
+
+
+
+ 
+
+
+
+
+
+\subsubsection{Corrected Beam Orbit}
+
+
+%todo: newer data would be nice
+\begin{figure}[h]
+\centering
+\subfloat[Vertical position of 6 mA beam in quads for 1st turn.]{\label{fig:vertical_quads}
+	\includegraphics[width=\textwidth,trim={.5in 6.4in .5in 2.4in}, clip]{4.figures/quad_as_BPM_Y.pdf}}
+\hspace{.05in}
+\subfloat[Vertical position of 6 mA beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
+	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{4.figures/BPM_position_sol151116_Y.pdf}}
+\end{figure}
+
+
+\section{Increasing Vertical Steering Capability} \label{sec:steering:SSV}
+
+Vertical orbit correction is inherently limited by the strength of vertical corrector magnets, RSV in Table \ref{tab:UMERsteererstrength}.
+Previous assumption has been that sparsely populated, low-field vertical correctors were sufficient to correct for the low average radial field. However, at regions of locally high radial field, the radial field bends $\approx 2.1^o$ per vertical corrector (every 2 ring cells), while the corrector at maximum safe excitation of 2 A can only supply $1.2^o$ of correction. This results in locally high vertical excursions, as seen in Fig. \ref{fig:vertical_quads} and Fig. \ref{fig:vertical_BPMs}. In the first turn, the maximum vertical displacement from quad center is 10 mm and the RMS displacement is 3.2 mm. 
+%Deviation about this orbit in the first 4 turns is $\sim10$ mm. 
+
+% This is much worse than the best horizontal steering solution described in this note. For horizontal beam position, the first-turn orbit (Fig. \ref{fig:ring_steering}) exhibited maximum horizontal displacement of 3.1 mm and RMS displacement of 0.8 mm. Deviation about this orbit in the first 4 turns is $\sim2$ mm. 
+
+While good recirculation with small turn-to-turn oscillation amplitude is possible using the existing correctors, alignment of the orbit to the vertical center of the quads is limited by the strength and density of vertical correctors. In other words, the beam can be injected with minimum deviation from the closed orbit, but this orbit has large deviations ($\ge 5$ mm) from the quadrupole centers.  
+
 
 \begin{figure}[]
-   \centering
-    \includegraphics[width=0.5\textwidth]{6.figures/warp_tune_scan_plot.png}
- 	\caption{Tune scan, simulated with WARP. Color axis shows particle survival over a range of operating points. Black marker indicates operating point $\nu_x=3.88$, $\nu_y=3.83$, while white marker indicates $\nu_x=4.13$, $\nu_y=4.11$.}
-   \label{fig:warpscan}
+\centering
+\includegraphics[width=0.5\textwidth]{4.figures/SSV/SSVlocations.png}
+\caption{Locations of SSV's on UMER $20^o$ plate indicated with arrows. RSV's are located at vacuum flanges at ends of $20^o$ section.}
+\label{fig:SSVlocation}
 \end{figure}
 
-In comparison, invariant tracking through the N4 distributed lattice shows much larger amplitude oscillations in $H_N$, most likely due to the approximations on the nonlinear portion of the lattice. For the WARP model, we use hard edged elements in the alternative lattice configuration. Octupoles of length 5.2 cm and peak strength $75 T/m^3/A$ are placed at 2.88 m intervals. 
-
-Two cases are considered:  The historically utilized alternative lattice operating point $I_F=I_D=0.87 A$, which has a tune (as calculated in WARP) of $\nu_x=3.88$, $\nu_y=3.83$ and $I_F=0.938 A$, $I_D=0.944 A$, with tunes $\nu_x=4.13$, $\nu_y=4.11$. The two operating points are marked in Fig. \ref{fig:warpscan}. 
+Increased strength and/or density is required for vertical orbit control comparable to horizontal control. I tested the use of "Short Steerers," abbreviated SSV. These are short circuits of length [] that are used for orbit correction in the injection line, pictured in Fig. \ref{fig:SSVdrawing}. There is space in the dense UMER lattice for two additional SSV's per $20^o$ plate, as shown in Fig. \ref{fig:SSVlocation}. From Table \ref{tab:UMERsteererstrength}, the available correction of the SSV is $\approx 1.2^o$ per amp, comparable to RSV strength. With twice the density of the RSV, orbit correction should be sufficient for the $\approx 2.1^o$ of distortion per cell.
 
 \begin{figure}[]
-   \centering
-	\subfigure[]{ \centering
-    \includegraphics[width=\textwidth]{6.figures/Ioct=0_F0870_D0870.png}
-	}
-	\subfigure[]{\centering
-    \includegraphics[width=\textwidth]{6.figures/Ioct=2_F0870_D0870.png}
-	}
-	\subfigure[]{ \centering
-    \includegraphics[width=\textwidth]{6.figures/Ioct=4_F0870_D0870.png}
-	}
- 	\caption{Invariant $H_N$ for N4 distributed lattice at $\nu_x=3.88$, $\nu_y=3.83$}
-   \label{fig:N4invar1}
+\centering
+\includegraphics[width=0.75\textwidth]{4.figures/SSV/steering_behaviour_vs_lever_arm_distance.png}
+\caption{Steering statistics for varying steerer-target distance. Quad center locations are indicated by dashed lines. Red dashes indicate distance from 1st SSV on $20^o$ plate, blue from 2nd SSV on $20^o$ plate.}
+\label{fig:lever_arm}
 \end{figure}
 
-\begin{figure}[]
-	\subfigure[]{ \centering 
-    \includegraphics[width=\textwidth]{6.figures/Ioct=0_F09385_D09435.png}
-	}
-	\subfigure[]{ \centering
-    \includegraphics[width=\textwidth]{6.figures/Ioct=2_F09385_D09435.png}
-	}
-	\subfigure[]{ \centering
-    \includegraphics[width=\textwidth]{6.figures/Ioct=4_F09385_D09435.png}
-	}
- 	\caption{Invariant $H_N$ for N4 distributed lattice at $\nu_x=4.13$, $\nu_y=4.11$}
-    \label{fig:N4invar2}
+% \begin{wrapfigure}{r}{0.4\textwidth} 
+% \includegraphics[width=0.4\textwidth]{4.figures/SSV/SSVdrawing.png}
+% \caption{Circuit winding for SSV magnets.}
+% \label{fig:SSVdrawing}
+% \end{wrapfigure}
+
+
+The target for steering with the SSV's is second downstream quadrupole, at a distance of $\approx 12$ cm from the SSV center. Dependence of SSV strength and correction on SSV-target separation is plotted in Fig. \ref{fig:lever_arm}. Similar to dipole steering, choice of "too-close" target leads to over-correction, reflected in the maximum SSV set-point which is at maximum safe current. Longer distances between steerer and target are necessary for corrections within the available strength, and there is a sharp transition between "good steering" and "poor steering" at $\approx 12$ cm. The target quadrupoles for the two SSV locations are at 20 cm and 28 cm respectively, within the range of good correction.
+
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.75\textwidth]{4.figures/SSV/orbit_uneven_ssvs.png}
+\caption{"Best-case" simulated orbits for quad-centered steering with just RSVs, hybrid (SSV's in 28 available locations, plot four RSV's for "glass gap" sections), and 36 SSV's}
+\label{fig:SSVsimorbit}
 \end{figure}
 
-One expects the invariant to be perfectly conserved in the linear case ($I_{oct}=0$). Also, decrease of dynamic aperture with increasing octupole strength is can be seen through high-amplitude unstable chaotic orbits leaving the system. Recall, for the nonlinear invariant to be conserved, particles must have continuous motion through the octupole elements otherwise chaotic, unbounded orbits are permitted.\cite{Danilov2010} In the case continuous motion (or quasi-continuous, allowing for linear inserts between octupoles) cannot be maintained, we expect the invariant quantity to be less bounded. As seen Fig. \ref{fig:N4invar1} and Fig. \ref{fig: N4invar2}, particles seem to gain stability as the external focusing nears the $\nu_x=\nu_y=4.07$ condition. However, simulations at this operating point yield poor results, and the invariant is not well conserved. 
-
-While the Hamiltonian is not well conserved, long term stability (past the tested 50 turns) may be possible. A natural extension of this work is to include predicted experimental errors into the invariant calculation, as well as extend consideration to a wider range of operating points.
+The resulting first turn orbit with SSV correction from VRUMER calculations is plotted in Fig. \ref{fig:SSVsimorbit}. There are three orbits plotted: orbit correction using only 18 RSV's (black dot), orbit correction using only 36 RSV's (blue dash), and orbit correction using 8 RSV's and 28 SSV's. In the ring, there are 4 $20^o$ sections with welded glass gap breaks in the pipe. Extra supports needed to protect the glass inhabit the available SSV space. In these sections, the two RSV's bookending the $20^o$ plate are also utilized. As seen in \ref{fig:SSVsimorbit}, there are large local deviations at the four glass gap sections.
 
 
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.75\textwidth]{4.figures/SSV/vert_steering_with_ssv_170831.png}
+\caption{Measured first turn orbit for vertical steering with SSV's on 30\% of the ring (locations indicated by gray shading)}
+\label{fig:SSVexporbit}
+\end{figure}
 
+The SSV's were very successful in simulation. To test their effectiveness in the lab, a trial run of 11 SSV's were installed on ring sections 5 - 11 (skipping section 10 due to glass gap in wall current monitor diagnostic). The SSV numbering system corresponds with the nearest horizontal dipole (SSV9 is immediately downstream of dipole D9, SSV10 upstream of D10, etc). The resulting first turn orbit, using the quad-centering algorithm with RSV1-5, SSV9-18, SSV21-22, RSV10-18 is plotted in Fig. \ref{fig:SSVexporbit}. Orbit statistics are in Table \ref{tab:SSVexporbit}. The addition of SSV's reduces the vertical orbit deviation by a factor of $\approx 2$, almost to a tolerance of $\pm 1$ mm.   
 
-
-
-\begin{table}[]
-%   \vspace*{-.5\baselineskip}
-   \centering
-   \caption{Results of invariant tracking in N4 octupole lattice.}
-   \begin{tabular}{lccc} \hline
-	   $\nu_x=4.13$ & $\nu_y=4.11$\\ \hline
-       \textbf{$I_{oct}$ [A]} & \textbf{$\langle H_N \rangle$}        &RMS variation             & \% variation peak-to-peak  \\
-           0        & 3.22E-6    &2.3E-8      & 2.4       \\ %[3pt]
-          0.5       & 3.17E-6     &4.2E-8     & 6.2       \\ %[3pt]
-           2.0        & 3.05E-6    &1.1E-7     &17.6       \\ %[3pt]
-           4.0      & 2.91E-6      &2.1E-7   & 33.5        \\ \hline
-	   $\nu_x=3.88$ & $\nu_y=3.83$\\ \hline
-       \textbf{$I_{oct}$ [A]} & \textbf{$\langle H_N \rangle$}          &RMS variation          & \% variation \\
-		& & & peak to peak\\
-           0        & 2.92E-6      &1.5E-8    & 2.3       \\ %[3pt]
-          0.5       & 2.90E-6      &3.5E-8    & 6.8       \\ %[3pt]
-           2.0        & 2.82E-6     & 1.0E-7    & 20.8       \\ %[3pt]
-           4.0      & 2.93E-6       & 1.4E-7   & 59.9        \\
-
-   \end{tabular}
-   \label{l2ea4-t1}
-%   \vspace*{-\baselineskip}
+\begin{table}[h]
+\centering
+\caption{First turn orbit statistics for SSV trial run.}
+\label{tab:SSVexporbit}
+\begin{tabular}{|l|c|}
+\hline
+First turn RMS & 0.98 mm\\
+First turn Max. & 3.25 mm\\
+Shaded RMS & 0.45 mm\\
+Shaded Max. & 1.11 mm \\
+\hline
+\end{tabular}
 \end{table}
 
 
-\section{Experimental Setup}
+
+\section{Steering for alternative FODO lattice}
 
 
-\begin{figure}[]
-   \centering
-   \includegraphics[width=\textwidth]{umer-diagram/altlat_N4octu_full_ring_labels.png}
-   \caption{N4 octupole lattice imposed on alternative lattice, large light-blue elements indicate octupole position.}
-   \label{fig:N4lattice}
-\end{figure}
+\section{Steering for single-channel octupole lattice}
 
+Orbit correction results suggest ring section 9 (location of quadrupole magnets \# 34-37) as a likely candidate for the octupole channel, as the vertical orbit control has been demonstrated to be within $\pm 0.1$ mm measured in the quadrupoles on the first turn with addition of SSV corrector magnets. However, leaving room for SSV correctors in the octupole section limits the length of the octupole channel, which should be as long as possible to maximize tune spread. Without the SSV correctors, orbit deviations are likely to be larger. 
 
-
-\section{Preliminary Measurements}
-
-\begin{figure}[]
-   \centering
-    \includegraphics[width=\textwidth]{6.figures/oct_profile.png}
- 	\caption{Beam profile after 1 pass through octupole, imaged using phosphor screen. From left to right: $I_{oct} >0$, $I_{oct} =0$, $I_{oct} <0$}
-   \label{fig:beam-pass-through-octu}
-\end{figure}
-
-
-\subsection{Tune Scan}
-
-\begin{figure}[]
-	\subfigure[Alternative lattice tune scan ]{
-	\centering
-    \includegraphics[width=0.48\textwidth]{6.figures/pencil_tune_scan_plot_currentspace_Oct0.png}
-	}
-	\subfigure[N4 lattice tune scan with octupoles powered at 0.5 A]{
-	\centering
-    \includegraphics[width=0.5\textwidth]{6.figures/pencil_tune_scan_plot_currentspace_Oct5.png}
-	}
- 	\caption{Tune scan data for 0.6 mA "pencil" beam, beam survival plot at 25 turns. Color axis is peak beam current normalized to 10th turn.}
-   \label{fig:oct-tune-scan-pencil}
-\end{figure}
-
-
-In preparation for N4 lattice testing, measurements are taken on the alternative lattice to gauge beam losses over a variety of operating parameters. The tune scan technique, described in more detail in \cite{tunescan}, measures variations in beam losses as a function of quadrupole strength in two families of quadrupoles (horizontally focusing and defocusing, notated as $I_F$ and $I_D$). Fig. \ref{fig:oct-tune-scan-pencil} shows beam survival measurements of the 0.6 mA beam for a range of quadrupole values.  Transformation to tune-space was done using WARP simulations with hard-edged elements and a thin-lens model of dipole edge focusing. The obvious integer resonance bands are used to orient the measurement in tune-space. An offset of $\nu_x = -0.45$ and $\nu_y = -0.35$ from the WARP prediction is necessary to line up integer bands. 
-
-The tunescan shows broad bands at the even integer tune resonances. As this N4 lattice is intended to be run at $\nu_x=\nu_y=4 + \delta$, tuning the beam closer to this operating point will be necessary if any beneficial effect is to be observed over the integer band losses. With octupoles on (Figs. \ref{fig:oct-tune-scan-pencil},\ref{fig:beam-pass-through-octu}), no apparent increase in dynamic aperture is seen. 
+SSV's should be avoided in the octupole section, but good orbit control with low deviations is essential for preserving the dynamics aperture of the octupole lattice. Other possibilities for orbit correction over a single $20^o$ section include field cancelling Helmholtz coils or $\mu$-metal shielding. These should be implemented in both horizontal and vertical planes. Low vertical background field will necessitate increased cooling capabilities for the two dipoles on this section, as they will have to be run $>3$ A to produce $10^o$ of bend. 
 
 
 
-\subsubsection{Errors: Beam Matching and Steering}
 
-The beam matching quadrupoles and steering correctors were optimized to a single operating point, at $I_F=I_D = 0.87$ A. It is expected that the accrued errors in the match and the steering grow with greater distance from the ideal operating point, although it is not clear that they accrue anisoptropically.
-%Steering in UMER is significantly complicated by the presence of a nominally 400 mG vertical Earth field component, which provides approximately 20 degrees of bending over a 32 cm FODO cell. The horizontal component, with maximum value approximately 200 mG, also contributes to the dynamics. The ideal closed orbit therefore is not centered on the beam pipe, but rather arcs across a FODO cell through the centers of the quadrupoles, complicating the steering procedure. 
-
-The steering solution for this operating point had first turn horizontal offsets in the quadrupoles  of RMS 0.5 mm with a maximum of 1.3 mm. Vertically, RMS offsets are 3.2 mm with maximum value of approximately 8.5 +- 0.5 mm. The contribution of these steering errors can be seen in the width of the integer resonance bands in the tune scan data (Fig. \ref{data}). More precise control of the steering will likely improve this characteristic by reducing the steering error for all operating points.
-
-The beam match was not well-tuned, with percent RMS variations of 33\% in the horizontal and 28\% in the vertical. More accurate matching solutions have been demonstrated in UMER, up to standard deviations of 0.17 mm horizontally and 014 mm vertically for the 6 mA beam. \cite{HaoThesis}
-
-
-\section{Conclusion}
-
-In conclusion, UMER is equipped to test quasi-integrable octupole lattices. Insight has been built into the behavior of the N4 octupole lattice, which has potential to be a testbed for quasi-integrable dynamics. However, the proximity to an integer resonance band may ultimately limit its usefulness and implementation, at least with short octupole elements. On UMER, the large $\nu_x = 4$ band overshadows any resonant loss mitigation induced by the octupoles. 
-
+\section{Global Optimization of Closed Orbit}
+\cite{Kirkpatrick2015} % simulated annealing
+\cite{Huang2013}, \cite{LevonRCDS} % RCDS
 
