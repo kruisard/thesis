@@ -380,6 +380,20 @@ I conclude that the existing vertical correcters provide too weak of a correctio
 
 
 
+\begin{table}[h]
+\centering
+\caption{Statistics for quad-centering steering method.}
+\label{tab:steeringresults}
+\begin{tabular}{|l|c|c|}
+& Horz. & Vert. \\
+\hline
+First turn RMS & & 1.32 mm\\
+First turn Max & & 4.05 mm\\
+Four turn RMS (in BPMs)& & \\
+Four turn Max (in BPMs)& & \\
+\hline
+\end{tabular}
+\end{table}
 
 
 
@@ -401,9 +415,9 @@ I conclude that the existing vertical correcters provide too weak of a correctio
 \begin{figure}[h]
 \centering
 \subfloat[Vertical position of 6 mA beam in quads for 1st turn.]{\label{fig:vertical_quads}
-	\includegraphics[width=\textwidth,trim={.5in 6.4in .5in 2.4in}, clip]{4.figures/quad_as_BPM_Y.pdf}}
+	\includegraphics[width=\textwidth]{4.figures/steering-y-170901.png}}
 \hspace{.05in}
-\subfloat[Vertical position of 6 mA beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
+\subfloat[OLD REPLACE PLS, Vertical position of 6 mA beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
 	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{4.figures/BPM_position_sol151116_Y.pdf}}
 \end{figure}
 
@@ -466,7 +480,7 @@ The SSV's were very successful in simulation. To test their effectiveness in the
 
 \begin{table}[h]
 \centering
-\caption{First turn orbit statistics for SSV trial run.}
+\caption{First turn orbit statistics for SSV trial run. Compare to vertical orbit in \ref{tab:steeringresults}}
 \label{tab:SSVexporbit}
 \begin{tabular}{|l|c|}
 \hline
