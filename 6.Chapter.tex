@@ -1,4 +1,4 @@
-%Chapter 4
+%Chapter 6
 
 
 %todo:
@@ -9,7 +9,7 @@
 % WRite up simulated annealing
 % 
 
-\renewcommand{\thechapter}{4}
+\renewcommand{\thechapter}{6}
 
 \chapter{Steering and Orbit Correction}
 \label{ch:steering}
@@ -34,7 +34,7 @@ In typical high-energy accelerating or storage rings (for which steering algorit
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{4.figures/earth_field_new.png}
+\includegraphics[width=\textwidth]{6.figures/earth_field_new.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -48,7 +48,7 @@ In typical high-energy accelerating or storage rings (for which steering algorit
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{4.figures/earth_field_3D.png}
+\includegraphics[width=\textwidth]{6.figures/earth_field_3D.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -65,7 +65,7 @@ Because the beam is immersed in a bending field, in the perfectly aligned case a
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.5\textwidth]{4.figures/bpm_quads_cartoon.png}
+\includegraphics[width=0.5\textwidth]{6.figures/bpm_quads_cartoon.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -107,7 +107,7 @@ SSV& 1.54 & 2.79 & 3.627 & 0.61 \\
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{4.figures/full_ring_steerers_labelled.png}
+\includegraphics[width=\textwidth]{6.figures/full_ring_steerers_labelled.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -146,7 +146,7 @@ First-turn position data is extrapolated from quadrupole response data, also cal
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{4.figures/simple_beamline.png}
+\includegraphics[width=\textwidth]{6.figures/simple_beamline.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -216,7 +216,7 @@ Fig. \ref{fig:quad-as-bpm-error} shows the dependence of the fractional error of
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{4.figures/quad_as_BPM_error.png}
+\includegraphics[width=\textwidth]{6.figures/quad_as_BPM_error.png}
 \end{center}
 \renewcommand{\baselinestretch}{1}
 \small\normalsize
@@ -291,10 +291,10 @@ $x_D,\thinspace x'_F$ & $\sqrt{x_D^2+(x_D-x_F)^2}$  & 0.2 & 7.0 & {\color{magent
 \begin{figure}[!htb]
 \centering
 \subfloat[No misalignments]{
-	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{4.figures/vrumer_steering_algorithm_compare_x1_xp0.pdf}}
+	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{6.figures/vrumer_steering_algorithm_compare_x1_xp0.pdf}}
 \hspace{.05in}
 \subfloat[Random quad misalignments from Gaussian distribution, $\sigma=5$mm]{
-	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{4.figures/vrumer_steering_algorithm_compare_x1_xp0_sig5.pdf}}
+	\includegraphics[width=\textwidth,trim={.5in 4.3in .7in 4.5in},clip]{6.figures/vrumer_steering_algorithm_compare_x1_xp0_sig5.pdf}}
 \caption{First turn VRUMER orbits for initial condition $x=1$mm, $x'=0$. 
 %blue circle: $x_F$, red triangle: $x_D$, black asterisk: $x_F$,$x'_F$, 
 %magenta plus:  $x_F$,$x'_F$, green diamond: $x_F$,$x_D$
@@ -366,15 +366,15 @@ I conclude that the existing vertical correcters provide too weak of a correctio
 \begin{figure}[!htb]
 \centering
 \subfloat[Vertical steering for perfect alignment, no current limit. Steering by minimizing $\| y_4 \|$. Red dotted trace is vertical solution without steering corrections.]{
-     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4.png}
+     \includegraphics[width=.8\textwidth]{6.figures/steering_rms_y4.png}
      \label{fig:SV_y4}}
 \hspace{0.5in}
 \subfloat[Vertical steering for perfect alignment, RSV current limited to 2 A. ]{
-     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_CL.png}
+     \includegraphics[width=.8\textwidth]{6.figures/steering_rms_y4_CL.png}
      \label{fig:SV_y4_CL}}
 \hspace{0.5in}
 \subfloat[Vertical steering for misalignment of $\sigma=1$ mm, RSV current limited to 2 A.]{
-     \includegraphics[width=.8\textwidth]{4.figures/steering_rms_y4_misalign1.png}
+     \includegraphics[width=.8\textwidth]{6.figures/steering_rms_y4_misalign1.png}
      \label{fig:SV_y4_misalign}}
 \end{figure}
 
@@ -415,10 +415,10 @@ Four turn Max (in BPMs)& & \\
 \begin{figure}[h]
 \centering
 \subfloat[Vertical position of 6 mA beam in quads for 1st turn.]{\label{fig:vertical_quads}
-	\includegraphics[width=\textwidth]{4.figures/steering-y-170901.png}}
+	\includegraphics[width=\textwidth]{6.figures/steering-y-170901.png}}
 \hspace{.05in}
 \subfloat[OLD REPLACE PLS, Vertical position of 6 mA beam in BPMs for first 4 turns. Note shorted vertical plates at RC2, RC11.]{\label{fig:vertical_BPMs}
-	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{4.figures/BPM_position_sol151116_Y.pdf}}
+	\includegraphics[width=\textwidth,trim={.5in 6.5in .5in 2.4in}, clip]{6.figures/BPM_position_sol151116_Y.pdf}}
 \end{figure}
 
 
@@ -435,7 +435,7 @@ While good recirculation with small turn-to-turn oscillation amplitude is possib
 
 \begin{figure}[]
 \centering
-\includegraphics[width=0.5\textwidth]{4.figures/SSV/SSVlocations.png}
+\includegraphics[width=0.5\textwidth]{6.figures/SSV/SSVlocations.png}
 \caption{Locations of SSV's on UMER $20^o$ plate indicated with arrows. RSV's are located at vacuum flanges at ends of $20^o$ section.}
 \label{fig:SSVlocation}
 \end{figure}
@@ -444,13 +444,13 @@ Increased strength and/or density is required for vertical orbit control compara
 
 \begin{figure}[]
 \centering
-\includegraphics[width=0.75\textwidth]{4.figures/SSV/steering_behaviour_vs_lever_arm_distance.png}
+\includegraphics[width=0.75\textwidth]{6.figures/SSV/steering_behaviour_vs_lever_arm_distance.png}
 \caption{Steering statistics for varying steerer-target distance. Quad center locations are indicated by dashed lines. Red dashes indicate distance from 1st SSV on $20^o$ plate, blue from 2nd SSV on $20^o$ plate.}
 \label{fig:lever_arm}
 \end{figure}
 
 % \begin{wrapfigure}{r}{0.4\textwidth} 
-% \includegraphics[width=0.4\textwidth]{4.figures/SSV/SSVdrawing.png}
+% \includegraphics[width=0.4\textwidth]{6.figures/SSV/SSVdrawing.png}
 % \caption{Circuit winding for SSV magnets.}
 % \label{fig:SSVdrawing}
 % \end{wrapfigure}
@@ -461,7 +461,7 @@ The target for steering with the SSV's is second downstream quadrupole, at a dis
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.75\textwidth]{4.figures/SSV/orbit_uneven_ssvs.png}
+\includegraphics[width=0.75\textwidth]{6.figures/SSV/orbit_uneven_ssvs.png}
 \caption{"Best-case" simulated orbits for quad-centered steering with just RSVs, hybrid (SSV's in 28 available locations, plot four RSV's for "glass gap" sections), and 36 SSV's}
 \label{fig:SSVsimorbit}
 \end{figure}
@@ -471,7 +471,7 @@ The resulting first turn orbit with SSV correction from VRUMER calculations is p
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.75\textwidth]{4.figures/SSV/vert_steering_with_ssv_170831.png}
+\includegraphics[width=0.75\textwidth]{6.figures/SSV/vert_steering_with_ssv_170831.png}
 \caption{Measured first turn orbit for vertical steering with SSV's on 30\% of the ring (locations indicated by gray shading)}
 \label{fig:SSVexporbit}
 \end{figure}

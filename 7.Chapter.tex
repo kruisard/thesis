@@ -1,4 +1,4 @@
-%Chapter 5
+%Chapter 7
 
 
 % -- not sure if this is Kosher -- removes double space before eq'ns
@@ -11,7 +11,7 @@
 \makeatother
 
 
-\renewcommand{\thechapter}{5}
+\renewcommand{\thechapter}{7}
 
 \chapter{Quasi-integrable Octupole Lattice}
 
@@ -75,7 +75,7 @@ For 100 passes through this octupole channel, we see a particle of $\langle H_N\
 
 \begin{figure}[]
    \centering
-    \includegraphics[width=0.5\textwidth]{5.figures/HvsZ_crun1_toylattice.png}
+    \includegraphics[width=0.5\textwidth]{7.figures/HvsZ_crun1_toylattice.png}
  	\caption{Conserved invariant $H_N$ for simple quasi-integrable octupole lattice, WARP simulation}
    \label{toyinvar}
 \end{figure}
@@ -91,12 +91,12 @@ For 100 passes through this octupole channel, we see a particle of $\langle H_N\
 \begin{figure}[]
 \centering
 \subfigure[]{
-\includegraphics[width=0.35\textwidth]{5.figures/FMA/WARP_fma_nu087.png}
+\includegraphics[width=0.35\textwidth]{7.figures/FMA/WARP_fma_nu087.png}
 \label{fig:toy-fma-configspace}
 }
 \hspace{.5in}
 \subfigure[]{
-\includegraphics[width=0.35\textwidth]{5.figures/FMA/WARP_fma_nu087_tunespace_reslines.png}
+\includegraphics[width=0.35\textwidth]{7.figures/FMA/WARP_fma_nu087_tunespace_reslines.png}
 \label{fig:toy-fma-tunespace}
 }
 \caption{Frequency map analysis (FMA) of toy octupole lattice in WARP PIC code. (a) Change in tune vs. particle launch position. (b) Tune footprint, with 1st to 3rd order resonances.}
@@ -106,11 +106,11 @@ For 100 passes through this octupole channel, we see a particle of $\langle H_N\
 \begin{figure}[]
 \centering
 \subfigure[]{
-\includegraphics[width=0.4\textwidth]{5.figures/FMA/parameter_scan_aperture.png}
+\includegraphics[width=0.4\textwidth]{7.figures/FMA/parameter_scan_aperture.png}
 \label{fig:fma-op-aperture}
 }\hspace{.25in}
 \subfigure[]{
-\includegraphics[width=0.4\textwidth]{5.figures/FMA/parameter_scan_tunespread.png}
+\includegraphics[width=0.4\textwidth]{7.figures/FMA/parameter_scan_tunespread.png}
 \label{fig:fma-op-tune}
 }
 \caption{Parameter space landscape of toy octupole lattice, generated with Elegant FMA for 1024 turns. (a) Dynamic aperture and (b) Maximum tunespread vs. integrated octupole strength and lattice tune.}
@@ -197,7 +197,7 @@ Tolerance simulations use the WARP PIC code to model a 64 cm octupole channel wi
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{5.figures/steeringtolerance/orbit_distortion_cartoon.png}
+\includegraphics[width=\textwidth]{7.figures/steeringtolerance/orbit_distortion_cartoon.png}
 \caption{Red line is centroid motion of beam with initial offset $x_0$, $x'_0$. Thick red lins indicate thin lens centroid transformation. Black line is centroid motion without centroid transformation.}
 \label{fig:straightorbitdistortion}
 \end{figure}
@@ -235,7 +235,7 @@ It should be noted that in case 1, I ignore the effect of the bending dipoles, w
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8 \textwidth]{5.figures/steeringtolerance/DA_deltanu_plots_vs_orbit_distortion.png}
+\includegraphics[width=0.8 \textwidth]{7.figures/steeringtolerance/DA_deltanu_plots_vs_orbit_distortion.png}
 \caption{Dependence of dynamic aperture and tune spread on orbit distortion. On dynamic aperture (DA) plot, horizontal dashed line indicates $90\%$ of ideal aperture.}
 \label{fig:DAvsorbitdistort}
 \end{figure}
@@ -251,7 +251,7 @@ I assume a round beam in the channel. As the dynamic aperture is not round, in t
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{5.figures/steeringtolerance/vert_bg_field_distortion_cartoon.png}
+\includegraphics[width=\textwidth]{7.figures/steeringtolerance/vert_bg_field_distortion_cartoon.png}
 \caption{Red line is centroid motion of beam with thin lens centroid transformation at thick red arrows. Black line is centroid motion without centroid transformation, just periodic thin lens focusing element.}
 \label{fig:vertcurvedorbitdistortion}
 \end{figure}
@@ -267,7 +267,7 @@ $\theta$ is the bending angle due to the background field. Assuming a constant b
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{5.figures/steeringtolerance/horz_bg_field_distortion_cartoon.png}
+\includegraphics[width=\textwidth]{7.figures/steeringtolerance/horz_bg_field_distortion_cartoon.png}
 \caption{Red line is centroid motion of beam with thin lens centroid transformation at thick red arrows. Thick black arrows indicate thin-lens focusing element.}
 \label{fig:horzcurvedorbitdistortion}
 \end{figure}
@@ -287,7 +287,7 @@ As horizontal steerers are located every 32 cm and will be co-housed in the long
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{5.figures/steeringtolerance/sp_traces.png}
+\includegraphics[width=\textwidth]{7.figures/steeringtolerance/sp_traces.png}
 \caption{Particle tracing results showing particle launched on closed orbit (black) and particle with initial offset (blue) in horizontal plan. Octupole fields are turned off.}
 \label{fig:horsptraces}
 \end{figure}
@@ -296,7 +296,7 @@ Eq. \ref{eq:horzcurvedorbitdistortion1} is applied at the ends of the 64 cm chan
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{5.figures/steeringtolerance/DA_deltanu_plots_vs_background_By.png}
+\includegraphics[width=0.8\textwidth]{7.figures/steeringtolerance/DA_deltanu_plots_vs_background_By.png}
 \caption{Dependence of dynamic aperture and tune spread on vertical background field. On dynamic aperture (DA) plot, horizontal dashed line indicates $90\%$ of ideal aperture.}
 \label{fig:DAvsBGfield}
 \end{figure}
@@ -305,13 +305,13 @@ Eq. \ref{eq:horzcurvedorbitdistortion1} is applied at the ends of the 64 cm chan
 \centering
 \subfigure[Dynamic aperture contours for beam immersed in vertical field, Max. Octupole strength $50 T/m^3$.]{
 	\centering
-	\includegraphics[width=0.45\linewidth]{5.figures/steeringtolerance/FMA_007_DAcontours.png}
+	\includegraphics[width=0.45\linewidth]{7.figures/steeringtolerance/FMA_007_DAcontours.png}
 	}
 	\label{fig:FMADA1}
 \hfill
 \subfigure[Dynamic aperture contours for beam immersed in vertical and horizontal fields, Max. Octupole strength $50 T/m^3$.]{
 	\centering
-	\includegraphics[width=0.45\linewidth]{5.figures/steeringtolerance/FMA_009_DAcontours.png}
+	\includegraphics[width=0.45\linewidth]{7.figures/steeringtolerance/FMA_009_DAcontours.png}
 	}
 	\label{fig:FMADA2}
 \end{figure}
@@ -334,10 +334,10 @@ There is a lot of freedom in choice of $20^o$ ring section for channel location.
 \begin{figure}[]
 \centering
 \subfigure[]{
-\includegraphics[width=\textwidth]{5.figures/space-charge/60microAmp_rms.png}
+\includegraphics[width=\textwidth]{7.figures/space-charge/60microAmp_rms.png}
 }\label{fig:halo-rms-60muA}
 \subfigure[]{
-\includegraphics[width=\textwidth]{5.figures/space-charge/pencilbeamAmp_rms.png}
+\includegraphics[width=\textwidth]{7.figures/space-charge/pencilbeamAmp_rms.png}
 }\label{fig:halo-rms-pencil}
 \caption{}
 \label{fig:halo-rms}
@@ -346,10 +346,10 @@ There is a lot of freedom in choice of $20^o$ ring section for channel location.
 \begin{figure}[]
 \centering
 \subfigure[]{
-\includegraphics[width=0.4\textwidth]{5.figures/space-charge/60microAmp_snap.png}
+\includegraphics[width=0.4\textwidth]{7.figures/space-charge/60microAmp_snap.png}
 }\label{fig:halo-snap-60muA}
 \subfigure[]{
-\includegraphics[width=0.4\textwidth]{5.figures/space-charge/pencilbeamAmp_snap.png}
+\includegraphics[width=0.4\textwidth]{7.figures/space-charge/pencilbeamAmp_snap.png}
 }\label{fig:halo-snap-pencil}
 \caption{}
 \label{fig:halo-snap}
@@ -375,7 +375,7 @@ Simulations were run at the two lowest-current UMER operating points: 6.0 mA and
  
 \begin{figure}[]
 \centering
-\includegraphics[width=\textwidth]{5.figures/long_channel_N9_cleanedup.png}   
+\includegraphics[width=\textwidth]{7.figures/long_channel_N9_cleanedup.png}   
 \caption{Composite octupole channel made of over-lapping, evenly-spaced discrete short PCB octupoles.}
 \label{fig:octchannel}
 \end{figure}  

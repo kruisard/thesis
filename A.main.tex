@@ -27,18 +27,21 @@
       {\normalfont\large}{Chapter \thechapter:}{1em}{}
 
 \usepackage{graphicx}
+\usepackage{epstopdf}
+\epstopdfsetup{update} % only regenerate pdf files when eps file is newer
 \usepackage{cite}
 \usepackage{lscape}
 \usepackage{indentfirst}
 \usepackage{latexsym}
-\usepackage{amsmath}
+%\usepackage{amsmath}
 \usepackage{multirow}
 \usepackage{tabls}
 \usepackage{wrapfig}
 \usepackage{slashbox}
 \usepackage{longtable}
 \usepackage{supertabular}
-%\usepackage{subeqn}
+%\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{subeqn}
 \usepackage{subfigure}
 \usepackage[pdftex, bookmarks, colorlinks=true, plainpages=false, citecolor=blue, urlcolor=blue, filecolor=blue, linkcolor=blue]{hyperref} 
 	%Works with PcTex.  You may have to choose one of the drivers above if dvips does not work.
@@ -55,14 +58,18 @@
 
 \begin{document}
 
-% \setlength{\parskip}{0em}
-% \renewcommand{\baselinestretch}{2}
-% \small\normalsize
+\pagestyle{plain}
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+\setlength{\parskip}{0em}
+\renewcommand{\baselinestretch}{2}
+\small\normalsize
 
 %Pages from this point start at Arabic numeral 1
 \setcounter{page}{1}
 \pagenumbering{arabic}
-\include{7.Chapter}
+\include{A.Appendix}
 
 % Bibliography
 \renewcommand{\baselinestretch}{1}
@@ -72,4 +79,6 @@
 \bibliographystyle{unsrt} 
 \bibliography{thesis} 
 
+
 \end{document}
+

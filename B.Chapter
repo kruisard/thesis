@@ -1,5 +1,0 @@
-\appendix
-\renewcommand{\thechapter}{B}
-\renewcommand{\chaptername}{Appendix}
-
-\chapter{Implementing steering procedure}
