@@ -65,26 +65,32 @@ We first model an ideal quasi-integrable octupole channel, in which octupoles ar
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% from AAC14
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-WARP PIC simulations have been used to predict octupole lattice behavior. Preliminary simulations have been limited to a 2D transverse geometry “toy-model” of the system, consisting of a 32 cm channel with longitudinally varying octupole fields alternating with an X-Y symmetric thin lens kick, which approximates the linear section of the ring. Figure 3 shows a schematic of the PIC simulation setup.
 
-\subsection{Invariant tracking in simple quasi-integrable lattice.}
+\begin{figure}[]
+   \centering
+    \includegraphics[width=\textwidth]{7.figures/toy-model-simulation-diagram.png}
+ 	\caption{Diagram of "simple model" simulation. An initial particle distribution is propagated for multiple passes through a long octupole channel (gray). The octupole fields are scaled as $\frac{1}{\beta^3}$ of the beta function (red). The external focusing of the linear ring is represented by a symmetric thin-lens kick.}
+   \label{fig:toy-model-diagram}
+\end{figure}
 
-We use the WARP PIC code to track the invariant quantity (Hamiltonian) in the nonlinear lattice \cite{warp}. 
+WARP PIC simulations have been used to predict octupole lattice behavior. Preliminary simulations have been limited to a 2D transverse geometry “simple model” of the system, consisting of a 32 cm channel with longitudinally varying octupole fields alternating with an X-Y symmetric thin lens kick. This kick replaces the linear portion of the ring, which should have a transfer matrix that is equivalent to the thin lens kick. Fig. \ref{fig:toy-model-diagram} shows a schematic of the simulation setup. This simulation is constructed in both the WARP and elegant frameworks. 
 
-For 100 passes through this octupole channel, we see a particle of $\langle H_N\rangle =1E-5$ experience RMS variations of $2.8E-10$ without octupoles (jitter apparently due to computational noise) and variations of $1.5E-8$ for maximum octupole current of 2 A. These values can be compared to Table \ref{l2ea4-t1}. Despite low-frequency oscillations, the particle energy appears to be well-bounded as expected, see Fig. \ref{toyinvar}.
+\subsection{Invariant tracking in the simple quasi-integrable octupole lattice.}
 
 \begin{figure}[]
    \centering
     \includegraphics[width=0.5\textwidth]{7.figures/HvsZ_crun1_toylattice.png}
- 	\caption{Conserved invariant $H_N$ for simple quasi-integrable octupole lattice, WARP simulation}
-   \label{toyinvar}
+ 	\caption{Conserved invariant $H_N$ for simple quasi-integrable octupole lattice, calculated in WARP simulation with no space charge.}
+   \label{fig:toyinvar}
 \end{figure}
 
+We use the WARP PIC code to track the invariant quantity (Hamiltonian) in the nonlinear lattice \cite{warp}. 
+For 100 passes through this octupole channel, we see a particle of $\langle H_N\rangle =1E-5$ experience RMS variations of $2.8E-10$ without octupoles (jitter apparently due to computational noise) and variations of $1.5E-8$ for maximum octupole current of 2 A. These values can be compared to Table \ref{l2ea4-t1}. Despite low-frequency oscillations, the particle energy appears to be well-bounded as expected. Invariant evolution for multiple single particles at various amplitudes are shown in Fig. \ref{fig: toyinvar}. 
+
+[Todo: look-up simulation details]
 
 
-\subsection{Frequency Map Analysis of Chaotic Octupole Lattice}
 
-%todo: Cover WARP and Elegant models, estimate tune prediction
 
 \subsection{Choosing Octupole Operating Point}
 
@@ -142,38 +148,17 @@ This octupole strength corresponds with a peak strength of $54$  $\frac{T}{m^3}$
 Based on the shape of the parameter landscape, it is desirable to push towards higher tunes and larger octupole gradients for larger tune spreads, ideally $> 0.10$.
 
 
-\subsection{Phase Advance in UMER}
+\subsection{Lattice Phase Advance for UMER }
 
 The maximum phase advance will be limited by the available focusing strength in the linear lattice.
 0-current envelope tracking in Elegant show how the UMER lattice can be modified to imitate a 0-phase advance focusing lens.\cite{RuisardAAC2014} 
-Phase advance of $0.087$ has been demonstrated using 14 quadrupoles to match a 32 cm octupole channel with a FODO lattice. Greater phase advance is possible, but 
-the maximum phase advance in the octupole channel is limited by the allowable excursion of the envelope ($\leq1$ meter).
+Phase advance of $0.087$ has been demonstrated using 14 quadrupoles to match a 32 cm octupole channel with a FODO lattice. Greater phase advance is possible, but the maximum phase advance in the octupole channel is limited by the allowable excursion of the envelope ($\leq1$ meter).
 
-Solenoids are considered for the matching section, to increase the attainable phase advance through the octupole channel. 
-With solenoids, phase advance of $0.4\cdot2 \pi$ was obtained in a 32 cm drift. 
+Solenoids are considered for the matching section, to increase the attainable phase advance through the octupole channel. With solenoids, phase advance of $0.4\cdot2 \pi$ was obtained in a 32 cm drift. 
 While the increase in phase advance (and therefore tune spread) is dramatic, use of solenoids creates additional alignment challenges. 
+
+[todo: include solution with solenoids]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -324,8 +309,78 @@ For reasonably dynamic aperture for the octupole channel experiment, I recommend
 There is a lot of freedom in choice of $20^o$ ring section for channel location. An important consideration is low radial field / low vertical field excursion. However, as the field has been measured to significantly between dipoles, the field will not be identically zero along the 64 cm channel and additional compensation is necessary. 
 
 
+
+
+
 \subsection{Sensitivity to external focusing}
 % Beta and tune errors
+
+\subsubsection{Phase errors in external focusing}
+
+A requirement for quasi-integrability is that the phase advance in the linear portion of the lattice (between nonlinear inserts) be an integer multiple of $\pi$. I use the simple model to interrogate dynamic aperture and tune spread dependence on phase error. In order to systematically introduce the error, I modify the symmetric thin lens kick, typically:
+
+\begin{equation}
+T=
+\begin{bmatrix} 
+1 & 0 & 0 & 0 \\ 
+-k & 1 & 0 & 0 \\ 
+0 & 0 & 1 & 0 \\
+0 & 0 & -k & 1 \\ 
+\end{bmatrix}
+\end{equation}
+
+to the more general expression: 
+
+\begin{equation}
+M_z = \begin{bmatrix} \cos{\psi_z} - \alpha \sin{\psi_z} & \beta \sin{\psi_z}  \\
+-\frac{1-\alpha^2}{\beta}\sin{\psi_z}-\frac{2\alpha}{\beta}\cos{\psi_z} & \cos{\psi_z}-\alpha\sin{\psi_z} \\ \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+T = 
+\begin{bmatrix} 
+\begin{bmatrix} M_x \end{bmatrix} & \begin{matrix} 0&0\\0&0 \end{matrix} \\
+\begin{matrix} 0&0\\0&0 \end{matrix} & \begin{bmatrix} M_y \end{bmatrix} \\
+\end{bmatrix}
+\end{equation}
+
+where linear lattice phase advance $\psi_{x,y} = 2\pi\nu_{x,y} + 2\pi \Delta\nu_{x,y}$ for lattice design tune $\nu_{x,y}$ and tune error $\Delta\nu_{x,y}$. As the lattice design tune is integer, $\mod \psi_{x,y} = 2\pi \Delta\nu_{x,y}$, and the applied focusing is:
+
+\begin{equation}
+M_z = 
+\begin{bmatrix} 
+\cos{2\pi\Delta\nu_x} - \alpha \sin{2\pi\Delta\nu_z} & \beta \sin{2\pi\Delta\nu_z} \\
+-\frac{1-\alpha^2}{\beta}\sin{2\pi\Delta\nu_z}-\frac{2\alpha}{\beta}\cos{2\pi\Delta\nu_z} & \cos{2\pi\Delta\nu_z}-\alpha\sin{2\pi\Delta\nu_z}\\
+\end{bmatrix}
+\end{equation}
+
+[todo: double check what alpha,beta are here... maybe derive?]
+
+Simulations with phase error were carried out in Elegant, for an octupole lattice with octupole section phase advance $\psi = 0.3 \cdot 2\pi$ and length $64$ cm. Simulation was run for 1024 passes through octupole channel. The simulated octupole channel is comprised of 8 flat-top, hard-edged ideal octupole elements, with a maximum octupole strength of $200$ T/m$^3$. External focusing strength $k=-1.405$ to give the phase advance $0.3 \cdot 2\pi$.
+
+\begin{figure} \centering
+\subfigure[Ideal case, $\Delta\nu_x = \Delta\nu_y=0$]{
+	\includegraphics[width=0.45\textwidth]{7.figures/phase-error/XY-nux0-nuy0.png}}
+\subfigure[$\Delta\nu_x = 0.01, \Delta\nu_y=0$]{
+	\includegraphics[width=0.45\textwidth]{7.figures/phase-error/XY-nux001-nuy0.png}}
+
+\subfigure[$\Delta\nu_x = 0.01, \Delta\nu_y=0.01$]{
+	\includegraphics[width=0.45\textwidth]{7.figures/phase-error/XY-nux001-nuy001.png}}	
+\subfigure[$\Delta\nu_x = 0.1, \Delta\nu_y=0$]{
+	\includegraphics[width=0.45\textwidth]{7.figures/phase-error/XY-nux01-nuy0.png}}
+	
+\subfigure[$\Delta\nu_x = 0.1, \Delta\nu_y=0.1$]{
+	\includegraphics[width=0.45\textwidth]{7.figures/phase-error/XY-nux01-nuy01.png}}
+\subfigure[$\Delta\nu_x = 0.05, \Delta\nu_y=0.1$]{
+	\includegraphics[width=0.45\textwidth]{7.figures/phase-error/XY-nux005-nuy01.png}}
+
+\caption{Elegant dynamic aperture plots for 1024 turns in 64 cm octupole channel, with varying x and y phase errors.} \label{fig:phase-error-xy}
+\end{figure}
+
+
+From Fig. \ref{fig:phase-error-xy}, it is apparent that the structure of the dynamic aperture is highly sensitive to differences in linear lattice phase advance beween planes, but less so to a phase error that is equal in both planes. 
+
+
 
 \subsection{Space Charge in octupole lattice}
 % Early halo evolution studies.
